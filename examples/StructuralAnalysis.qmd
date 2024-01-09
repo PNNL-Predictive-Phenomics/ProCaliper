@@ -10,8 +10,7 @@ This page contains the example scripts for analyzing the structure of individual
 
 ## Downloading the scripts
 
-The scripts can be downloaded from the [GitHub repository](http://github.com/PhenoMeters/AlphaMeter/tree/main/examples/StructuralAnalysis.py
-).
+The scripts can be downloaded from the [GitHub repository](http://github.com/PhenoMeters/AlphaMeter/tree/main/examples/StructuralAnalysis.py).
 
 
 ## import modules
