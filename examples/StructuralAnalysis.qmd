@@ -1,0 +1,17 @@
+---
+title: "The exmaple scripts for analyszing the structure of individual proteins"
+format: html
+---
+
+
+## Introduction
+
+This page contains the example scripts for analyzing the structure of individual proteins. The scripts are written in Python and use the [ProDy](http://prody.csb.pitt.edu/) package. The scripts are provided as a part of the [ProDy tutorial](http://prody.csb.pitt.edu/tutorials/).
+
+## Downloading the scripts
+
+The scripts can be downloaded from the [GitHub repository](http://github.com/PhenoMeters/AlphaMeter/tree/main/examples/StructuralAnalysis.py
+).
+
+
+## import modules
