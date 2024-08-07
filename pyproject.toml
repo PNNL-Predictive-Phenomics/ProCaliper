@@ -6,54 +6,49 @@ homepage = "https://github.com/LifeWorks/alphameter"
 description = "Skeleton project created by Python Project Wizard (ppw)."
 authors = ["AlphaMeter <song.feng@pnnl.gov>"]
 readme = "README.md"
-license =  "GPL-3.0-only"
-classifiers=[
+license = "GPL-3.0-only"
+classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Natural Language :: English',
     'Programming Language :: Python :: 3.11',
 ]
-packages = [
-    { include = "alphameter" },
-    { include = "tests", format = "sdist" },
-]
+packages = [{ include = "alphameter" }, { include = "tests", format = "sdist" }]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
-fire = "0.4.0"
+python = ">=3.9,<4.0"
+fire = "0.6.0"
 
-black  = { version = "^22.3.0", optional = true}
-isort  = { version = "5.10.1", optional = true}
-flake8  = { version = "4.0.1", optional = true}
+black = { version = "24.8.0", optional = true }
+isort = { version = "5.10.1", optional = true }
+flake8 = { version = "7.1.1", optional = true }
 flake8-docstrings = { version = "^1.6.0", optional = true }
-pytest  = { version = "^7.0.1", optional = true}
-pytest-cov  = { version = "^3.0.0", optional = true}
-tox  = { version = "^3.24.5", optional = true}
-mkdocs  = { version = "^1.2.3", optional = true}
-mkdocs-include-markdown-plugin  = { version = "^3.2.3", optional = true}
-mkdocs-material  = { version = "^8.1.11", optional = true}
-mkdocstrings  = { version = "^0.18.0", optional = true}
-mkdocs-material-extensions  = { version = "^1.0.3", optional = true}
-twine  = { version = "^3.8.0", optional = true}
-mkdocs-autorefs = {version = "^0.3.1", optional = true}
-pre-commit = {version = "^2.17.0", optional = true}
-toml = {version = "^0.10.2", optional = true}
-livereload = {version = "^2.6.3", optional = true}
-pyreadline = {version = "^2.1", optional = true}
-mike = { version="^1.1.2", optional=true}
-mypy = {version = "^1.5.1", optional = true}
-setuptools = {version="^68.0", optional = true}
-pkginfo = {version="^1.9", optional = true}
-virtualenv = {version="^20.0", optional = true}
+pytest = { version = "8.3.2", optional = true }
+pytest-cov = { version = "5.0.0", optional = true }
+tox = { version = "4.17.1", optional = true }
+mkdocs = { version = "^1.2.3", optional = true }
+mkdocs-include-markdown-plugin = { version = "6.2.1", optional = true }
+mkdocs-material = { version = "9.5.31", optional = true }
+mkdocstrings = { version = "0.25.2", optional = true }
+mkdocs-material-extensions = { version = "^1.0.3", optional = true }
+twine = { version = "5.1.1", optional = true }
+mkdocs-autorefs = { version = "1.0.1", optional = true }
+pre-commit = { version = "3.8.0", optional = true }
+toml = { version = "^0.10.2", optional = true }
+livereload = { version = "^2.6.3", optional = true }
+pyreadline = { version = "^2.1", optional = true }
+mike = { version = "2.1.2", optional = true }
+mypy = { version = "^1.5.1", optional = true }
+setuptools = { version = "72.1.0", optional = true }
+pkginfo = { version = "^1.9", optional = true }
+virtualenv = { version = "^20.0", optional = true }
 
 [tool.poetry.extras]
-test = [
-    "pytest",
-    "pytest-cov"
-    ]
+test = ["pytest", "pytest-cov"]
 
-dev = ["tox",
+dev = [
+    "tox",
     "pre-commit",
     "twine",
     "toml",
@@ -61,8 +56,8 @@ dev = ["tox",
     "isort",
     "flake8",
     "flake8-docstrings",
-    "mypy"
-    ]
+    "mypy",
+]
 
 doc = [
     "mkdocs",
@@ -74,8 +69,8 @@ doc = [
     "mike",
     "setuptools",
     "pkginfo",
-    "virtualenv"
-    ]
+    "virtualenv",
+]
 
 [tool.poetry.scripts]
 alphameter = 'alphameter.cli:main'
