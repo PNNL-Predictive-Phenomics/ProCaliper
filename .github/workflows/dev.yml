@@ -105,7 +105,7 @@ jobs:
           poetry run mkdocs build
           git config --global user.name Docs deploy
           git config --global user.email docs@dummy.bot.com
-          poetry run mike deploy -p --ignore "`poetry version --short`.dev"
+          poetry run mike deploy -p --ignore-remote-status "`poetry version --short`.dev"
           poetry run mike set-default -p "`poetry version --short`.dev"
 
       - name: Build wheels and source tarball
