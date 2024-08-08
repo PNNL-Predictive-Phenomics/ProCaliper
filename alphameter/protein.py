@@ -46,14 +46,17 @@ class Protein:
         p = cls()
         p.data["Sequence"] = row["Sequence"]
 
-        for key in cls.UNIPROT_SITE_PATTERNS:
-            p.data[f"{key}_sites"] = p._extract_sites(
-                row[key],
-                cls.UNIPROT_SITE_PATTERNS[key],
-            )
-            p.data[f"{key}_sites"] = [
-                site for site in p.data[f"{key}_sites"] if p._is_site_cysteine(site)
-            ]
+        for key, value in row.items():
+            if key in cls.UNIPROT_SITE_PATTERNS:
+                p.data[f"{key}_sites"] = p._extract_sites(
+                    value,
+                    cls.UNIPROT_SITE_PATTERNS[key],
+                )
+                p.data[f"{key}_cysteine_sites"] = [
+                    site for site in p.data[f"{key}_sites"] if p._is_site_cysteine(site)
+                ]
+            else:
+                p.data[key] = value
 
         p._rectify_data_labels()
         return p
@@ -62,7 +65,12 @@ class Protein:
         self, site_description: str, patterns: list[tuple[str, bool]]
     ) -> list[int]:
         sites: list[int] = []
+        if (
+            str(site_description) == "nan"
+        ):  # this will be the missing value default in pandas--is there a more elegant way to handle this?
+            return sites
         for pattern, expand_range in patterns:
+            print(site_description)
             matches = cast(list[str], re.findall(pattern, site_description))
 
             for match in matches:
