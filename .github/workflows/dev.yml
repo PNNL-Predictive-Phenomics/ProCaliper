@@ -12,9 +12,12 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Necessary to upload docs to the gh-pages branch
+
 permissions:
+  # Necessary to upload docs to the gh-pages branch
   contents: write
+  # Necessary for publishing to test.pypi.org
+  id-token: write
 
 # contains 3 jobs: test, publish_dev_build and notification
 jobs:
