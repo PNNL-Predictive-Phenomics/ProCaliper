@@ -1,3 +1,8 @@
+"""
+Reference:
+https://github.com/PhenoMeters/PTM_ML/tree/hunter/DatabaseScripts
+"""
+
 from __future__ import annotations
 
 import re
@@ -39,12 +44,16 @@ class Protein:
     @classmethod
     def from_uniprot_row(cls, row: dict[str, Any]) -> Protein:
         p = cls()
+        p.data["Sequence"] = row["Sequence"]
 
         for key in cls.UNIPROT_SITE_PATTERNS:
             p.data[f"{key}_sites"] = p._extract_sites(
                 row[key],
                 cls.UNIPROT_SITE_PATTERNS[key],
             )
+            p.data[f"{key}_sites"] = [
+                site for site in p.data[f"{key}_sites"] if p._is_site_cysteine(site)
+            ]
 
         p._rectify_data_labels()
         return p
@@ -68,3 +77,14 @@ class Protein:
                 else:
                     sites.append(int(match))
         return sites
+
+    def _is_site_cysteine(self, site: int) -> bool:
+        if "Sequence" not in self.data:
+            raise ValueError("Sequence entry not found in data")
+
+        if site < 1:
+            raise ValueError("Site index must be positive integer")
+
+        sequence = self.data["Sequence"]
+
+        return site <= len(sequence) and sequence[site - 1] == "C"
