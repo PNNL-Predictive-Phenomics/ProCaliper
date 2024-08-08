@@ -12,6 +12,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Necessary to upload docs to the gh-pages branch
+permissions:
+  contents: write
+
 # contains 3 jobs: test, publish_dev_build and notification
 jobs:
   test:
