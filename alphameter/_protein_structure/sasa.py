@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TypedDict
 
-from Bio.PDB import Entity, PDBParser
+from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 
 from .hyperparameters import HYPERPARAMETERS
@@ -24,8 +24,7 @@ class SASAData(TypedDict):
 def calculate_sasa(pdb_filename: str, shortname: str):
     p = PDBParser(QUIET=True)
     struct = p.get_structure(shortname, pdb_filename)  # type: ignore
-    if not isinstance(struct, Entity):
-        raise TypeError("`struct` must be a Bio.PDB.Entity")
+
     sr = ShrakeRupley(probe_radius=1.40, n_points=N_POINTS, radii_dict=None)
 
     # Calc sasa values from Residues, then from atoms
