@@ -9,6 +9,7 @@ import re
 from typing import Any, cast
 
 # import pandas as pd
+from alphameter.type_aliases import AminoAcidLetter
 
 
 class Protein:
@@ -53,7 +54,9 @@ class Protein:
                     cls.UNIPROT_SITE_PATTERNS[key],
                 )
                 p.data[f"{key}_cysteine_sites"] = [
-                    site for site in p.data[f"{key}_sites"] if p._is_site_cysteine(site)
+                    site
+                    for site in p.data[f"{key}_sites"]
+                    if p._is_site_aa(site, aa="C")
                 ]
             else:
                 p.data[key] = value
@@ -86,13 +89,29 @@ class Protein:
                     sites.append(int(match))
         return sites
 
-    def _is_site_cysteine(self, site: int) -> bool:
+    def _is_site_aa(self, site: int, aa: AminoAcidLetter = "C") -> bool:
+        """_summary_
+
+        Parameters
+        ----------
+        site : int
+            Position of amino acid (1-indexed)
+        aa : str, optional
+            Amino acid code to test against by default "C" (cysteine)
+
+        Returns
+        -------
+        bool
+            True if the amino acid is a the position `site` is as specified.
+
+        Raises
+        ------
+        ValueError
+            If the protein does not have a defined sequence.
+        """
         if "Sequence" not in self.data:
             raise ValueError("Sequence entry not found in data")
 
-        if site < 1:
-            raise ValueError("Site index must be positive integer")
-
         sequence = self.data["Sequence"]
 
-        return site <= len(sequence) and sequence[site - 1] == "C"
+        return site <= len(sequence) and sequence[site - 1] == aa
