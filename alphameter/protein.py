@@ -49,6 +49,8 @@ class Protein:
         """
         Standardize the features names in self.data
         """
+        if "Entry" in self.data:
+            self.data["entry"] = self.data.pop("Entry")
         pass
 
     @classmethod
@@ -80,7 +82,7 @@ class Protein:
         if self.pdb_location_absolute:
             self.sasa_data = structure.sasa.calculate_sasa(
                 self.pdb_location_absolute,
-                self.data["Entry"],
+                self.data["entry"],
             )
             return self.sasa_data
         else:
@@ -95,7 +97,7 @@ class Protein:
         if self.pdb_location_absolute:
             self.charge_data = structure.charge.calculate_charge(
                 self.pdb_location_absolute,
-                self.data["Entry"],
+                self.data["entry"],
             )
             return self.charge_data
         else:
@@ -110,7 +112,7 @@ class Protein:
         if self.pdb_location_absolute:
             self.size_data = structure.size.calculate_size(
                 self.pdb_location_absolute,
-                self.data["Entry"],
+                self.data["entry"],
             )
             return self.size_data
         else:
@@ -150,9 +152,9 @@ class Protein:
 
     def fetch_pdb(self, save_path: str | None = None, url: str | None = None) -> None:
         if not url:
-            url = f"https://alphafold.ebi.ac.uk/files/AF-{self.data['Entry']}-F1-model_v4.pdb"
+            url = f"https://alphafold.ebi.ac.uk/files/AF-{self.data['entry']}-F1-model_v4.pdb"
         if not save_path:
-            save_path = f"{self.data['Entry']}.pdb"
+            save_path = f"{self.data['entry']}.pdb"
 
         response = requests.get(url)
 

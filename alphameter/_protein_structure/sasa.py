@@ -11,11 +11,6 @@ N_POINTS = int(
     HYPERPARAMETERS["n_points"]
 )  # Dictates the accuracy of the ShrakeRupley calculation. Higher values are more accurate but slower to calculate. Default = 100
 
-"""
-    returns a dict whith names "Entry", ,"all_sasa_value", "sg_sasa_value", "residue_id", 'residue_name'
-
-"""
-
 
 class SASAData(TypedDict):
     entry: list[str]

@@ -38,13 +38,13 @@ def test_read_uniprot_row() -> None:
 
         assert protein is not None
 
-        if protein.data["Entry"] == COMPARISON_ENTRY_1:
+        if protein.data["entry"] == COMPARISON_ENTRY_1:
             assert protein.data["Sequence"] == COMPARISON_SEQUENCE_1
 
-        if protein.data["Entry"] == COMPARISON_ENTRY_2:
+        if protein.data["entry"] == COMPARISON_ENTRY_2:
             assert protein.data["Disulfide bond_sites"] == COMPARISON_DISULFIDE_2
 
-        if protein.data["Entry"] == COMPARISON_ENTRY_3:
+        if protein.data["entry"] == COMPARISON_ENTRY_3:
             assert protein.data["Beta strand_sites"] == COMPARISON_STRAND
             assert protein.data["Helix_sites"] == COMPARISON_HELIX
             assert protein.data["Turn_sites"] == COMPARISON_TURN
@@ -58,11 +58,11 @@ def test_unravel():
     protein = Protein.from_uniprot_row(row_dict)
 
     unraveled = protein.unravel_sites(
-        selected_aas={"M"}, selected_keys={"Entry", "Turn"}
+        selected_aas={"M"}, selected_keys={"entry", "Turn"}
     )
 
     expected = {
-        "Entry": ["A0A0B4J2F0", "A0A0B4J2F0"],
+        "entry": ["A0A0B4J2F0", "A0A0B4J2F0"],
         "Turn": [False, False],
         "Letter": ["M", "M"],
         "Position": [1, 43],
