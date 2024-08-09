@@ -40,6 +40,15 @@ def test_read_uniprot_row() -> None:
 
         if protein.data["Entry"] == COMPARISON_ENTRY_1:
             assert protein.data["Sequence"] == COMPARISON_SEQUENCE_1
+            unraveled = protein.unravel_sites(
+                selected_aas={"M"}, selected_keys={"Entry", "Turn"}
+            )
+            expected = [
+                {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 1},
+                {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 43},
+            ]
+
+            assert unraveled == expected
 
         if protein.data["Entry"] == COMPARISON_ENTRY_2:
             assert protein.data["Disulfide bond_sites"] == COMPARISON_DISULFIDE_2

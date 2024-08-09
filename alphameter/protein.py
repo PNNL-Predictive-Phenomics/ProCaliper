@@ -64,6 +64,33 @@ class Protein:
         p._rectify_data_labels()
         return p
 
+    def unravel_sites(
+        self,
+        selected_aas: None | set[AminoAcidLetter] = None,
+        selected_keys: None | set[str] = None,
+    ) -> list[dict[str, Any]]:
+        res: list[dict[str, Any]] = []
+
+        if not selected_keys:
+            selected_keys = set(self.data.keys()) - {"Sequence"}
+
+        site_keys = set(Protein.UNIPROT_SITE_PATTERNS.keys()) & selected_keys
+        other_keys = selected_keys - site_keys
+
+        for index, site in enumerate(self.data["Sequence"]):
+            site_dict: dict[str, Any] = {k: self.data[k] for k in other_keys}
+            site_dict["Letter"] = site
+            site_dict["Position"] = index + 1
+            if selected_aas and site not in selected_aas:
+                continue
+
+            for key in site_keys:
+                site_dict[key] = index in self.data[f"{key}_sites"]
+
+            res.append(site_dict)
+
+        return res
+
     def _extract_sites(
         self, site_description: str, patterns: list[tuple[str, bool]]
     ) -> list[int]:
