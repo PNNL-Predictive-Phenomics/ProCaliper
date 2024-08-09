@@ -57,7 +57,7 @@ def test_unravel():
     row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
     protein = Protein.from_uniprot_row(row_dict)
 
-    unraveled = protein.unravel_sites(
+    unravelled = protein.unravel_sites(
         selected_aas={"M"}, selected_keys={"entry", "Turn"}
     )
 
@@ -68,7 +68,7 @@ def test_unravel():
         "Position": [1, 43],
     }
 
-    assert unraveled == expected
+    assert unravelled == expected
 
 
 def test_fetch_pdb():
