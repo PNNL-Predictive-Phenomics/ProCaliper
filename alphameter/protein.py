@@ -5,12 +5,13 @@ https://github.com/PhenoMeters/PTM_ML/tree/hunter/DatabaseScripts
 
 from __future__ import annotations
 
+import os
 import re
 from typing import Any, cast
 
 import requests
 
-# import pandas as pd
+import alphameter._protein_structure as structure
 from alphameter.type_aliases import AminoAcidLetter
 
 
@@ -36,6 +37,12 @@ class Protein:
 
     def __init__(self) -> None:
         self.data: dict[str, Any] = {}
+        self.pdb_location_relative: str | None = None
+        self.pdb_location_absolute: str | None = None
+
+        self.sasa_data: structure.sasa.SASAData | None = None
+        self.charge_data: structure.charge.ChargeData | None = None
+        self.size_data: structure.size.SizeData | None = None
         pass
 
     def _rectify_data_labels(self) -> None:
@@ -65,6 +72,51 @@ class Protein:
 
         p._rectify_data_labels()
         return p
+
+    def get_sasa(self) -> structure.sasa.SASAData:
+        if self.sasa_data:
+            return self.sasa_data
+
+        if self.pdb_location_absolute:
+            self.sasa_data = structure.sasa.calculate_sasa(
+                self.pdb_location_absolute,
+                self.data["Entry"],
+            )
+            return self.sasa_data
+        else:
+            raise ValueError(
+                "SASA data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
+
+    def get_charge(self) -> structure.charge.ChargeData:
+        if self.charge_data:
+            return self.charge_data
+
+        if self.pdb_location_absolute:
+            self.charge_data = structure.charge.calculate_charge(
+                self.pdb_location_absolute,
+                self.data["Entry"],
+            )
+            return self.charge_data
+        else:
+            raise ValueError(
+                "Charge data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
+
+    def get_size(self) -> structure.size.SizeData:
+        if self.size_data:
+            return self.size_data
+
+        if self.pdb_location_absolute:
+            self.size_data = structure.size.calculate_size(
+                self.pdb_location_absolute,
+                self.data["Entry"],
+            )
+            return self.size_data
+        else:
+            raise ValueError(
+                "Size data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
 
     def unravel_sites(
         self,
@@ -106,6 +158,9 @@ class Protein:
 
         with open(save_path, "wb+") as f:
             f.write(response.content)
+
+        self.pdb_location_relative = save_path
+        self.pdb_location_absolute = os.path.abspath(save_path)
 
     def _extract_sites(
         self, site_description: str, patterns: list[tuple[str, bool]]
