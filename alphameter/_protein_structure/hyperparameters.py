@@ -12,5 +12,5 @@ HYPERPARAMETERS = {
     # SASA Parameters
     "n_points": 100,  # Determines the accuracy of the sasa calculation. Higher values are more accurate but take more time to calculate. Recommended 100-1000
     # Charge Parameters
-    "charge_method_used": "qtpie",  # method of charge calculation, for all options check  https://open-babel.readthedocs.io/en/latest/Charges/charges.html
+    "charge_method_used": "gasteiger",  # method of charge calculation, for all options check  https://open-babel.readthedocs.io/en/latest/Charges/charges.html
 }
