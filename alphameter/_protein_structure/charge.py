@@ -37,6 +37,8 @@ def calculate_charge(pdb_filename: str, shortname: str):
     # Applies the model and computes charges.
     ob_charge_model = ob.OBChargeModel.FindType(METHOD_USED)  # type: ignore
 
+    if not ob_charge_model:  # type: ignore
+        raise ValueError("Charge method not found. Please check hyperparameters.py")
     ob_charge_model.ComputeCharges(mol)  # type: ignore
 
     charges = cast(list[float], ob_charge_model.GetPartialCharges())  # type: ignore
