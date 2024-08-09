@@ -122,14 +122,16 @@ class Protein:
         self,
         selected_aas: None | set[AminoAcidLetter] = None,
         selected_keys: None | set[str] = None,
-    ) -> list[dict[str, Any]]:
-        res: list[dict[str, Any]] = []
-
+    ) -> dict[str, list[Any]]:
         if not selected_keys:
             selected_keys = set(self.data.keys()) - {"Sequence"}
 
         site_keys = set(Protein.UNIPROT_SITE_PATTERNS.keys()) & selected_keys
         other_keys = selected_keys - site_keys
+
+        res: dict[str, list[Any]] = {k: [] for k in other_keys | site_keys}
+        res["Letter"] = []
+        res["Position"] = []
 
         for index, site in enumerate(self.data["Sequence"]):
             site_dict: dict[str, Any] = {k: self.data[k] for k in other_keys}
@@ -141,7 +143,8 @@ class Protein:
             for key in site_keys:
                 site_dict[key] = index in self.data[f"{key}_sites"]
 
-            res.append(site_dict)
+            for k, v in site_dict.items():
+                res[k].append(v)
 
         return res
 

@@ -60,10 +60,13 @@ def test_unravel():
     unraveled = protein.unravel_sites(
         selected_aas={"M"}, selected_keys={"Entry", "Turn"}
     )
-    expected = [
-        {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 1},
-        {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 43},
-    ]
+
+    expected = {
+        "Entry": ["A0A0B4J2F0", "A0A0B4J2F0"],
+        "Turn": [False, False],
+        "Letter": ["M", "M"],
+        "Position": [1, 43],
+    }
 
     assert unraveled == expected
 
