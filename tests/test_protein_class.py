@@ -40,15 +40,6 @@ def test_read_uniprot_row() -> None:
 
         if protein.data["Entry"] == COMPARISON_ENTRY_1:
             assert protein.data["Sequence"] == COMPARISON_SEQUENCE_1
-            unraveled = protein.unravel_sites(
-                selected_aas={"M"}, selected_keys={"Entry", "Turn"}
-            )
-            expected = [
-                {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 1},
-                {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 43},
-            ]
-
-            assert unraveled == expected
 
         if protein.data["Entry"] == COMPARISON_ENTRY_2:
             assert protein.data["Disulfide bond_sites"] == COMPARISON_DISULFIDE_2
@@ -57,3 +48,30 @@ def test_read_uniprot_row() -> None:
             assert protein.data["Beta strand_sites"] == COMPARISON_STRAND
             assert protein.data["Helix_sites"] == COMPARISON_HELIX
             assert protein.data["Turn_sites"] == COMPARISON_TURN
+
+
+def test_unravel():
+    TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
+    TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
+
+    row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
+    protein = Protein.from_uniprot_row(row_dict)
+
+    unraveled = protein.unravel_sites(
+        selected_aas={"M"}, selected_keys={"Entry", "Turn"}
+    )
+    expected = [
+        {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 1},
+        {"Entry": "A0A0B4J2F0", "Turn": False, "Letter": "M", "Position": 43},
+    ]
+
+    assert unraveled == expected
+
+
+def test_fetch_pdb():
+    TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
+    TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
+
+    row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
+    protein = Protein.from_uniprot_row(row_dict)
+    protein.fetch_pdb(save_path="tests/test_data/outputs/test_pdb.pdb")

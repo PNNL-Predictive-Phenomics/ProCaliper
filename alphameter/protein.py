@@ -8,6 +8,8 @@ from __future__ import annotations
 import re
 from typing import Any, cast
 
+import requests
+
 # import pandas as pd
 from alphameter.type_aliases import AminoAcidLetter
 
@@ -90,6 +92,20 @@ class Protein:
             res.append(site_dict)
 
         return res
+
+    def fetch_pdb(self, save_path: str | None = None, url: str | None = None) -> None:
+        if not url:
+            url = f"https://alphafold.ebi.ac.uk/files/AF-{self.data['Entry']}-F1-model_v4.pdb"
+        if not save_path:
+            save_path = f"{self.data['Entry']}.pdb"
+
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            raise Exception(f"Failed to fetch PDB: {response.status_code}")
+
+        with open(save_path, "wb+") as f:
+            f.write(response.content)
 
     def _extract_sites(
         self, site_description: str, patterns: list[tuple[str, bool]]
