@@ -176,7 +176,6 @@ class Protein:
         ):  # this will be the missing value default in pandas--is there a more elegant way to handle this?
             return sites
         for pattern, expand_range in patterns:
-            print(site_description)
             matches = cast(list[str], re.findall(pattern, site_description))
 
             for match in matches:
