@@ -35,6 +35,25 @@ class Protein:
         "Turn": [(r"TURN (\d+);", True), (r"TURN (\d+)\.\.(\d+);", True)],
     }
 
+    UNIPROT_SITE_PATTERNS_RECTIFIED = {
+        "active_site": [(r"ACT_SITE (\d+);", False)],
+        "binding_site": [
+            (r"BINDING (\d+);", False),
+            (r"BINDING (\d+)\.\.(\d+);", False),
+        ],
+        "dna_binding": [
+            (r"DNA_BIND (\d+);", False),
+            (r"DNA_BIND (\d+)\.\.(\d+);", False),
+        ],
+        "disulfide_bond": [
+            (r"DISULFID (\d+);", False),
+            (r"DISULFID (\d+)\.\.(\d+);", False),
+        ],
+        "beta_strand": [(r"STRAND (\d+);", True), (r"STRAND (\d+)\.\.(\d+);", True)],
+        "helix": [(r"HELIX (\d+);", True), (r"HELIX (\d+)\.\.(\d+);", True)],
+        "turn": [(r"TURN (\d+);", True), (r"TURN (\d+)\.\.(\d+);", True)],
+    }
+
     def __init__(self) -> None:
         self.data: dict[str, Any] = {}
         self.pdb_location_relative: str | None = None
@@ -48,15 +67,17 @@ class Protein:
     def _rectify_data_labels(self) -> None:
         """
         Standardize the features names in self.data
+
+        Replaces all spaces with underscores and lowercases the keys
         """
-        if "Entry" in self.data:
-            self.data["entry"] = self.data.pop("Entry")
-        pass
+        for k in list(self.data.keys()):
+            new_key = k.replace(" ", "_").lower()
+            self.data[new_key] = self.data.pop(k)
 
     @classmethod
     def from_uniprot_row(cls, row: dict[str, Any]) -> Protein:
         p = cls()
-        p.data["Sequence"] = row["Sequence"]
+        p.data["sequence"] = row["Sequence"]
 
         for key, value in row.items():
             if key in cls.UNIPROT_SITE_PATTERNS:
@@ -126,19 +147,19 @@ class Protein:
         selected_keys: None | set[str] = None,
     ) -> dict[str, list[Any]]:
         if not selected_keys:
-            selected_keys = set(self.data.keys()) - {"Sequence"}
+            selected_keys = set(self.data.keys()) - {"sequence"}
 
-        site_keys = set(Protein.UNIPROT_SITE_PATTERNS.keys()) & selected_keys
+        site_keys = set(Protein.UNIPROT_SITE_PATTERNS_RECTIFIED.keys()) & selected_keys
         other_keys = selected_keys - site_keys
 
         res: dict[str, list[Any]] = {k: [] for k in other_keys | site_keys}
-        res["Letter"] = []
-        res["Position"] = []
+        res["letter"] = []
+        res["position"] = []
 
-        for index, site in enumerate(self.data["Sequence"]):
+        for index, site in enumerate(self.data["sequence"]):
             site_dict: dict[str, Any] = {k: self.data[k] for k in other_keys}
-            site_dict["Letter"] = site
-            site_dict["Position"] = index + 1
+            site_dict["letter"] = site
+            site_dict["position"] = index + 1
             if selected_aas and site not in selected_aas:
                 continue
 
@@ -211,9 +232,9 @@ class Protein:
         ValueError
             If the protein does not have a defined sequence.
         """
-        if "Sequence" not in self.data:
+        if "sequence" not in self.data:
             raise ValueError("Sequence entry not found in data")
 
-        sequence = self.data["Sequence"]
+        sequence = self.data["sequence"]
 
         return site <= len(sequence) and sequence[site - 1] == aa
