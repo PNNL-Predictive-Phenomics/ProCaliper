@@ -11,8 +11,8 @@ from typing import Any, cast
 
 import requests
 
-import alphameter._protein_structure as structure
-from alphameter.type_aliases import AminoAcidLetter
+import procaliper._protein_structure as structure
+from procaliper.type_aliases import AminoAcidLetter
 
 
 class Protein:

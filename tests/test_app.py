@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Tests for `alphameter` package."""
+"""Tests for `procaliper` package."""
 # pylint: disable=redefined-outer-name
 
 import pytest

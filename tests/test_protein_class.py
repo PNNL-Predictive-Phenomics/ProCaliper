@@ -1,6 +1,6 @@
 import pandas as pd
 
-from alphameter.protein import Protein
+from procaliper.protein import Protein
 
 
 def test_read_uniprot_row() -> None:

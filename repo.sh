@@ -5,8 +5,8 @@
 # Once you got persona token, set enviroment variable GH_TOKEN with it
 
 # Create repo and push code to github
-gh repo create alphameter --public
-git remote add origin git@github.com:LifeWorks/alphameter.git
+gh repo create procaliper --public
+git remote add origin git@github.com:LifeWorks/procaliper.git
 git add .
 pre-commit run --all-files
 git add .

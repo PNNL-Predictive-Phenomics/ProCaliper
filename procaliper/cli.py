@@ -1,11 +1,11 @@
-"""Console script for alphameter."""
+"""Console script for procaliper."""
 
 import fire
 
 
 def help() -> None:
-    print("alphameter")
-    print("=" * len("alphameter"))
+    print("procaliper")
+    print("=" * len("procaliper"))
     print("Skeleton project created by Python Project Wizard (ppw)")
 
 

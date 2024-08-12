@@ -1,6 +1,6 @@
 import pandas as pd
 
-import alphameter as am
+import procaliper as am
 
 df = pd.read_csv("examples/database_generation/sample_uniprot.tsv", sep="\t")  # type: ignore
 
@@ -30,6 +30,8 @@ for _, row in df.iterrows():  # type: ignore
         sdf = row_df
     else:
         sdf = pd.concat([sdf, row_df])
+
+assert sdf is not None
 
 print(sdf)
 print(sdf.columns)

@@ -1,8 +1,8 @@
 [tool]
 [tool.poetry]
-name = "alphameter"
+name = "procaliper"
 version = "0.1.0"
-homepage = "https://github.com/LifeWorks/alphameter"
+homepage = "https://github.com/LifeWorks/procaliper"
 description = "Skeleton project created by Python Project Wizard (ppw)."
 authors = ["AlphaMeter <song.feng@pnnl.gov>"]
 readme = "README.md"
@@ -14,7 +14,7 @@ classifiers = [
     'Natural Language :: English',
     'Programming Language :: Python :: 3.11',
 ]
-packages = [{ include = "alphameter" }, { include = "tests", format = "sdist" }]
+packages = [{ include = "procaliper" }, { include = "tests", format = "sdist" }]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
@@ -81,7 +81,7 @@ doc = [
 ]
 
 [tool.poetry.scripts]
-alphameter = 'alphameter.cli:main'
+procaliper = 'procaliper.cli:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

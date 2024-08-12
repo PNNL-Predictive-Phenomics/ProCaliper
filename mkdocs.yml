@@ -1,7 +1,7 @@
-site_name: alphameter
+site_name: procaliper
 # site_url: http://www.jieyu.ai
-repo_url: https://github.com/LifeWorks/alphameter
-repo_name: alphameter
+repo_url: https://github.com/LifeWorks/procaliper
+repo_name: procaliper
 #strict: true
 nav:
   - home: index.md
@@ -59,7 +59,7 @@ plugins:
       lang: en
   - mkdocstrings:
       watch:
-        - alphameter
+        - procaliper
 extra:
   version:
     provider: mike
@@ -73,7 +73,7 @@ extra:
       link: http://www.jieyu.ai
       name: Facebook
     - icon: fontawesome/brands/github
-      link: https://github.com/LifeWorks/alphameter
+      link: https://github.com/LifeWorks/procaliper
       name: Github
     - icon: material/email
       link: "mailto:song.feng@pnnl.gov"

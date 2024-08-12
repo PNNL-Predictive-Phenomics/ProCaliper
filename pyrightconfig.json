@@ -10,7 +10,7 @@
     ".vscode",
     "docs",
     "**/__pycache__",
-    "LifeWorks_alphameter.egg-info"
+    "LifeWorks_procaliper.egg-info"
   ],
 
   "ignore": [

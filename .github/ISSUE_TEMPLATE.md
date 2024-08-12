@@ -1,4 +1,4 @@
-* alphameter version:
+* procaliper version:
 * Python version:
 * Operating System:
 

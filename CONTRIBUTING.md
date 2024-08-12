@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/LifeWorks/alphameter/issues.
+Report bugs at https://github.com/LifeWorks/procaliper/issues.
 
 If you are reporting a bug, please include:
 
@@ -29,13 +29,13 @@ and "help wanted" is open to whoever wants to implement it.
 
 ### Write Documentation
 
-alphameter could always use more documentation, whether as part of the
-official alphameter docs, in docstrings, or even on the web in blog posts,
+procaliper could always use more documentation, whether as part of the
+official procaliper docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/LifeWorks/alphameter/issues.
+The best way to send feedback is to file an issue at https://github.com/LifeWorks/procaliper/issues.
 
 If you are proposing a feature:
 
@@ -46,13 +46,13 @@ If you are proposing a feature:
 
 ## Get Started!
 
-Ready to contribute? Here's how to set up `alphameter` for local development.
+Ready to contribute? Here's how to set up `procaliper` for local development.
 
-1. Fork the `alphameter` repo on GitHub.
+1. Fork the `procaliper` repo on GitHub.
 2. Clone your fork locally
 
 ```
-    $ git clone git@github.com:your_name_here/alphameter.git
+    $ git clone git@github.com:your_name_here/procaliper.git
 ```
 
 3. Ensure [poetry](https://python-poetry.org/docs/) is installed.
@@ -96,11 +96,11 @@ Before you submit a pull request, check that it meets these guidelines:
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
 3. The pull request should work for Python 3.6, 3.7, 3.8, 3.9 and for PyPy. Check
-   https://github.com/LifeWorks/alphameter/actions
+   https://github.com/LifeWorks/procaliper/actions
    and make sure that the tests pass for all supported Python versions.
 
 ## Tips```
-    $ pytest tests.test_alphameter
+    $ pytest tests.test_procaliper
 ```To run a subset of tests.
 
 
