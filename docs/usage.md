@@ -1,7 +1,7 @@
 # Usage
 
-To use alphameter in a project
+To use procaliper in a project
 
 ```
-    import alphameter
+    import procaliper
 ```

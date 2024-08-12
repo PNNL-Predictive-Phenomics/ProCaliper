@@ -12,13 +12,20 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+
+permissions:
+  # Necessary to upload docs to the gh-pages branch
+  contents: write
+  # Necessary for publishing to test.pypi.org
+  id-token: write
+
 # contains 3 jobs: test, publish_dev_build and notification
 jobs:
   test:
     # The type of runner that the job will run on
     strategy:
       matrix:
-        python-versions: ['3.8', '3.9', '3.10', '3.11']
+        python-versions: ['3.9', '3.10', '3.11', '3.12']
         # github action doesn't goes well with windows due to docker support
         # github action doesn't goes well with macos due to `no docker command`
         #os: [ubuntu-latest, windows-latest, macos-latest]
@@ -48,7 +55,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-versions }}
 
@@ -70,9 +77,9 @@ jobs:
       - name: test with tox
         run: tox
 
-      - uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
+      # - uses: codecov/codecov-action@v3
+      #   with:
+      #     fail_ci_if_error: true
 
   publish_dev_build:
     # if test failed, we should not publish
@@ -81,7 +88,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
 
@@ -93,76 +102,77 @@ jobs:
       - name: build documentation
         run: |
           poetry install -E doc
-          mkdocs build
+          poetry run mkdocs build
           git config --global user.name Docs deploy
           git config --global user.email docs@dummy.bot.com
-          mike deploy -p -f --ignore "`poetry version --short`.dev"
-          mike set-default -p "`poetry version --short`.dev"
+          git fetch origin gh-pages --depth=1
+          poetry run mike deploy -p "`poetry version --short`.dev"
+          poetry run mike set-default -p "`poetry version --short`.dev"
 
-      - name: Build wheels and source tarball
-        run: |
-          poetry version $(poetry version --short)-dev.$GITHUB_RUN_NUMBER
-          poetry lock
-          poetry build
+      # - name: Build wheels and source tarball
+      #   run: |
+      #     poetry version $(poetry version --short)-dev.$GITHUB_RUN_NUMBER
+      #     poetry lock
+      #     poetry build
 
-      - name: publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN}}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+      # - name: publish to Test PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.TEST_PYPI_API_TOKEN}}
+      #     repository_url: https://test.pypi.org/legacy/
+      #     skip_existing: true
 
-  notification:
-    needs: [test,publish_dev_build]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: martialonline/workflow-status@v2
-        id: check
+  # notification:
+  #   needs: [test,publish_dev_build]
+  #   if: always()
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: martialonline/workflow-status@v2
+  #       id: check
 
-      - name: build success notification via email
-        if: ${{ steps.check.outputs.status == 'success' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.BUILD_NOTIFY_MAIL_SERVER }}
-          server_port: ${{ secrets.BUILD_NOTIFY_MAIL_PORT }}
-          username: ${{ secrets.BUILD_NOTIFY_MAIL_FROM }}
-          password: ${{ secrets.BUILD_NOTIFY_MAIL_PASSWORD }}
-          from: build-bot
-          to: ${{ secrets.BUILD_NOTIFY_MAIL_RCPT }}
-          subject: ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version}}.dev.${{ github.run_number }} build successfully
-          convert_markdown: true
-          html_body: |
-            ## Build Success
-            ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version }}.dev.${{ github.run_number }} is built and published to test pypi
+  #     - name: build success notification via email
+  #       if: ${{ steps.check.outputs.status == 'success' }}
+  #       uses: dawidd6/action-send-mail@v3
+  #       with:
+  #         server_address: ${{ secrets.BUILD_NOTIFY_MAIL_SERVER }}
+  #         server_port: ${{ secrets.BUILD_NOTIFY_MAIL_PORT }}
+  #         username: ${{ secrets.BUILD_NOTIFY_MAIL_FROM }}
+  #         password: ${{ secrets.BUILD_NOTIFY_MAIL_PASSWORD }}
+  #         from: build-bot
+  #         to: ${{ secrets.BUILD_NOTIFY_MAIL_RCPT }}
+  #         subject: ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version}}.dev.${{ github.run_number }} build successfully
+  #         convert_markdown: true
+  #         html_body: |
+  #           ## Build Success
+  #           ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version }}.dev.${{ github.run_number }} is built and published to test pypi
 
-            ## Change Details
-            ${{ github.event.head_commit.message }}
+  #           ## Change Details
+  #           ${{ github.event.head_commit.message }}
 
-            For more information, please check change history at https://${{ needs.test.outputs.repo_owner }}.github.io/${{ needs.test.outputs.repo_name }}/${{ needs.test.outputs.package_version }}.dev/history
+  #           For more information, please check change history at https://${{ needs.test.outputs.repo_owner }}.github.io/${{ needs.test.outputs.repo_name }}/${{ needs.test.outputs.package_version }}.dev/history
 
-            ## Package Download
-            The pacakge is available at: https://test.pypi.org/project/${{ needs.test.outputs.package_name }}/
+  #           ## Package Download
+  #           The pacakge is available at: https://test.pypi.org/project/${{ needs.test.outputs.package_name }}/
 
-      - name: build failure notification via email
-        if: ${{ steps.check.outputs.status == 'failure' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.BUILD_NOTIFY_MAIL_SERVER }}
-          server_port: ${{ secrets.BUILD_NOTIFY_MAIL_PORT }}
-          username: ${{ secrets.BUILD_NOTIFY_MAIL_FROM }}
-          password: ${{ secrets.BUILD_NOTIFY_MAIL_PASSWORD }}
-          from: build-bot
-          to: ${{ secrets.BUILD_NOTIFY_MAIL_RCPT }}
-          subject: ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version}}.dev.${{ github.run_number }} build failure
-          convert_markdown: true
-          html_body: |
-            ## Change Details
-            ${{ github.event.head_commit.message }}
+  #     - name: build failure notification via email
+  #       if: ${{ steps.check.outputs.status == 'failure' }}
+  #       uses: dawidd6/action-send-mail@v3
+  #       with:
+  #         server_address: ${{ secrets.BUILD_NOTIFY_MAIL_SERVER }}
+  #         server_port: ${{ secrets.BUILD_NOTIFY_MAIL_PORT }}
+  #         username: ${{ secrets.BUILD_NOTIFY_MAIL_FROM }}
+  #         password: ${{ secrets.BUILD_NOTIFY_MAIL_PASSWORD }}
+  #         from: build-bot
+  #         to: ${{ secrets.BUILD_NOTIFY_MAIL_RCPT }}
+  #         subject: ${{ needs.test.outputs.package_name }}.${{ needs.test.outputs.package_version}}.dev.${{ github.run_number }} build failure
+  #         convert_markdown: true
+  #         html_body: |
+  #           ## Change Details
+  #           ${{ github.event.head_commit.message }}
 
-            ## View Log
-            https://github.com/${{ needs.test.outputs.repo_owner }}/${{ needs.test.outputs.repo_name }}/actions
+  #           ## View Log
+  #           https://github.com/${{ needs.test.outputs.repo_owner }}/${{ needs.test.outputs.repo_name }}/actions
 
 
       # - name: Dingtalk Robot Notify

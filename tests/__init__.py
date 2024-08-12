@@ -1,1 +1,1 @@
-"""Unit test package for alphameter."""
+"""Unit test package for procaliper."""
