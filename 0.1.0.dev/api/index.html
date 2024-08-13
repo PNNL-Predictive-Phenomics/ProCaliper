@@ -674,9 +674,7 @@
 
               <details class="quote">
                 <summary>Source code in <code>procaliper/protein.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 20</span>
 <span class="normal"> 21</span>
 <span class="normal"> 22</span>
 <span class="normal"> 23</span>
@@ -896,7 +894,71 @@
 <span class="normal">237</span>
 <span class="normal">238</span>
 <span class="normal">239</span>
-<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;ACT_SITE (\d+);&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)],</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -934,6 +996,23 @@
         <span class="s2">&quot;helix&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;HELIX (\d+);&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;HELIX (\d+)\.\.(\d+);&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)],</span>
         <span class="s2">&quot;turn&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;TURN (\d+);&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;TURN (\d+)\.\.(\d+);&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)],</span>
     <span class="p">}</span>
+
+    <span class="n">UNIPROT_API_DEFAULT_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;reviewed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;protein_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gene_names&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;organism_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sequence&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_act_site&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_binding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_dna_bind&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_disulfid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_strand&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_helix&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ft_turn&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -976,6 +1055,51 @@
 
         <span class="n">p</span><span class="o">.</span><span class="n">_rectify_data_labels</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">p</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_uniprot_id</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">uniprot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UNIPROT_API_DEFAULT_FIELDS</span>
+
+        <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="n">uniprot_id</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uniprot id </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2"> not retrieved&quot;</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">uniprot_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Protein</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UNIPROT_API_DEFAULT_FIELDS</span>
+
+        <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">uniprot_ids</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uniprot id </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2"> not retrieved&quot;</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Protein</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sasa_data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">sasa_data</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">charge_data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">charge_data</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">size_data</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sasa_data</span><span class="p">:</span>
