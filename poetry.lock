@@ -170,7 +170,7 @@ files = [
 name = "certifi"
 version = "2024.7.4"
 description = "Python package for providing Mozilla's CA Bundle."
-optional = true
+optional = false
 python-versions = ">=3.6"
 files = [
     {file = "certifi-2024.7.4-py3-none-any.whl", hash = "sha256:c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90"},
@@ -282,7 +282,7 @@ files = [
 name = "charset-normalizer"
 version = "3.3.2"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
-optional = true
+optional = false
 python-versions = ">=3.7.0"
 files = [
     {file = "charset-normalizer-3.3.2.tar.gz", hash = "sha256:f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5"},
@@ -685,7 +685,7 @@ license = ["ukkonen"]
 name = "idna"
 version = "3.7"
 description = "Internationalized Domain Names in Applications (IDNA)"
-optional = true
+optional = false
 python-versions = ">=3.5"
 files = [
     {file = "idna-3.7-py3-none-any.whl", hash = "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"},
@@ -2072,7 +2072,7 @@ files = [
 name = "requests"
 version = "2.32.3"
 description = "Python HTTP for Humans."
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
@@ -2327,10 +2327,29 @@ files = [
 ]
 
 [[package]]
+name = "uniprot-id-mapper"
+version = "1.1.2"
+description = "A Python wrapper for the UniProt Mapping RESTful API."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "uniprot_id_mapper-1.1.2-py3-none-any.whl", hash = "sha256:d58bacc43dcb7f4ae13e744f4fa5d3ea59d899f3b34748dc694d4ca8f6ade9c3"},
+    {file = "uniprot_id_mapper-1.1.2.tar.gz", hash = "sha256:5cc0bf5ca91cd123749b631cc1ea807052676085239cc4e4409e2036a367003b"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+requests = "*"
+
+[package.extras]
+dev = ["black", "isort", "ruff"]
+
+[[package]]
 name = "urllib3"
 version = "2.2.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "urllib3-2.2.2-py3-none-any.whl", hash = "sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472"},
@@ -2461,4 +2480,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "be8e35268609c4aeee07014ea8179b222818ae9e4f82593f05008b557d868a2a"
+content-hash = "d9b1d9e16f83c20c7f609cec3cdd270625a9cbda9a7bed7d5918e77f70826571"
