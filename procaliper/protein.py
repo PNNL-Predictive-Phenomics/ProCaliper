@@ -9,7 +9,9 @@ import os
 import re
 from typing import Any, cast
 
+import pandas as pd
 import requests
+from UniProtMapper import ProtMapper
 
 import procaliper._protein_structure as structure
 from procaliper.type_aliases import AminoAcidLetter
@@ -54,6 +56,23 @@ class Protein:
         "turn": [(r"TURN (\d+);", True), (r"TURN (\d+)\.\.(\d+);", True)],
     }
 
+    UNIPROT_API_DEFAULT_FIELDS = [
+        "id",
+        "reviewed",
+        "protein_name",
+        "gene_names",
+        "organism_name",
+        "length",
+        "sequence",
+        "ft_act_site",
+        "ft_binding",
+        "ft_dna_bind",
+        "ft_disulfid",
+        "ft_strand",
+        "ft_helix",
+        "ft_turn",
+    ]
+
     def __init__(self) -> None:
         self.data: dict[str, Any] = {}
         self.pdb_location_relative: str | None = None
@@ -95,6 +114,51 @@ class Protein:
 
         p._rectify_data_labels()
         return p
+
+    @classmethod
+    def from_uniprot_id(
+        cls, uniprot_id: str, fields: list[str] | None = None
+    ) -> Protein:
+        if not fields:
+            fields = cls.UNIPROT_API_DEFAULT_FIELDS
+
+        mapper = ProtMapper()
+
+        result, error = mapper.get(ids=[uniprot_id], fields=fields)  # type: ignore
+        if error:
+            raise ValueError(f"Uniprot id {error} not retrieved")
+        result.rename(columns={"From": "entry"}, inplace=True)
+        if "Length" in result.columns:
+            result["Length"] = pd.to_numeric(result["Length"])  # type: ignore
+        return cls.from_uniprot_row(result.iloc[0].to_dict())  # type: ignore
+
+    @classmethod
+    def list_from_uniprot_ids(
+        cls, uniprot_ids: list[str], fields: list[str] | None = None
+    ) -> list[Protein]:
+        if not fields:
+            fields = cls.UNIPROT_API_DEFAULT_FIELDS
+
+        mapper = ProtMapper()
+
+        result, error = mapper.get(ids=uniprot_ids, fields=fields)  # type: ignore
+        if error:
+            raise ValueError(f"Uniprot id {error} not retrieved")
+        result.rename(columns={"From": "entry"}, inplace=True)
+
+        if "Length" in result.columns:
+            result["Length"] = pd.to_numeric(result["Length"])  # type: ignore
+        return [cls.from_uniprot_row(row.to_dict()) for _, row in result.iterrows()]  # type: ignore
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Protein):
+            return False
+        return (
+            self.data == other.data
+            and self.sasa_data == other.sasa_data
+            and self.charge_data == other.charge_data
+            and self.size_data == other.size_data
+        )
 
     def get_sasa(self) -> structure.sasa.SASAData:
         if self.sasa_data:
