@@ -2,12 +2,12 @@ import pandas as pd
 
 from procaliper.protein import Protein
 
+TEST_DATA_PATH = (
+    "tests/test_data/uniprotkb_Human_AND_model_organism_9606_2024_08_07.tsv"
+)
+
 
 def test_read_uniprot_row() -> None:
-    TEST_DATA_PATH = (
-        "tests/test_data/uniprotkb_Human_AND_model_organism_9606_2024_08_07.tsv"
-    )
-
     COMPARISON_ENTRY_1 = "A0A0B4J2F0"
     COMPARISON_SEQUENCE_1 = "MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS"
 
@@ -78,3 +78,29 @@ def test_fetch_pdb():
     row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
     protein = Protein.from_uniprot_row(row_dict)
     protein.fetch_pdb(save_path="tests/test_data/outputs/test_pdb.pdb")
+
+
+def test_uniprot_api():
+    df = pd.read_csv(  # type: ignore
+        TEST_DATA_PATH,
+        sep="\t",
+        nrows=5,
+    )
+
+    ids: list[str] = df["Entry"].to_list()
+
+    print(Protein.from_uniprot_id(ids[0]).data)
+    print(
+        Protein.from_uniprot_row(
+            df.iloc[0].to_dict()  # type: ignore
+        ).data
+    )
+
+    assert Protein.from_uniprot_id(ids[0]) == Protein.from_uniprot_row(
+        df.iloc[0].to_dict()  # type: ignore
+    )
+
+    assert Protein.list_from_uniprot_ids(ids) == [
+        Protein.from_uniprot_row(row.to_dict())  # type: ignore
+        for _, row in df.iterrows()  # type: ignore
+    ]
