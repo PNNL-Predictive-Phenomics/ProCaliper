@@ -205,6 +205,20 @@ class Protein:
                 "Size data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
+    def get_titration(self) -> structure.titration.TitrationData:
+        if self.titration_data:
+            return self.titration_data
+
+        if self.pdb_location_absolute:
+            self.titration_data = structure.titration.calculate_titration(
+                self.pdb_location_absolute,
+            )
+            return self.titration_data
+        else:
+            raise ValueError(
+                "Titration data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
+
     def unravel_sites(
         self,
         selected_aas: None | set[AminoAcidLetter] = None,
