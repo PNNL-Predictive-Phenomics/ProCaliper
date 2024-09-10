@@ -81,6 +81,7 @@ class Protein:
         self.sasa_data: structure.sasa.SASAData | None = None
         self.charge_data: structure.charge.ChargeData | None = None
         self.size_data: structure.size.SizeData | None = None
+        self.titration_data: structure.titration.TitrationData | None = None
         pass
 
     def _rectify_data_labels(self) -> None:
@@ -211,6 +212,20 @@ class Protein:
 
         if self.pdb_location_absolute:
             self.titration_data = structure.titration.calculate_titration(
+                self.pdb_location_absolute,
+            )
+            return self.titration_data
+        else:
+            raise ValueError(
+                "Titration data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
+
+    def get_titration_estimate(self) -> structure.titration.TitrationData:
+        if self.titration_data:
+            return self.titration_data
+
+        if self.pdb_location_absolute:
+            self.titration_data = structure.titration.estimate_titration(
                 self.pdb_location_absolute,
             )
             return self.titration_data
