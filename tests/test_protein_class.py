@@ -92,7 +92,7 @@ def test_structure_run_only():
     protein.get_sasa()
     protein.get_size()
     # protein.get_titration() # optional dependency
-    protein.get_titration_estimate()
+    # protein.get_titration_estimate() # optional dependency
 
 
 def test_uniprot_api():

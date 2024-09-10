@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Literal, TypedDict
 
-from pkai.pKAI import pKAI
-
 NEUTRAL_PH = 7.0
 
 
@@ -44,36 +42,8 @@ def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
     return state, average_prot
 
 
-def estimate_titration(
-    pdb_filename: str,
-    model_name: Literal["pKAI", "pKAI+"] = "pKAI",
-    device: Literal["cpu", "gpu"] = "cpu",
-    threads=None,
-) -> TitrationData:
-    predictions = pKAI(
-        pdb_filename, model_name=model_name, device=device, threads=threads
-    )
-
-    residue_names = []
-    residue_numbers = []
-    pKs = []
-    states = []
-    for _, resnumb, resname, pk in predictions:  # we do not use the chain here
-        residue_names.append(resname)
-        residue_numbers.append(resnumb)
-        pKs.append(pk)
-        states.append(_state_from_pk(pk))
-
-    return TitrationData(
-        residue_names=residue_names,
-        residue_numbers=residue_numbers,
-        pKs=pKs,
-        states=states,
-    )
-
-
 try:
-    from pypka import Titration
+    from pypka import Titration  # type: ignore
 
     def calculate_titration(
         pdb_filename: str,
@@ -111,4 +81,49 @@ except ImportError:
         periodic_boundary_dims: int = 0,
         sites: str | dict[str, tuple[str,]] = "all",
     ) -> TitrationData:
-        raise ImportError("pypka not installed. Install with `pip install pypka`")
+        raise ImportError(
+            "pypka not installed. Install with `pip install pypka` (note that libgfortran4 will be required.)"
+        )
+
+
+try:
+    from pkai.pKAI import pKAI  # type: ignore
+
+    def estimate_titration(
+        pdb_filename: str,
+        model_name: Literal["pKAI", "pKAI+"] = "pKAI",
+        device: Literal["cpu", "gpu"] = "cpu",
+        threads=None,
+    ) -> TitrationData:
+        predictions = pKAI(
+            pdb_filename, model_name=model_name, device=device, threads=threads
+        )
+
+        residue_names = []
+        residue_numbers = []
+        pKs = []
+        states = []
+        for _, resnumb, resname, pk in predictions:  # we do not use the chain here
+            residue_names.append(resname)
+            residue_numbers.append(resnumb)
+            pKs.append(pk)
+            states.append(_state_from_pk(pk))
+
+        return TitrationData(
+            residue_names=residue_names,
+            residue_numbers=residue_numbers,
+            pKs=pKs,
+            states=states,
+        )
+
+except ImportError:
+
+    def estimate_titration(
+        pdb_filename: str,
+        model_name: Literal["pKAI", "pKAI+"] = "pKAI",
+        device: Literal["cpu", "gpu"] = "cpu",
+        threads=None,
+    ) -> TitrationData:
+        raise ImportError(
+            "pkai not installed. Install with `pip install pkai` (note that only Python 3.11 or lower is supported.)"
+        )
