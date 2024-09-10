@@ -105,11 +105,7 @@ def test_uniprot_api():
     ids: list[str] = df["Entry"].to_list()
 
     print(Protein.from_uniprot_id(ids[0]).data)
-    print(
-        Protein.from_uniprot_row(
-            df.iloc[0].to_dict()  # type: ignore
-        ).data
-    )
+    print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)  # type: ignore
 
     assert Protein.from_uniprot_id(ids[0]) == Protein.from_uniprot_row(
         df.iloc[0].to_dict()  # type: ignore
