@@ -19,6 +19,7 @@ packages = [{ include = "procaliper" }, { include = "tests", format = "sdist" }]
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 fire = "0.6.0"
+torch = "^1.2.0"
 biopython = "1.84"
 openbabel-wheel = "3.1.1.19"                    # note: might want to change to official openbabel if/when install issues are fixed
 biopandas = "0.5.1"
