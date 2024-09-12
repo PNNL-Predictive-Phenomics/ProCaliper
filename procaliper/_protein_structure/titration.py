@@ -53,6 +53,9 @@ try:
         periodic_boundary_dims: int = 0,
         sites: str | dict[str, tuple[str,]] = "all",
     ) -> TitrationData:
+        if cpu_limit is None:
+            cpu_limit = -1
+
         titr_params = {
             "structure": pdb_filename,
             "ncpus": cpu_limit,
