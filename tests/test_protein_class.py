@@ -91,8 +91,15 @@ def test_structure_run_only():
     protein.get_charge()
     protein.get_sasa()
     protein.get_size()
-    # protein.get_titration() # optional dependency
-    # protein.get_titration_estimate() # optional dependency
+
+    try:
+        protein.get_titration()  # optional dependency
+    except ImportError:
+        pass
+    try:
+        protein.get_titration_estimate()  # optional dependency
+    except ImportError:
+        pass
 
 
 def test_uniprot_api():
