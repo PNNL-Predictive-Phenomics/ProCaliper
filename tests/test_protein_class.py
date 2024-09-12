@@ -92,12 +92,15 @@ def test_structure_run_only():
     protein.get_sasa()
     protein.get_size()
 
+    protein.get_titration()
+    protein.get_titration_from_propka()
+
     try:
-        protein.get_titration()  # optional dependency
+        protein.get_titration_from_pypka()  # optional dependency
     except ImportError:
         pass
     try:
-        protein.get_titration_estimate()  # optional dependency
+        protein.get_titration_from_pkai()  # optional dependency
     except ImportError:
         pass
 

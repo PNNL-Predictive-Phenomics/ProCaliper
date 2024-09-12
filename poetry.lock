@@ -1783,6 +1783,17 @@ pyyaml = ">=5.1"
 virtualenv = ">=20.10.0"
 
 [[package]]
+name = "propka"
+version = "3.5.1"
+description = "Heuristic pKa calculations with ligands"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "propka-3.5.1-py3-none-any.whl", hash = "sha256:2df2d81adc9205113a0e6f9d96b06b46e29716bc3a71223075dd396e0eefdfc3"},
+    {file = "propka-3.5.1.tar.gz", hash = "sha256:d8083b58d8c4c553ff8704c706190fe37ff82253adcd6e53b31d8ad7d6d52257"},
+]
+
+[[package]]
 name = "psutil"
 version = "6.0.0"
 description = "Cross-platform lib for process and system monitoring in Python."
@@ -2694,4 +2705,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "f2cf4281756a23fdc47f1f09f69f8416d4915746c4763521cc136e8176250508"
+content-hash = "3612b17b43194b3385de7c83f2c2e51ee7933fd9f0cb3e962b8b1b6c3a0dc1d2"

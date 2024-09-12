@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+import logging
 from typing import Literal, TypedDict
 
+import propka
+import propka.run
+
+logging.getLogger("propka").setLevel(logging.WARNING)
 NEUTRAL_PH = 7.0
 
 
@@ -42,10 +47,21 @@ def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
     return state, average_prot
 
 
+def calculate_titration_propka(pdb_filename: str) -> TitrationData:
+    mol = propka.run.single(pdb_filename, optargs=["--quiet"], write_pka=False)
+    gs = mol.conformations["AVR"].groups
+    return TitrationData(
+        residue_names=[group.atom.res_name for group in gs],
+        residue_numbers=[group.atom.res_num for group in gs],
+        pKs=[group.pka_value for group in gs],
+        states=[_state_from_pk(group.pka_value) for group in gs],
+    )
+
+
 try:
     from pypka import Titration  # type: ignore
 
-    def calculate_titration(
+    def calculate_titration_pypka(
         pdb_filename: str,
         cpu_limit: int | None = None,
         epsin: float = 15.0,
@@ -76,7 +92,7 @@ try:
 
 except ImportError:
 
-    def calculate_titration(
+    def calculate_titration_pypka(
         pdb_filename: str,
         cpu_limit: int | None = None,
         epsin: float = 15.0,
@@ -92,7 +108,7 @@ except ImportError:
 try:
     from pkai.pKAI import pKAI  # type: ignore
 
-    def estimate_titration(
+    def calculate_titration_pkai(
         pdb_filename: str,
         model_name: Literal["pKAI", "pKAI+"] = "pKAI",
         device: Literal["cpu", "gpu"] = "cpu",
@@ -121,7 +137,7 @@ try:
 
 except ImportError:
 
-    def estimate_titration(
+    def calculate_titration_pkai(
         pdb_filename: str,
         model_name: Literal["pKAI", "pKAI+"] = "pKAI",
         device: Literal["cpu", "gpu"] = "cpu",

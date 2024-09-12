@@ -207,11 +207,14 @@ class Protein:
             )
 
     def get_titration(self) -> structure.titration.TitrationData:
+        return self.get_titration_from_propka()
+
+    def get_titration_from_propka(self) -> structure.titration.TitrationData:
         if self.titration_data:
             return self.titration_data
 
         if self.pdb_location_absolute:
-            self.titration_data = structure.titration.calculate_titration(
+            self.titration_data = structure.titration.calculate_titration_propka(
                 self.pdb_location_absolute,
             )
             return self.titration_data
@@ -220,12 +223,26 @@ class Protein:
                 "Titration data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
-    def get_titration_estimate(self) -> structure.titration.TitrationData:
+    def get_titration_from_pypka(self) -> structure.titration.TitrationData:
         if self.titration_data:
             return self.titration_data
 
         if self.pdb_location_absolute:
-            self.titration_data = structure.titration.estimate_titration(
+            self.titration_data = structure.titration.calculate_titration_pypka(
+                self.pdb_location_absolute,
+            )
+            return self.titration_data
+        else:
+            raise ValueError(
+                "Titration data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
+
+    def get_titration_from_pkai(self) -> structure.titration.TitrationData:
+        if self.titration_data:
+            return self.titration_data
+
+        if self.pdb_location_absolute:
+            self.titration_data = structure.titration.calculate_titration_pkai(
                 self.pdb_location_absolute,
             )
             return self.titration_data
