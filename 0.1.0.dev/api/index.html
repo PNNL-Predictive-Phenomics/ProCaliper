@@ -987,7 +987,24 @@
 <span class="normal">330</span>
 <span class="normal">331</span>
 <span class="normal">332</span>
-<span class="normal">333</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;ACT_SITE (\d+);&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)],</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1177,11 +1194,14 @@
             <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_titration_from_propka</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">calculate_titration</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">calculate_titration_propka</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
@@ -1190,12 +1210,26 @@
                 <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_titration_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">estimate_titration</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">calculate_titration_pypka</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">calculate_titration_pkai</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span>
