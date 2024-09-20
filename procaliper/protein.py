@@ -96,7 +96,12 @@ class Protein:
     @classmethod
     def from_uniprot_row(cls, row: dict[str, Any]) -> Protein:
         p = cls()
-        p.data["sequence"] = row["Sequence"]
+        if "Sequence" in row:
+            p.data["sequence"] = row["Sequence"]
+        elif "sequence" in row:
+            p.data["sequence"] = row["sequence"]
+        else:
+            raise ValueError(f"Sequence not found in row: {row}")
 
         for key, value in row.items():
             if key in cls.UNIPROT_SITE_PATTERNS:
@@ -117,14 +122,20 @@ class Protein:
 
     @classmethod
     def from_uniprot_id(
-        cls, uniprot_id: str, fields: list[str] | None = None
+        cls,
+        uniprot_id: str,
+        fields: list[str] | None = None,
+        from_db: str = "UniProtKB_AC-ID",
+        to_db: str = "UniProtKB-Swiss-Prot",
     ) -> Protein:
         if not fields:
             fields = cls.UNIPROT_API_DEFAULT_FIELDS
 
         mapper = ProtMapper()
 
-        result, error = mapper.get(ids=[uniprot_id], fields=fields)  # type: ignore
+        result, error = mapper.get(  # type: ignore
+            ids=[uniprot_id], fields=fields, from_db=from_db, to_db=to_db
+        )
         if error:
             raise ValueError(f"Uniprot id {error} not retrieved")
         result.rename(columns={"From": "entry"}, inplace=True)
@@ -134,14 +145,20 @@ class Protein:
 
     @classmethod
     def list_from_uniprot_ids(
-        cls, uniprot_ids: list[str], fields: list[str] | None = None
+        cls,
+        uniprot_ids: list[str],
+        fields: list[str] | None = None,
+        from_db: str = "UniProtKB_AC-ID",
+        to_db: str = "UniProtKB-Swiss-Prot",
     ) -> list[Protein]:
         if not fields:
             fields = cls.UNIPROT_API_DEFAULT_FIELDS
 
         mapper = ProtMapper()
 
-        result, error = mapper.get(ids=uniprot_ids, fields=fields)  # type: ignore
+        result, error = mapper.get(  # type: ignore
+            ids=uniprot_ids, fields=fields, from_db=from_db, to_db=to_db
+        )
         if error:
             raise ValueError(f"Uniprot id {error} not retrieved")
         result.rename(columns={"From": "entry"}, inplace=True)
