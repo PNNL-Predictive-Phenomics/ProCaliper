@@ -20,9 +20,14 @@ packages = [{ include = "procaliper" }, { include = "tests", format = "sdist" }]
 python = ">=3.9,<4.0"
 fire = "0.6.0"
 biopython = "1.84"
-openbabel-wheel = "3.1.1.19" # note: might want to change to official openbabel if/when install issues are fixed
+openbabel-wheel = "3.1.1.19"                                     # note: might want to change to official openbabel if/when install issues are fixed
 biopandas = "0.5.1"
 uniprot-id-mapper = "1.1.2"
+propka = { version = "3.5.1" }
+pkai = { version = "1.2.0", optional = true, python = "<=3.11" }
+pypka = { version = "2.10.0", optional = true }
+numpy = { version = "1.26.4", optional = true }
+
 
 black = { version = "24.8.0", optional = true }
 isort = { version = "5.10.1", optional = true }
@@ -31,14 +36,14 @@ flake8-docstrings = { version = "^1.6.0", optional = true }
 pytest = { version = "8.3.2", optional = true }
 pytest-cov = { version = "5.0.0", optional = true }
 tox = { version = "4.17.1", optional = true }
-mkdocs = { version = "^1.2.3", optional = true }
-mkdocs-include-markdown-plugin = { version = "6.2.1", optional = true }
-mkdocs-material = { version = "9.5.31", optional = true }
-mkdocstrings = { version = "0.25.2", optional = true }
-mkdocstrings-python = { version = "1.10.7", optional = true }
+mkdocs = { version = "1.6.1", optional = true }
+mkdocs-include-markdown-plugin = { version = "6.2.2", optional = true }
+mkdocs-material = { version = "9.5.34", optional = true }
+mkdocstrings = { version = "0.26.1", optional = true }
+mkdocstrings-python = { version = "1.11.1", optional = true }
 mkdocs-material-extensions = { version = "^1.0.3", optional = true }
 twine = { version = "5.1.1", optional = true }
-mkdocs-autorefs = { version = "1.0.1", optional = true }
+mkdocs-autorefs = { version = "1.2.0", optional = true }
 pre-commit = { version = "3.8.0", optional = true }
 toml = { version = "^0.10.2", optional = true }
 livereload = { version = "^2.6.3", optional = true }
@@ -80,6 +85,8 @@ doc = [
     "pkginfo",
     "virtualenv",
 ]
+
+pka = ["pypka", "pkai", "numpy"]
 
 [tool.poetry.scripts]
 procaliper = 'procaliper.cli:main'

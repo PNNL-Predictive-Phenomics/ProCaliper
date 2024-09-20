@@ -80,6 +80,31 @@ def test_fetch_pdb():
     protein.fetch_pdb(save_path="tests/test_data/outputs/test_pdb.pdb")
 
 
+def test_structure_run_only():
+    TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
+    TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
+
+    row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
+    protein = Protein.from_uniprot_row(row_dict)
+    protein.fetch_pdb(save_path="tests/test_data/outputs/test_pdb.pdb")
+
+    protein.get_charge()
+    protein.get_sasa()
+    protein.get_size()
+
+    protein.get_titration()
+    protein.get_titration_from_propka()
+
+    try:
+        protein.get_titration_from_pypka()  # optional dependency
+    except ImportError:
+        pass
+    try:
+        protein.get_titration_from_pkai()  # optional dependency
+    except ImportError:
+        pass
+
+
 def test_uniprot_api():
     df = pd.read_csv(  # type: ignore
         TEST_DATA_PATH,
@@ -90,11 +115,7 @@ def test_uniprot_api():
     ids: list[str] = df["Entry"].to_list()
 
     print(Protein.from_uniprot_id(ids[0]).data)
-    print(
-        Protein.from_uniprot_row(
-            df.iloc[0].to_dict()  # type: ignore
-        ).data
-    )
+    print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)  # type: ignore
 
     assert Protein.from_uniprot_id(ids[0]) == Protein.from_uniprot_row(
         df.iloc[0].to_dict()  # type: ignore
