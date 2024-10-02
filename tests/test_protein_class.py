@@ -1,6 +1,6 @@
 import pandas as pd
 
-from procaliper.protein import Protein
+from procaliper import Protein
 
 TEST_DATA_PATH = (
     "tests/test_data/uniprotkb_Human_AND_model_organism_9606_2024_08_07.tsv"

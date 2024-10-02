@@ -99,7 +99,7 @@ class Protein:
 
         Args:
             row (dict[str, Any]): Contains the data from the Uniprot table. Must
-            have "Sequence" or "sequence" as a key.
+                have "Sequence" or "sequence" as a key.
 
         Raises:
             ValueError: If "Sequence" or "sequence" is not found in the row.
@@ -232,11 +232,11 @@ class Protein:
 
         Raises:
             ValueError: If `sasa_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns:
             structure.sasa.SASAData: A :class:`protein_structure.sasa.SASAData`
-            object containing the SASA values for cystein sites.
+                object containing the SASA values for cystein sites.
         """
         if self.sasa_data:
             return self.sasa_data
@@ -260,11 +260,11 @@ class Protein:
 
         Raises:
             ValueError: If `charge_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns:
             structure.charge.ChargeData: A :class:`protein_structure.charge.ChargeData`
-            object containing the charge values for cystein sites.
+                object containing the charge values for cystein sites.
         """
         if self.charge_data:
             return self.charge_data
@@ -288,11 +288,11 @@ class Protein:
 
         Raises:
             ValueError: If `size_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns:
             structure.size.SizeData: A :class:`protein_structure.size.SizeData`
-            object containing the size values for cystein sites.
+                object containing the size values for cystein sites.
         """
         if self.size_data:
             return self.size_data
@@ -318,12 +318,12 @@ class Protein:
 
         Raises:
             ValueError: If `titration_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns:
             structure.titration.TitrationData: A
-            :class:`protein_structure.titration.TitrationData` object containing
-            the titration values for cystein sites.
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites.
         """
         return self.get_titration_from_propka()
 
@@ -338,12 +338,12 @@ class Protein:
 
         Raises:
             ValueError: If `titration_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns:
             structure.titration.TitrationData: A
-            :class:`protein_structure.titration.TitrationData` object containing
-            the titration values for cystein sites."""
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
         if self.titration_data:
             return self.titration_data
 
@@ -370,13 +370,13 @@ class Protein:
 
         Raises:
             ValueError: If `titration_data` is not already stored and
-            `pdb_location_absolute` is not set. ImportError: If pypka is not
-            installed.
+                `pdb_location_absolute` is not set. ImportError: If pypka is not
+                installed.
 
         Returns:
             structure.titration.TitrationData: A
-            :class:`protein_structure.titration.TitrationData` object containing
-            the titration values for cystein sites."""
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
 
         if self.titration_data:
             return self.titration_data
@@ -404,11 +404,11 @@ class Protein:
 
         Raises:
             ValueError: If `titration_data` is not already stored and
-            `pdb_location_absolute` is not set.
+                `pdb_location_absolute` is not set.
 
         Returns: structure.titration.TitrationData: A
-        :class:`protein_structure.titration.TitrationData` object containing
-            the titration values for cystein sites."""
+            :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
         if self.titration_data:
             return self.titration_data
 
@@ -432,12 +432,12 @@ class Protein:
         Args:
             selected_aas: A set of amino acids letters to include in the output.
             selected_keys: A set of keys to include in the output. Possible keys
-            can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.
+                can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.
 
         Returns:
             dict[str, list[Any]]: A dictionary mapping keys to lists of values.
-            Each list is a parallel array of the same length as the protein
-            sequence (after filtering out non-selected amino acids)."""
+                Each list is a parallel array of the same length as the protein
+                sequence (after filtering out non-selected amino acids)."""
         if not selected_keys:
             selected_keys = set(self.data.keys()) - {"sequence"}
 
@@ -474,7 +474,7 @@ class Protein:
 
         Raises:
             Exception: If the response status code is not 200, meaning we could
-            not fetch the PDB from the database."""
+                not fetch the PDB from the database."""
         if not url:
             url = f"https://alphafold.ebi.ac.uk/files/AF-{self.data['entry']}-F1-model_v4.pdb"
         if not save_path:
