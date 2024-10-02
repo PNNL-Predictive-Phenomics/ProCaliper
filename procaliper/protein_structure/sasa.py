@@ -13,6 +13,17 @@ N_POINTS = int(
 
 
 class SASAData(TypedDict):
+    """Data class for holding SASA data from computed from a PDB file.
+
+    Attributes:
+        entry (list[str]): An entry name corresponding the protein (typically will be UniProt ID).
+        all_sasa_value (list[float]): The overall SASA value for all CYS sites.
+        sg_sasa_value (list[float]): The SASA value for the CYS sites at SG atom.
+        residue_id (list[int]): The residue ID for the CYS sites.
+        residue_name (list[str]): The residue name for the CYS sites.
+        b_factor (list[float]): The B factor for the CYS sites.
+    """
+
     entry: list[str]
     all_sasa_value: list[float]
     sg_sasa_value: list[float]
@@ -21,7 +32,19 @@ class SASAData(TypedDict):
     b_factor: list[float]
 
 
-def calculate_sasa(pdb_filename: str, shortname: str):
+def calculate_sasa(pdb_filename: str, shortname: str) -> SASAData:
+    """Compute the SASA values for all CYS sites in a PDB file.
+
+    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`
+    with a probe radius of 1.40.
+
+    Args:
+        pdb_filename (str): The path to the PDB file. shortname (str): The
+            shortname of the protein (typically will be UniProt ID).
+
+    Returns:
+        SASAData: A data class for holding SASA data from computed from a PDB
+            file."""
     p = PDBParser(QUIET=True)
     struct = p.get_structure(shortname, pdb_filename)  # type: ignore
 

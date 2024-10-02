@@ -22,6 +22,18 @@ METHOD_USED = str(HYPERPARAMETERS.get("charge_method_used"))
 
 
 class ChargeData(TypedDict):
+    """
+    A data class for holding charge data from computed from a PDB file.
+
+    Attributes:
+        entry (list[str]): An entry name corresponding the protein (typically will be UniProt ID).
+        all_charge_value (list[float]): The charge value for all CYS sites (summed over atoms).
+        sg_charge_value (list[float]): The charge value for the CYS sites at SG atom.
+        method (list[str]): The method used for the charge calculation.
+        residue_id (list[int]): The residue ID for the CYS sites.
+        residue_name (list[str]): The residue name for the CYS sites.
+    """
+
     entry: list[str]
     all_charge_value: list[float]
     sg_charge_value: list[float]
@@ -30,7 +42,23 @@ class ChargeData(TypedDict):
     residue_name: list[str]
 
 
-def calculate_charge(pdb_filename: str, shortname: str):
+def calculate_charge(pdb_filename: str, shortname: str) -> ChargeData:
+    """Computes the charge of CYS sites in a PDB file.
+
+    By default, the method used is 'gasteiger', but this is configurable in
+    `hyperparameters.py`.
+
+    Args:
+        pdb_filename (str): The path to the PDB file. shortname (str): The
+            shortname of the protein (typically will be UniProt ID).
+
+    Raises:
+        ValueError: If the charge method is not found.
+
+    Returns:
+        ChargeData: A data class for holding charge data from computed from a
+            PDB file.
+    """
     pbmol = next(pybel.readfile("pdb", pdb_filename))  # type: ignore
     mol = pbmol.OBMol  # type: ignore
 
