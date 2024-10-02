@@ -16,7 +16,6 @@ class SASAData(TypedDict):
     """Data class for holding SASA data from computed from a PDB file.
 
     Attributes:
-        entry (list[str]): An entry name corresponding the protein (typically will be UniProt ID).
         all_sasa_value (list[float]): The overall SASA value for all CYS sites.
         sg_sasa_value (list[float]): The SASA value for the CYS sites at SG atom.
         residue_id (list[int]): The residue ID for the CYS sites.
@@ -24,7 +23,6 @@ class SASAData(TypedDict):
         b_factor (list[float]): The B factor for the CYS sites.
     """
 
-    entry: list[str]
     all_sasa_value: list[float]
     sg_sasa_value: list[float]
     residue_id: list[int]
@@ -32,21 +30,20 @@ class SASAData(TypedDict):
     b_factor: list[float]
 
 
-def calculate_sasa(pdb_filename: str, shortname: str) -> SASAData:
+def calculate_sasa(pdb_filename: str) -> SASAData:
     """Compute the SASA values for all CYS sites in a PDB file.
 
     Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`
     with a probe radius of 1.40.
 
     Args:
-        pdb_filename (str): The path to the PDB file. shortname (str): The
-            shortname of the protein (typically will be UniProt ID).
+        pdb_filename (str): The path to the PDB file.
 
     Returns:
         SASAData: A data class for holding SASA data from computed from a PDB
             file."""
     p = PDBParser(QUIET=True)
-    struct = p.get_structure(shortname, pdb_filename)  # type: ignore
+    struct = p.get_structure("", pdb_filename)  # type: ignore
 
     sr = ShrakeRupley(probe_radius=1.40, n_points=N_POINTS, radii_dict=None)
 
@@ -57,7 +54,6 @@ def calculate_sasa(pdb_filename: str, shortname: str) -> SASAData:
     # Set up dict
     res = SASAData(
         {
-            "entry": [],
             "all_sasa_value": [],
             "sg_sasa_value": [],
             "residue_id": [],
@@ -71,7 +67,6 @@ def calculate_sasa(pdb_filename: str, shortname: str) -> SASAData:
         for y in x.child_list:  # type: ignore
             for z in y.child_list:  # type: ignore
                 if z.resname == "CYS":  # type: ignore
-                    res["entry"].append(shortname)
                     res["all_sasa_value"].append(z.sasa)  # type: ignore
                     res["sg_sasa_value"].append(z.child_list[5].sasa)  # type: ignore
                     res["residue_id"].append(int(z.id[1]))  # type: ignore

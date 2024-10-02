@@ -244,7 +244,6 @@ class Protein:
         if self.pdb_location_absolute:
             self.sasa_data = structure.sasa.calculate_sasa(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.sasa_data
         else:
@@ -272,7 +271,6 @@ class Protein:
         if self.pdb_location_absolute:
             self.charge_data = structure.charge.calculate_charge(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.charge_data
         else:
@@ -300,7 +298,6 @@ class Protein:
         if self.pdb_location_absolute:
             self.size_data = structure.size.calculate_size(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.size_data
         else:

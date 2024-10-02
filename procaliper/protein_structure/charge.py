@@ -26,7 +26,6 @@ class ChargeData(TypedDict):
     A data class for holding charge data from computed from a PDB file.
 
     Attributes:
-        entry (list[str]): An entry name corresponding the protein (typically will be UniProt ID).
         all_charge_value (list[float]): The charge value for all CYS sites (summed over atoms).
         sg_charge_value (list[float]): The charge value for the CYS sites at SG atom.
         method (list[str]): The method used for the charge calculation.
@@ -34,7 +33,6 @@ class ChargeData(TypedDict):
         residue_name (list[str]): The residue name for the CYS sites.
     """
 
-    entry: list[str]
     all_charge_value: list[float]
     sg_charge_value: list[float]
     method: list[str]
@@ -42,7 +40,7 @@ class ChargeData(TypedDict):
     residue_name: list[str]
 
 
-def calculate_charge(pdb_filename: str, shortname: str) -> ChargeData:
+def calculate_charge(pdb_filename: str) -> ChargeData:
     """Computes the charge of CYS sites in a PDB file.
 
     By default, the method used is 'gasteiger', but this is configurable in
@@ -77,7 +75,6 @@ def calculate_charge(pdb_filename: str, shortname: str) -> ChargeData:
     # Set up dict
     res = ChargeData(
         {
-            "entry": [],
             "all_charge_value": [],
             "sg_charge_value": [],
             "method": [],
@@ -97,7 +94,6 @@ def calculate_charge(pdb_filename: str, shortname: str) -> ChargeData:
 
             # Adds data to dict when CYS site read is over
             if ppdb.df["ATOM"]["atom_name"][x] == "SG":  # type: ignore
-                res["entry"].append(shortname)
                 res["all_charge_value"].append(float(sum(residue_charges)))
                 res["sg_charge_value"].append(float(residue_charges[-1]))
                 res["method"].append(METHOD_USED)
