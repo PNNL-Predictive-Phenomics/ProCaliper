@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/LifeWorks/procaliper/issues.
+Report bugs at https://github.com/PhenoMeters/procaliper/issues.
 
 If you are reporting a bug, please include:
 
@@ -35,7 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/LifeWorks/procaliper/issues.
+The best way to send feedback is to file an issue at https://github.com/PhenoMeters/procaliper/issues.
 
 If you are proposing a feature:
 
@@ -74,7 +74,7 @@ Ready to contribute? Here's how to set up `procaliper` for local development.
    tests, including testing other Python versions, with tox:
 
 ```
-    $ tox
+    $ poetry run tox
 ```
 
 7. Commit your changes and push your branch to GitHub:
@@ -95,8 +95,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
-3. The pull request should work for Python 3.6, 3.7, 3.8, 3.9 and for PyPy. Check
-   https://github.com/LifeWorks/procaliper/actions
+3. The pull request should work for Python >=3.9. Check
+   https://github.com/PhenoMeters/procaliper/actions
    and make sure that the tests pass for all supported Python versions.
 
 ## Tips```
