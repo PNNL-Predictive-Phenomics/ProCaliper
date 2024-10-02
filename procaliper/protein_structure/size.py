@@ -36,7 +36,6 @@ def calculate_size(pdb_filename: str) -> SizeData:
 
     Args:
         pdb_filename (str): The path to the PDB file.
-        shortname (str): The shortname of the protein (typically will be UniProt ID).
 
     Returns:
         SizeData: A data class for holding size data from computed from a PDB file.
