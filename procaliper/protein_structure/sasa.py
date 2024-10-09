@@ -50,8 +50,8 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
 
     sr = ShrakeRupley(probe_radius=1.40, n_points=N_POINTS, radii_dict=None)
 
-    # Calc sasa values from Residues, then from atoms
-    sr.compute(struct, level="A")  # type: ignore
+    # Calc sasa values from Residues (from atoms)
+    sr.compute(struct, level="R")  # type: ignore
 
     # Set up dict
     res = SASAData(
@@ -67,9 +67,8 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     for x in struct.child_list:  # type: ignore
         for y in x.child_list:  # type: ignore
             for z in y.child_list:  # type: ignore
-                sv = [x.sasa for x in z.child_list]  # type: ignore
-                res["all_sasa_value"].append(sum(sv))  # type: ignore
-                res["atom_sasa_values"].append(sv)  # type: ignore
+                res["all_sasa_value"].append(z.sasa)  # type: ignore
+                res["atom_sasa_values"].append([x.sasa for x in z.child_list])  # type: ignore
                 res["residue_number"].append(int(z.id[1]))  # type: ignore
                 res["residue_name"].append(z.resname)  # type: ignore
 
