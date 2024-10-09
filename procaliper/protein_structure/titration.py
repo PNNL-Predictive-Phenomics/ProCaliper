@@ -14,15 +14,17 @@ class TitrationData(TypedDict):
     """Data class for titration data.
 
     Attributes:
-        residue_names (list[str]): The residue names for the titration data.
-        residue_numbers (list[int]): The residue numbers for the titration data.
         pKs (list[float]): The pK values for the titration data.
-        states (list[tuple[str, float | str]]): The expected protonation states for the titration data."""
+        states (list[tuple[str, float | str]]): The expected protonation states for the titration data.
+        residue_number (list[int]): The residue numbers for the titration data.
+        residue_name (list[str]): The residue name (three-letter amino acid
+            abbreviation) for the sites.
+    """
 
-    residue_names: list[str]
-    residue_numbers: list[int]
     pKs: list[float]
     states: list[tuple[str, float | str]]
+    residue_number: list[int]
+    residue_name: list[str]
 
 
 def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
@@ -56,10 +58,10 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
     mol = propka.run.single(pdb_filename, optargs=["--quiet"], write_pka=False)
     gs = mol.conformations["AVR"].groups
     return TitrationData(
-        residue_names=[group.atom.res_name for group in gs],
-        residue_numbers=[group.atom.res_num for group in gs],
         pKs=[group.pka_value for group in gs],
         states=[_state_from_pk(group.pka_value) for group in gs],
+        residue_name=[group.atom.res_name for group in gs],
+        residue_number=[group.atom.res_num for group in gs],
     )
 
 
@@ -162,10 +164,10 @@ try:
             states.append(_state_from_pk(pk))
 
         return TitrationData(
-            residue_names=residue_names,
-            residue_numbers=residue_numbers,
             pKs=pKs,
             states=states,
+            residue_number=residue_numbers,
+            residue_name=residue_names,
         )
 
 except ImportError:

@@ -16,18 +16,20 @@ class SASAData(TypedDict):
     """Data class for holding SASA data from computed from a PDB file.
 
     Attributes:
-        all_sasa_value (list[float]): The overall SASA value for all CYS sites.
-        sg_sasa_value (list[float]): The SASA value for the CYS sites at SG atom.
-        residue_id (list[int]): The residue ID for the CYS sites.
-        residue_name (list[str]): The residue name for the CYS sites.
-        b_factor (list[float]): The B factor for the CYS sites.
+        all_sasa_value (list[float]): The overall SASA value for each site.
+        atom_sasa_values (list[list[float]]): The SASA value for the each atom
+            in each sites. Atoms are ordered from C-terminus to N-terminus
+            according to standard pdb order. For example, in CYS, the last atom
+            is always the SG sulfur.
+        residue_number (list[int]): The residue number for the site.
+        residue_name (list[str]): The residue name (three-letter amino acid
+            abbreviation) for the sites.
     """
 
     all_sasa_value: list[float]
-    sg_sasa_value: list[float]
-    residue_id: list[int]
+    atom_sasa_values: list[list[float]]
+    residue_number: list[int]
     residue_name: list[str]
-    b_factor: list[float]
 
 
 def calculate_sasa(pdb_filename: str) -> SASAData:
@@ -55,10 +57,9 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     res = SASAData(
         {
             "all_sasa_value": [],
-            "sg_sasa_value": [],
-            "residue_id": [],
+            "atom_sasa_values": [],
+            "residue_number": [],
             "residue_name": [],
-            "b_factor": [],
         }
     )
 
@@ -66,11 +67,9 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     for x in struct.child_list:  # type: ignore
         for y in x.child_list:  # type: ignore
             for z in y.child_list:  # type: ignore
-                if z.resname == "CYS":  # type: ignore
-                    res["all_sasa_value"].append(z.sasa)  # type: ignore
-                    res["sg_sasa_value"].append(z.child_list[5].sasa)  # type: ignore
-                    res["residue_id"].append(int(z.id[1]))  # type: ignore
-                    res["residue_name"].append(z.resname)  # type: ignore
-                    res["b_factor"].append(z.child_list[5].get_bfactor())  # type: ignore
+                res["all_sasa_value"].append(z.sasa)  # type: ignore
+                res["atom_sasa_values"].append([x.sasa for x in z.child_list])  # type: ignore
+                res["residue_number"].append(int(z.id[1]))  # type: ignore
+                res["residue_name"].append(z.resname)  # type: ignore
 
     return res

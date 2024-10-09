@@ -236,7 +236,7 @@ class Protein:
 
         Returns:
             structure.sasa.SASAData: A :class:`protein_structure.sasa.SASAData`
-                object containing the SASA values for cystein sites.
+                object containing the SASA values for residues and atoms.
         """
         if self.sasa_data:
             return self.sasa_data
@@ -263,7 +263,7 @@ class Protein:
 
         Returns:
             structure.charge.ChargeData: A :class:`protein_structure.charge.ChargeData`
-                object containing the charge values for cystein sites.
+                object containing the charge values for residues and atoms.
         """
         if self.charge_data:
             return self.charge_data
@@ -320,7 +320,7 @@ class Protein:
         Returns:
             structure.titration.TitrationData: A
                 :class:`protein_structure.titration.TitrationData` object containing
-                the titration values for cystein sites.
+                the titration values for residues.
         """
         return self.get_titration_from_propka()
 
@@ -340,7 +340,7 @@ class Protein:
         Returns:
             structure.titration.TitrationData: A
                 :class:`protein_structure.titration.TitrationData` object containing
-                the titration values for cystein sites."""
+                the titration values for residues."""
         if self.titration_data:
             return self.titration_data
 
@@ -373,7 +373,7 @@ class Protein:
         Returns:
             structure.titration.TitrationData: A
                 :class:`protein_structure.titration.TitrationData` object containing
-                the titration values for cystein sites."""
+                the titration values forresidues."""
 
         if self.titration_data:
             return self.titration_data
@@ -405,7 +405,7 @@ class Protein:
 
         Returns: structure.titration.TitrationData: A
             :class:`protein_structure.titration.TitrationData` object containing
-                the titration values for cystein sites."""
+                the titration values for residues."""
         if self.titration_data:
             return self.titration_data
 
