@@ -13,7 +13,16 @@ Appends that data to cystein site data.
 
 
 class SizeData(TypedDict):
-    entry: list[str]
+    """Data class for holding size data from computed from a PDB file.
+
+    Attributes:
+        cys_ratio (list[float]): The ratio of CYS sites to total sites.
+        min_dist_to_closest_sulfur (list[float]): The minimum distance to the closest sulfur for each CYS site.
+        sulfur_closeness_rating_scaled (list[float]): The sulfur closeness rating scaled for the CYS sites.
+        pLDDT (list[float]): The pLDDT values for the CYS sites.
+        residue_id (list[int]): The residue ID for the CYS sites.
+        residue_name (list[str]): The residue name for the CYS sites."""
+
     cys_ratio: list[float]
     min_dist_to_closest_sulfur: list[float]
     sulfur_closeness_rating_scaled: list[float]
@@ -22,13 +31,20 @@ class SizeData(TypedDict):
     residue_name: list[str]
 
 
-def calculate_size(pdb_filename: str, shortname: str):
+def calculate_size(pdb_filename: str) -> SizeData:
+    """Calculates spatial data for a protein from a PDB file.
+
+    Args:
+        pdb_filename (str): The path to the PDB file.
+
+    Returns:
+        SizeData: A data class for holding size data from computed from a PDB file.
+    """
     ppdb = PandasPdb()
     ppdb.read_pdb(pdb_filename)  # type: ignore
 
     res = SizeData(
         {
-            "entry": [],
             "cys_ratio": [],
             "min_dist_to_closest_sulfur": [],
             "sulfur_closeness_rating_scaled": [],
@@ -85,7 +101,6 @@ def calculate_size(pdb_filename: str, shortname: str):
 
                 location_index += 1
 
-                res["entry"].append(shortname)
                 res["cys_ratio"].append(float(total_cys_sites) / float(total_residue))
                 res["min_dist_to_closest_sulfur"].append(min_distance)
                 res["sulfur_closeness_rating_scaled"].append(sg_closeness_rating_scaled)

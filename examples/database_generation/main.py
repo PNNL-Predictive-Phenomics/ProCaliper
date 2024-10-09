@@ -17,11 +17,6 @@ for _, row in df.iterrows():  # type: ignore
     charge = pd.DataFrame(protein.get_charge())
     size = pd.DataFrame(protein.get_size())
 
-    # entry info will be in unravelled
-    sasa.drop(columns=["entry"], inplace=True)
-    charge.drop(columns=["entry"], inplace=True)
-    size.drop(columns=["entry"], inplace=True)
-
     unravelled = pd.DataFrame(protein.unravel_sites(selected_aas={"C"}))
 
     row_df = pd.concat([unravelled, sasa, charge, size], axis=1)

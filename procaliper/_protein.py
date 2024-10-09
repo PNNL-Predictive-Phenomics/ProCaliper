@@ -1,6 +1,5 @@
 """
-Reference:
-https://github.com/PhenoMeters/PTM_ML/tree/hunter/DatabaseScripts
+Contains the main class for holding single protein data.
 """
 
 from __future__ import annotations
@@ -13,7 +12,7 @@ import pandas as pd
 import requests
 from UniProtMapper import ProtMapper
 
-import procaliper._protein_structure as structure
+import procaliper.protein_structure as structure
 from procaliper.type_aliases import AminoAcidLetter
 
 
@@ -96,6 +95,18 @@ class Protein:
 
     @classmethod
     def from_uniprot_row(cls, row: dict[str, Any]) -> Protein:
+        """Create a new Protein object from a row from a Uniprot table
+
+        Args:
+            row (dict[str, Any]): Contains the data from the Uniprot table. Must
+                have "Sequence" or "sequence" as a key.
+
+        Raises:
+            ValueError: If "Sequence" or "sequence" is not found in the row.
+
+        Returns:
+            Protein: A processed and standardized protein object.
+        """
         p = cls()
         if "Sequence" in row:
             p.data["sequence"] = row["Sequence"]
@@ -129,6 +140,24 @@ class Protein:
         from_db: str = "UniProtKB_AC-ID",
         to_db: str = "UniProtKB-Swiss-Prot",
     ) -> Protein:
+        """Create a new Protein object from a Uniprot ID (fetches with Uniprot API)
+
+        Args:
+            uniprot_id (str): The Uniprot ID of the protein.
+            fields (list[str] | None, optional): The fields to retrieve from
+                Uniprot. If `None`, `Protein.UNIPROT_API_DEFAULT_FIELDS` is used.
+            from_db (str, optional): The database to retrieve the ID from.
+                Defaults to "UniProtKB_AC-ID".
+            to_db (str, optional): The database to map to.
+                Defaults to "UniProtKB-Swiss-Prot".
+
+        Raises:
+            ValueError: If we cannot retrieve the Uniprot ID.
+
+        Returns:
+            Protein: A processed and standardized protein object.
+        """
+
         if not fields:
             fields = cls.UNIPROT_API_DEFAULT_FIELDS
 
@@ -138,7 +167,7 @@ class Protein:
             ids=[uniprot_id], fields=fields, from_db=from_db, to_db=to_db
         )
         if error:
-            raise ValueError(f"Uniprot id {error} not retrieved")
+            raise ValueError(f"Uniprot id not retrieved: {error}")
         result.rename(columns={"From": "entry"}, inplace=True)
         if "Length" in result.columns:
             result["Length"] = pd.to_numeric(result["Length"])  # type: ignore
@@ -152,6 +181,23 @@ class Protein:
         from_db: str = "UniProtKB_AC-ID",
         to_db: str = "UniProtKB-Swiss-Prot",
     ) -> list[Protein]:
+        """Create a list of Protein objects from a list of Uniprot IDs (fetches with Uniprot API)
+
+        Args:
+            uniprot_ids (list[str]): The Uniprot IDs of the proteins.
+            fields (list[str] | None, optional): The fields to retrieve from
+                Uniprot. If `None`, `Protein.UNIPROT_API_DEFAULT_FIELDS` is used.
+            from_db (str, optional): The database to retrieve the IDs from.
+                Defaults to "UniProtKB_AC-ID".
+            to_db (str, optional): The database to map to.
+                Defaults to "UniProtKB-Swiss-Prot".
+
+        Raises:
+            ValueError: If we cannot retrieve the Uniprot IDs.
+
+        Returns:
+            list[Protein]: A list of processed and standardized protein objects.
+        """
         if not fields:
             fields = cls.UNIPROT_API_DEFAULT_FIELDS
 
@@ -161,7 +207,7 @@ class Protein:
             ids=uniprot_ids, fields=fields, from_db=from_db, to_db=to_db
         )
         if error:
-            raise ValueError(f"Uniprot id {error} not retrieved")
+            raise ValueError(f"Uniprot id not retrieved: {error}")
         result.rename(columns={"From": "entry"}, inplace=True)
 
         if "Length" in result.columns:
@@ -179,13 +225,25 @@ class Protein:
         )
 
     def get_sasa(self) -> structure.sasa.SASAData:
+        """Fetches precomputed SASA data for the protein, or computes it.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `sasa_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            structure.sasa.SASAData: A :class:`protein_structure.sasa.SASAData`
+                object containing the SASA values for cystein sites.
+        """
         if self.sasa_data:
             return self.sasa_data
 
         if self.pdb_location_absolute:
             self.sasa_data = structure.sasa.calculate_sasa(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.sasa_data
         else:
@@ -194,13 +252,25 @@ class Protein:
             )
 
     def get_charge(self) -> structure.charge.ChargeData:
+        """Fetches precomputed charge data for the protein, or computes it.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `charge_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            structure.charge.ChargeData: A :class:`protein_structure.charge.ChargeData`
+                object containing the charge values for cystein sites.
+        """
         if self.charge_data:
             return self.charge_data
 
         if self.pdb_location_absolute:
             self.charge_data = structure.charge.calculate_charge(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.charge_data
         else:
@@ -209,13 +279,25 @@ class Protein:
             )
 
     def get_size(self) -> structure.size.SizeData:
+        """Fetches precomputed size data for the protein, or computes it.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `size_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            structure.size.SizeData: A :class:`protein_structure.size.SizeData`
+                object containing the size values for cystein sites.
+        """
         if self.size_data:
             return self.size_data
 
         if self.pdb_location_absolute:
             self.size_data = structure.size.calculate_size(
                 self.pdb_location_absolute,
-                self.data["entry"],
             )
             return self.size_data
         else:
@@ -224,9 +306,41 @@ class Protein:
             )
 
     def get_titration(self) -> structure.titration.TitrationData:
+        """Runs the default titration calculation for the protein.
+
+        Equivalent to running `self.get_titration_from_propka`.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `titration_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            structure.titration.TitrationData: A
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites.
+        """
         return self.get_titration_from_propka()
 
     def get_titration_from_propka(self) -> structure.titration.TitrationData:
+        """Fetches precomputed titration data for the protein, or computes it.
+
+        Uses :func:`protein_structure.titration.calculate_titration_propka` if
+        `self.titration_data` is not already stored.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `titration_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            structure.titration.TitrationData: A
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
         if self.titration_data:
             return self.titration_data
 
@@ -241,6 +355,26 @@ class Protein:
             )
 
     def get_titration_from_pypka(self) -> structure.titration.TitrationData:
+        """Fetches precomputed titration data for the protein, or computes it.
+
+        Uses :func:`protein_structure.titration.calculate_titration_pypka` if
+        `self.titration_data` is not already stored. Requires pypka to be
+        installed, which has dependencies that are not FOSS. Please be sure to
+        verify that you are legally allowed to use pypka.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `titration_data` is not already stored and
+                `pdb_location_absolute` is not set. ImportError: If pypka is not
+                installed.
+
+        Returns:
+            structure.titration.TitrationData: A
+                :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
+
         if self.titration_data:
             return self.titration_data
 
@@ -255,6 +389,23 @@ class Protein:
             )
 
     def get_titration_from_pkai(self) -> structure.titration.TitrationData:
+        """Fetches precomputed titration data for the protein, or computes it.
+
+        Uses :func:`protein_structure.titration.calculate_titration_pkai` if
+        `self.titration_data` is not already stored. Requires pkai to be
+        installed. Note that this method is a deep-learning model, not a
+        physics-based calculation.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `titration_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns: structure.titration.TitrationData: A
+            :class:`protein_structure.titration.TitrationData` object containing
+                the titration values for cystein sites."""
         if self.titration_data:
             return self.titration_data
 
@@ -273,6 +424,17 @@ class Protein:
         selected_aas: None | set[AminoAcidLetter] = None,
         selected_keys: None | set[str] = None,
     ) -> dict[str, list[Any]]:
+        """Split the protein into individual sites, recording values for each.
+
+        Args:
+            selected_aas: A set of amino acids letters to include in the output.
+            selected_keys: A set of keys to include in the output. Possible keys
+                can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.
+
+        Returns:
+            dict[str, list[Any]]: A dictionary mapping keys to lists of values.
+                Each list is a parallel array of the same length as the protein
+                sequence (after filtering out non-selected amino acids)."""
         if not selected_keys:
             selected_keys = set(self.data.keys()) - {"sequence"}
 
@@ -299,6 +461,17 @@ class Protein:
         return res
 
     def fetch_pdb(self, save_path: str | None = None, url: str | None = None) -> None:
+        """Fetches the PDB file for the protein (from the AlphaFold database by default).
+
+        Args:
+            save_path (str | None, optional): The path to save the PDB file to.
+                Defaults to `None`.
+            url (str | None, optional): The URL to fetch the PDB file from.
+                Defaults to `None`, in which case the AlphaFold database is used.
+
+        Raises:
+            Exception: If the response status code is not 200, meaning we could
+                not fetch the PDB from the database."""
         if not url:
             url = f"https://alphafold.ebi.ac.uk/files/AF-{self.data['entry']}-F1-model_v4.pdb"
         if not save_path:
@@ -340,25 +513,6 @@ class Protein:
         return sites
 
     def _is_site_aa(self, site: int, aa: AminoAcidLetter = "C") -> bool:
-        """_summary_
-
-        Parameters
-        ----------
-        site : int
-            Position of amino acid (1-indexed)
-        aa : str, optional
-            Amino acid code to test against by default "C" (cysteine)
-
-        Returns
-        -------
-        bool
-            True if the amino acid is a the position `site` is as specified.
-
-        Raises
-        ------
-        ValueError
-            If the protein does not have a defined sequence.
-        """
         if "sequence" not in self.data:
             raise ValueError("Sequence entry not found in data")
 

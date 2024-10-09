@@ -1,34 +1,26 @@
 # procaliper
 
 
-<p align="center">
-<a href="https://pypi.python.org/pypi/procaliper">
-    <img src="https://img.shields.io/pypi/v/procaliper.svg"
-        alt = "Release Status">
-</a>
+A tool for fetching and organizing protein data in order to perform structure calculations.
 
-<a href="https://github.com/LifeWorks/procaliper/actions">
-    <img src="https://github.com/LifeWorks/procaliper/actions/workflows/main.yml/badge.svg?branch=release" alt="CI Status">
-</a>
+# Installation
 
-<a href="https://LifeWorks.github.io/procaliper/">
-    <img src="https://img.shields.io/website/https/LifeWorks.github.io/procaliper/index.html.svg?label=docs&down_message=unavailable&up_message=available" alt="Documentation Status">
-</a>
+Available on [PyPI](https://pypi.org/project/procaliper/) ![PyPI](https://img.shields.io/pypi/v/procaliper.svg)
 
-</p>
+Currently, installing from this repo (see ***Contributing*** section below) is the best way to install `procaliper`, as it is still a work-in-progress!
 
+# Contributing
 
-Skeleton project created by Python Project Wizard (ppw)
+Contributions are welcome!
 
+See [Contributing](https://github.com/PhenoMeters/ProCaliper/blob/main/CONTRIBUTING.md) for detailed instructions.
 
-* Free software: GPL-3.0-only
-* Documentation: <https://LifeWorks.github.io/procaliper/>
+# License
 
+This code is released under GPL v3. See our [License](https://github.com/PhenoMeters/ProCaliper/blob/main/LICENSE) for detailed information.
 
-## Features
+Please note that some *optional* dependencies may require proprietary licenses.
 
-* TODO
+# Credits
 
-## Credits
-
-This package was created with the [ppw](https://zillionare.github.io/python-project-wizard) tool. For more information, please visit the [project page](https://zillionare.github.io/python-project-wizard/).
+This work is supported by the Predictive Phenomics Initiative at Pacific Northwest National Laboratory.

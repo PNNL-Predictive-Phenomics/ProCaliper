@@ -11,6 +11,14 @@ NEUTRAL_PH = 7.0
 
 
 class TitrationData(TypedDict):
+    """Data class for titration data.
+
+    Attributes:
+        residue_names (list[str]): The residue names for the titration data.
+        residue_numbers (list[int]): The residue numbers for the titration data.
+        pKs (list[float]): The pK values for the titration data.
+        states (list[tuple[str, float | str]]): The expected protonation states for the titration data."""
+
     residue_names: list[str]
     residue_numbers: list[int]
     pKs: list[float]
@@ -18,18 +26,7 @@ class TitrationData(TypedDict):
 
 
 def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
-    """This function is modified from PypKa.titration.getProtState.
-
-    Parameters
-    ----------
-    pk : float | None
-        _description_
-
-    Returns
-    -------
-    tuple[str, float | str]
-        _description_
-    """
+    """This function is modified from PypKa.titration.getProtState."""
     state = "undefined"
     if pk is not None:
         average_prot = 10 ** (pk - NEUTRAL_PH) / (1 + 10 ** (pk - NEUTRAL_PH))
@@ -48,6 +45,14 @@ def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
 
 
 def calculate_titration_propka(pdb_filename: str) -> TitrationData:
+    """Uses propka to calculate titration data for the protein.
+
+    Args:
+        pdb_filename (str): The path to the PDB file.
+
+    Returns:
+        TitrationData: The titration data for the protein.
+    """
     mol = propka.run.single(pdb_filename, optargs=["--quiet"], write_pka=False)
     gs = mol.conformations["AVR"].groups
     return TitrationData(
@@ -69,6 +74,20 @@ try:
         periodic_boundary_dims: int = 0,
         sites: str | dict[str, tuple[str,]] = "all",
     ) -> TitrationData:
+        """Uses pypka to calculate titration data for the protein.
+        Arguments are identical to those of `pypka.Titration`; see `pypka.Titration` for more details.
+
+        Args:
+            pdb_filename (str): The path to the PDB file.
+            cpu_limit (int, optional): The number of CPUs to use. Defaults to -1 (no limit).
+            epsin (float, optional): The value of epsin. Defaults to 15.0.
+            ionic_strength (float, optional): The value of ionic strength. Defaults to 0.1.
+            periodic_boundary_dims (int, optional): The value of periodic boundary dimensions. Defaults to 0.
+            sites (str | dict[str, tuple[str,]], optional): The value of sites. Defaults to "all".
+
+        Returns:
+            TitrationData: The titration data for the protein."""
+
         if cpu_limit is None:
             cpu_limit = -1
 
@@ -114,6 +133,20 @@ try:
         device: Literal["cpu", "gpu"] = "cpu",
         threads=None,
     ) -> TitrationData:
+        """Uses pkai to calculate titration data for the protein.
+
+        This uses a deep-learning model to predict the titration values of the
+        protein sites.
+
+        Args:
+            pdb_filename (str): The path to the PDB file.
+            model_name (Literal["pKAI", "pKAI+"], optional): The name of the deep learning
+                model to use. Defaults to "pKAI".
+            device (Literal["cpu", "gpu"], optional): The device to use. Defaults to "cpu".
+            threads (int, optional): The number of threads to use. Defaults to None.
+
+        Returns:
+            TitrationData: The titration data for the protein."""
         predictions = pKAI(
             pdb_filename, model_name=model_name, device=device, threads=threads
         )
