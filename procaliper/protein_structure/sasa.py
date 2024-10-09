@@ -16,7 +16,8 @@ class SASAData(TypedDict):
     """Data class for holding SASA data from computed from a PDB file.
 
     Attributes:
-        all_sasa_value (list[float]): The overall SASA value for each site.
+        all_sasa_value (list[float]): The overall SASA value for each site
+            (computed as sum of atom SASA values).
         atom_sasa_values (list[list[float]]): The SASA value for the each atom
             in each sites. Atoms are ordered from C-terminus to N-terminus
             according to standard pdb order. For example, in CYS, the last atom
@@ -50,7 +51,6 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     sr = ShrakeRupley(probe_radius=1.40, n_points=N_POINTS, radii_dict=None)
 
     # Calc sasa values from Residues, then from atoms
-    sr.compute(struct, level="R")  # type: ignore
     sr.compute(struct, level="A")  # type: ignore
 
     # Set up dict
@@ -67,8 +67,9 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     for x in struct.child_list:  # type: ignore
         for y in x.child_list:  # type: ignore
             for z in y.child_list:  # type: ignore
-                res["all_sasa_value"].append(z.sasa)  # type: ignore
-                res["atom_sasa_values"].append([x.sasa for x in z.child_list])  # type: ignore
+                sv = [x.sasa for x in z.child_list]  # type: ignore
+                res["all_sasa_value"].append(sum(sv))  # type: ignore
+                res["atom_sasa_values"].append(sv)  # type: ignore
                 res["residue_number"].append(int(z.id[1]))  # type: ignore
                 res["residue_name"].append(z.resname)  # type: ignore
 
