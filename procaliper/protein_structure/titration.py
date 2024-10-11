@@ -5,6 +5,7 @@ from typing import Literal, TypedDict
 
 import propka
 import propka.run
+from biopandas.pdb import PandasPdb
 
 logging.getLogger("propka").setLevel(logging.WARNING)
 NEUTRAL_PH = 7.0
@@ -56,21 +57,23 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
         TitrationData: The titration data for the protein.
     """
     mol = propka.run.single(pdb_filename, optargs=["--quiet"], write_pka=False)
-    gs = mol.conformations["1A"].groups
+    gs = mol.conformations["AVR"].groups
 
-    res_dict = {}
-    for group in gs:
-        if group.atom.res_num not in res_dict:
-            res_dict[group.atom.res_num] = [group]
-        else:
-            res_dict[group.atom.res_num].append(group)
-    res_items = sorted(res_dict.items())
-    pks = [max(group.pka_value for group in res) for _, res in res_items]
+    ppdb = PandasPdb()
+    ppdb.read_pdb(pdb_filename)  # type: ignore
+
+    seq = {
+        i: res["residue_name"].iloc[0]
+        for i, res in ppdb.df["ATOM"].groupby("residue_number")
+    }
+    pks = {group.atom.res_num: group.pka_value for group in gs}
+    sv = sorted(seq.items())
     return TitrationData(
-        pKa=pks,
-        protonation_state=[_state_from_pk(pk) for pk in pks],
-        residue_name=[res[0].atom.res_name for _, res in res_items],
-        residue_number=[k for k, _ in res_items],
+        # pKa=[group.pka_value for group in gs],
+        pKa=[pks[i] if i in pks else 0 for i, _ in sv],
+        protonation_state=[_state_from_pk(pks[i] if i in pks else 0) for i, _ in sv],
+        residue_name=[v for _, v in sv],
+        residue_number=[i for i, _ in sv],
     )
 
 
