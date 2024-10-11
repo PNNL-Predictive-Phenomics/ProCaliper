@@ -6564,8 +6564,7 @@ abbreviation) for the sites.</p>
 
               <details class="quote">
                 <summary>Source code in <code>procaliper/protein_structure/titration.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
-<span class="normal">14</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
@@ -6578,7 +6577,8 @@ abbreviation) for the sites.</p>
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for titration data.</span>
 
 <span class="sd">    Attributes:</span>
@@ -6684,8 +6684,7 @@ abbreviation) for the sites.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/titration.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
-<span class="normal">50</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span>
 <span class="normal">53</span>
@@ -6709,7 +6708,10 @@ abbreviation) for the sites.</p>
 <span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span>
-<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses propka to calculate titration data for the protein.</span>
 
 <span class="sd">    Args:</span>
@@ -6719,21 +6721,23 @@ abbreviation) for the sites.</p>
 <span class="sd">        TitrationData: The titration data for the protein.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mol</span> <span class="o">=</span> <span class="n">propka</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">single</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">,</span> <span class="n">optargs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--quiet&quot;</span><span class="p">],</span> <span class="n">write_pka</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">gs</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">conformations</span><span class="p">[</span><span class="s2">&quot;1A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groups</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">conformations</span><span class="p">[</span><span class="s2">&quot;AVR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groups</span>
 
-    <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">gs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">res_num</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="p">:</span>
-            <span class="n">res_dict</span><span class="p">[</span><span class="n">group</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">res_num</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">group</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">res_dict</span><span class="p">[</span><span class="n">group</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
-    <span class="n">res_items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">res_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-    <span class="n">pks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">pka_value</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">res</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">res_items</span><span class="p">]</span>
+    <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="n">seq</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">pks</span> <span class="o">=</span> <span class="p">{</span><span class="n">group</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">res_num</span><span class="p">:</span> <span class="n">group</span><span class="o">.</span><span class="n">pka_value</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">gs</span><span class="p">}</span>
+    <span class="n">sv</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">TitrationData</span><span class="p">(</span>
-        <span class="n">pKa</span><span class="o">=</span><span class="n">pks</span><span class="p">,</span>
-        <span class="n">protonation_state</span><span class="o">=</span><span class="p">[</span><span class="n">_state_from_pk</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">pks</span><span class="p">],</span>
-        <span class="n">residue_name</span><span class="o">=</span><span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">res_name</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">res_items</span><span class="p">],</span>
-        <span class="n">residue_number</span><span class="o">=</span><span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">res_items</span><span class="p">],</span>
+        <span class="c1"># pKa=[group.pka_value for group in gs],</span>
+        <span class="n">pKa</span><span class="o">=</span><span class="p">[</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
+        <span class="n">protonation_state</span><span class="o">=</span><span class="p">[</span><span class="n">_state_from_pk</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
+        <span class="n">residue_name</span><span class="o">=</span><span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
+        <span class="n">residue_number</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
