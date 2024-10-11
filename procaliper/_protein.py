@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import os
 import re
+from itertools import chain
 from typing import Any, cast
 
 import pandas as pd
@@ -77,9 +78,10 @@ class Protein:
         self.pdb_location_relative: str | None = None
         self.pdb_location_absolute: str | None = None
 
+        self.confidence_data: list[float] | None = None
         self.sasa_data: structure.sasa.SASAData | None = None
         self.charge_data: structure.charge.ChargeData | None = None
-        self.size_data: structure.size.SizeData | None = None
+        self.cysteine_data: structure.cysteine_data.CysteineData | None = None
         self.titration_data: structure.titration.TitrationData | None = None
         pass
 
@@ -221,8 +223,47 @@ class Protein:
             self.data == other.data
             and self.sasa_data == other.sasa_data
             and self.charge_data == other.charge_data
-            and self.size_data == other.size_data
+            and self.cysteine_data == other.cysteine_data
         )
+
+    def residue_data_frame(self) -> pd.DataFrame:
+        d = dict(
+            chain(
+                self.get_charge().items(),
+                self.get_sasa().items(),
+                self.get_cysteine_data().items(),
+                self.get_titration().items(),
+            )
+        )
+        d["pLDDT"] = self.get_confidence()
+
+        return pd.DataFrame(d)
+
+    def get_confidence(self) -> list[float]:
+        """Fetches precomputed confidence data from pdb file.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `confidence_data` is not already stored and
+                `pdb_location_absolute` is not set.
+
+        Returns:
+            list[float]: A list of confidence values for each residue.
+        """
+        if self.confidence_data:
+            return self.confidence_data
+
+        if self.pdb_location_absolute:
+            self.confidence_data = structure.confidence.residue_pLDDT(
+                self.pdb_location_absolute,
+            )
+            return self.confidence_data
+        else:
+            raise ValueError(
+                "Confidence data not stored, and PDB location not set; use `fetch_pdb` first"
+            )
 
     def get_sasa(self) -> structure.sasa.SASAData:
         """Fetches precomputed SASA data for the protein, or computes it.
@@ -278,28 +319,28 @@ class Protein:
                 "Charge data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
-    def get_size(self) -> structure.size.SizeData:
+    def get_cysteine_data(self) -> structure.cysteine_data.CysteineData:
         """Fetches precomputed size data for the protein, or computes it.
 
         Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
         file in `self.pdb_location_absolute`.
 
         Raises:
-            ValueError: If `size_data` is not already stored and
+            ValueError: If `cysteine_data` is not already stored and
                 `pdb_location_absolute` is not set.
 
         Returns:
-            structure.size.SizeData: A :class:`protein_structure.size.SizeData`
+            structure.size.CysteineData: A :class:`protein_structure.size.CysteineData`
                 object containing the size values for cystein sites.
         """
-        if self.size_data:
-            return self.size_data
+        if self.cysteine_data:
+            return self.cysteine_data
 
         if self.pdb_location_absolute:
-            self.size_data = structure.size.calculate_size(
+            self.cysteine_data = structure.cysteine_data.calculate_cysteine_data(
                 self.pdb_location_absolute,
             )
-            return self.size_data
+            return self.cysteine_data
         else:
             raise ValueError(
                 "Size data not stored, and PDB location not set; use `fetch_pdb` first"
