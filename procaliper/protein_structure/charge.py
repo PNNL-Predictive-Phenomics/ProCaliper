@@ -35,8 +35,8 @@ class ChargeData(TypedDict):
             abbreviation) for the sites.
     """
 
-    charges: list[list[float]]
-    method: list[str]
+    charge: list[list[float]]
+    charge_method: list[str]
     residue_number: list[int]
     residue_name: list[str]
 
@@ -76,16 +76,16 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
     # Set up dict
     res = ChargeData(
         {
-            "charges": [],
-            "method": [],
+            "charge": [],
+            "charge_method": [],
             "residue_number": [],
             "residue_name": [],
         }
     )
 
     for res_num, residue in ppdb.df["ATOM"].groupby("residue_number"):
-        res["charges"].append([charges[x - 1] for x in sorted(residue["atom_number"])])
-        res["method"].append(METHOD_USED)
+        res["charge"].append([charges[x - 1] for x in sorted(residue["atom_number"])])
+        res["charge_method"].append(METHOD_USED)
         res["residue_number"].append(int(res_num))
         res["residue_name"].append(
             residue["residue_name"].iloc[0]
