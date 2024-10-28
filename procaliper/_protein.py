@@ -487,6 +487,13 @@ class Protein:
 
         self.pdb_location_relative = save_path
         self.pdb_location_absolute = os.path.abspath(save_path)
+    
+    def register_local_pdb(self, path_to_pdb_file: str | None = None) -> None:
+        if not path_to_pdb_file:
+            path_to_pdb_file = f"{self.data['entry']}.pdb"
+        self.pdb_location_relative = path_to_pdb_file
+        self.pdb_location_absolute = os.path.abspath(path_to_pdb_file)
+
 
     def _extract_sites(
         self, site_description: str, patterns: list[tuple[str, bool]]
