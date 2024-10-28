@@ -84,20 +84,18 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
     )
     residue_charges: list[float] = []
     for x in range(len(ppdb.df["ATOM"])):  # type: ignore
-        if ppdb.df["ATOM"]["residue_name"][x] == "CYS":  # type: ignore
-            # Reset residue charge on new CYS site
-            if ppdb.df["ATOM"]["atom_name"][x] == "N":  # type: ignore
-                residue_charges = []
+        if ppdb.df["ATOM"]["atom_name"][x] == "N":  # type: ignore
+            residue_charges = []
 
-            # Add charge of atom to total for residue
-            residue_charges.append(charges[x])
+        # Add charge of atom to total for residue
+        residue_charges.append(charges[x])
 
-            # Adds data to dict when CYS site read is over
-            if ppdb.df["ATOM"]["atom_name"][x] == "SG":  # type: ignore
-                res["all_charge_value"].append(float(sum(residue_charges)))
-                res["sg_charge_value"].append(float(residue_charges[-1]))
-                res["method"].append(METHOD_USED)
-                res["residue_id"].append(int(ppdb.df["ATOM"]["residue_number"][x]))  # type: ignore
-                res["residue_name"].append(ppdb.df["ATOM"]["residue_name"][x])  # type: ignore
+        # Adds data to dict when CYS site read is over
+        if ppdb.df["ATOM"]["atom_name"][x] == "SG":  # type: ignore
+            res["all_charge_value"].append(float(sum(residue_charges)))
+            res["sg_charge_value"].append(float(residue_charges[-1]))
+            res["method"].append(METHOD_USED)
+            res["residue_id"].append(int(ppdb.df["ATOM"]["residue_number"][x]))  # type: ignore
+            res["residue_name"].append(ppdb.df["ATOM"]["residue_name"][x])  # type: ignore
 
     return res
