@@ -489,6 +489,11 @@ class Protein:
         self.pdb_location_absolute = os.path.abspath(save_path)
     
     def register_local_pdb(self, path_to_pdb_file: str | None = None) -> None:
+        """Sets pdb file for protein object using local pdb file.
+
+        Args:
+            path_to_pdb_file (str | None, optional): Path to local PDB file.
+                Defaults to `None`, in which case it assumes a file with 'entry'.pdb."""
         if not path_to_pdb_file:
             path_to_pdb_file = f"{self.data['entry']}.pdb"
         self.pdb_location_relative = path_to_pdb_file
