@@ -26,17 +26,18 @@ class ChargeData(TypedDict):
     A data class for holding charge data from computed from a PDB file.
 
     Attributes:
-        all_charge_value (list[float]): The charge value for all CYS sites (summed over atoms).
-        sg_charge_value (list[float]): The charge value for the CYS sites at SG atom.
+        charges (list[list[float]]): The charge value for atoms in the residue,
+            ordered from C-terminus to N-terminus according to standard pdb order.
+            For example, in CYS, the last atom is always the SG sulfur.
         method (list[str]): The method used for the charge calculation.
-        residue_id (list[int]): The residue ID for the CYS sites.
-        residue_name (list[str]): The residue name for the CYS sites.
+        residue_number (list[int]): The residue number for the site.
+        residue_name (list[str]): The residue name (three-letter amino acid
+            abbreviation) for the sites.
     """
 
-    all_charge_value: list[float]
-    sg_charge_value: list[float]
-    method: list[str]
-    residue_id: list[int]
+    charge: list[list[float]]
+    charge_method: list[str]
+    residue_number: list[int]
     residue_name: list[str]
 
 
@@ -75,29 +76,19 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
     # Set up dict
     res = ChargeData(
         {
-            "all_charge_value": [],
-            "sg_charge_value": [],
-            "method": [],
-            "residue_id": [],
+            "charge": [],
+            "charge_method": [],
+            "residue_number": [],
             "residue_name": [],
         }
     )
-    residue_charges: list[float] = []
-    for x in range(len(ppdb.df["ATOM"])):  # type: ignore
-        if ppdb.df["ATOM"]["residue_name"][x] == "CYS":  # type: ignore
-            # Reset residue charge on new CYS site
-            if ppdb.df["ATOM"]["atom_name"][x] == "N":  # type: ignore
-                residue_charges = []
 
-            # Add charge of atom to total for residue
-            residue_charges.append(charges[x])
-
-            # Adds data to dict when CYS site read is over
-            if ppdb.df["ATOM"]["atom_name"][x] == "SG":  # type: ignore
-                res["all_charge_value"].append(float(sum(residue_charges)))
-                res["sg_charge_value"].append(float(residue_charges[-1]))
-                res["method"].append(METHOD_USED)
-                res["residue_id"].append(int(ppdb.df["ATOM"]["residue_number"][x]))  # type: ignore
-                res["residue_name"].append(ppdb.df["ATOM"]["residue_name"][x])  # type: ignore
+    for res_num, residue in ppdb.df["ATOM"].groupby("residue_number"):
+        res["charge"].append([charges[x - 1] for x in sorted(residue["atom_number"])])
+        res["charge_method"].append(METHOD_USED)
+        res["residue_number"].append(int(res_num))
+        res["residue_name"].append(
+            residue["residue_name"].iloc[0]
+        )  # all residue names should be the same because these atoms are from the same residue
 
     return res

@@ -5,6 +5,7 @@ from typing import Literal, TypedDict
 
 import propka
 import propka.run
+from biopandas.pdb import PandasPdb
 
 logging.getLogger("propka").setLevel(logging.WARNING)
 NEUTRAL_PH = 7.0
@@ -14,15 +15,17 @@ class TitrationData(TypedDict):
     """Data class for titration data.
 
     Attributes:
-        residue_names (list[str]): The residue names for the titration data.
-        residue_numbers (list[int]): The residue numbers for the titration data.
-        pKs (list[float]): The pK values for the titration data.
-        states (list[tuple[str, float | str]]): The expected protonation states for the titration data."""
+        pKa (list[float]): The pK values for the titration data.
+        protonation_state (list[tuple[str, float | str]]): The expected protonation states for the titration data.
+        residue_number (list[int]): The residue numbers for the titration data.
+        residue_name (list[str]): The residue name (three-letter amino acid
+            abbreviation) for the sites.
+    """
 
-    residue_names: list[str]
-    residue_numbers: list[int]
-    pKs: list[float]
-    states: list[tuple[str, float | str]]
+    pKa: list[float]
+    protonation_state: list[tuple[str, float | str]]
+    residue_number: list[int]
+    residue_name: list[str]
 
 
 def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
@@ -55,11 +58,22 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
     """
     mol = propka.run.single(pdb_filename, optargs=["--quiet"], write_pka=False)
     gs = mol.conformations["AVR"].groups
+
+    ppdb = PandasPdb()
+    ppdb.read_pdb(pdb_filename)  # type: ignore
+
+    seq = {
+        i: res["residue_name"].iloc[0]
+        for i, res in ppdb.df["ATOM"].groupby("residue_number")
+    }
+    pks = {group.atom.res_num: group.pka_value for group in gs}
+    sv = sorted(seq.items())
     return TitrationData(
-        residue_names=[group.atom.res_name for group in gs],
-        residue_numbers=[group.atom.res_num for group in gs],
-        pKs=[group.pka_value for group in gs],
-        states=[_state_from_pk(group.pka_value) for group in gs],
+        # pKa=[group.pka_value for group in gs],
+        pKa=[pks[i] if i in pks else 0 for i, _ in sv],
+        protonation_state=[_state_from_pk(pks[i] if i in pks else 0) for i, _ in sv],
+        residue_name=[v for _, v in sv],
+        residue_number=[i for i, _ in sv],
     )
 
 
@@ -106,7 +120,7 @@ try:
             residue_names=[site.res_name for site in titr],  # type: ignore
             residue_numbers=[site.res_number for site in titr],  # type: ignore
             pKs=[site.pK for site in titr],  # type: ignore
-            states=[site.getProtState(NEUTRAL_PH)[0] for site in titr],  # type: ignore
+            protonation_state=[site.getProtState(NEUTRAL_PH)[0] for site in titr],  # type: ignore
         )
 
 except ImportError:
@@ -162,10 +176,10 @@ try:
             states.append(_state_from_pk(pk))
 
         return TitrationData(
-            residue_names=residue_names,
-            residue_numbers=residue_numbers,
-            pKs=pKs,
-            states=states,
+            pKa=pKs,
+            protonation_state=states,
+            residue_number=residue_numbers,
+            residue_name=residue_names,
         )
 
 except ImportError:
