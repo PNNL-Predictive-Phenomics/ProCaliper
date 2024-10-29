@@ -4765,7 +4765,8 @@ PDB file.</p>
 <span class="normal">91</span>
 <span class="normal">92</span>
 <span class="normal">93</span>
-<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -4806,6 +4807,7 @@ PDB file.</p>
             <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
+
 
     <span class="k">for</span> <span class="n">res_num</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">charges</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">residue</span><span class="p">[</span><span class="s2">&quot;atom_number&quot;</span><span class="p">])])</span>
@@ -5638,7 +5640,8 @@ PDB file.</p>
 <span class="normal">91</span>
 <span class="normal">92</span>
 <span class="normal">93</span>
-<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -5679,6 +5682,7 @@ PDB file.</p>
             <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
+
 
     <span class="k">for</span> <span class="n">res_num</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">charges</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">residue</span><span class="p">[</span><span class="s2">&quot;atom_number&quot;</span><span class="p">])])</span>
