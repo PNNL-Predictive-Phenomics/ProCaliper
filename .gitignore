@@ -1,6 +1,10 @@
 # pdb files in examples
 examples/**/*.pdb
 
+# scratch files for debuggin only
+scratch.py
+scratch.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
