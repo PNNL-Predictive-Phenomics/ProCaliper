@@ -5,11 +5,8 @@ from typing import TypedDict
 from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 
-from .hyperparameters import HYPERPARAMETERS
-
-N_POINTS = int(
-    HYPERPARAMETERS["n_points"]
-)  # Dictates the accuracy of the ShrakeRupley calculation. Higher values are more accurate but slower to calculate. Default = 100
+N_POINTS = 100
+PROBE_RADIUS = 1.40
 
 
 class SASAData(TypedDict):
@@ -37,7 +34,7 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     """Compute the SASA values for all CYS sites in a PDB file.
 
     Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`
-    with a probe radius of 1.40.
+    with a probe radius of 1.40 and 100 points.
 
     Args:
         pdb_filename (str): The path to the PDB file.
@@ -48,7 +45,7 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     p = PDBParser(QUIET=True)
     struct = p.get_structure("", pdb_filename)  # type: ignore
 
-    sr = ShrakeRupley(probe_radius=1.40, n_points=N_POINTS, radii_dict=None)
+    sr = ShrakeRupley(probe_radius=PROBE_RADIUS, n_points=N_POINTS, radii_dict=None)
 
     # Calc sasa values from Residues (from atoms)
     sr.compute(struct, level="R")  # type: ignore
