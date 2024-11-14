@@ -6,14 +6,8 @@ from biopandas.pdb import PandasPdb
 from openbabel import openbabel as ob
 from openbabel import pybel
 
-from .hyperparameters import HYPERPARAMETERS
-
 # Removes annoying warning messages
 pybel.ob.obErrorLog.SetOutputLevel(0)  # type: ignore
-
-# METHOD_USED determines the method used for charge_calculations. examples ('qtpie', 'eem', 'gasteiger')
-# For a full list reference https://open-babel.readthedocs.io/en/latest/Charges/charges.html
-METHOD_USED = str(HYPERPARAMETERS.get("charge_method_used"))
 
 """
     Takes a pdb file and the method used ('qtpie', 'eem', etc) 
@@ -41,7 +35,7 @@ class ChargeData(TypedDict):
     residue_name: list[str]
 
 
-def calculate_charge(pdb_filename: str) -> ChargeData:
+def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
     """Computes the charge of CYS sites in a PDB file.
 
     By default, the method used is 'gasteiger', but this is configurable in
@@ -50,6 +44,11 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
     Args:
         pdb_filename (str): The path to the PDB file. shortname (str): The
             shortname of the protein (typically will be UniProt ID).
+        method (str, optional): The method used for the charge calculation.
+            Examples include 'qtpie', 'eem', 'gasteiger'. Defaults to
+            'gasteiger'. For a full list reference
+            https://open-babel.readthedocs.io/en/latest/Charges/charges.html
+
 
     Raises:
         ValueError: If the charge method is not found.
@@ -62,7 +61,7 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
     mol = pbmol.OBMol  # type: ignore
 
     # Applies the model and computes charges.
-    ob_charge_model = ob.OBChargeModel.FindType(METHOD_USED)  # type: ignore
+    ob_charge_model = ob.OBChargeModel.FindType(method)  # type: ignore
 
     if not ob_charge_model:  # type: ignore
         raise ValueError("Charge method not found. Please check hyperparameters.py")
@@ -83,10 +82,9 @@ def calculate_charge(pdb_filename: str) -> ChargeData:
         }
     )
 
-
     for res_num, residue in ppdb.df["ATOM"].groupby("residue_number"):
         res["charge"].append([charges[x - 1] for x in sorted(residue["atom_number"])])
-        res["charge_method"].append(METHOD_USED)
+        res["charge_method"].append(method)
         res["residue_number"].append(int(res_num))
         res["residue_name"].append(
             residue["residue_name"].iloc[0]

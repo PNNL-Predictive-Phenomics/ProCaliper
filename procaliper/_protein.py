@@ -292,11 +292,17 @@ class Protein:
                 "SASA data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
-    def get_charge(self) -> structure.charge.ChargeData:
+    def get_charge(self, method="gasteiger") -> structure.charge.ChargeData:
         """Fetches precomputed charge data for the protein, or computes it.
 
         Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
         file in `self.pdb_location_absolute`.
+
+        Args:
+            method (str, optional): The method used for the charge calculation.
+                Examples include 'qtpie', 'eem', 'gasteiger'. Defaults to
+                'gasteiger'. For a full list reference
+                https://open-babel.readthedocs.io/en/latest/Charges/charges.html
 
         Raises:
             ValueError: If `charge_data` is not already stored and
@@ -307,16 +313,22 @@ class Protein:
                 object containing the charge values for residues and atoms.
         """
         if self.charge_data:
-            return self.charge_data
+            if self.charge_data["charge_method"]:
+                if self.charge_data["charge_method"][0] == method:
+                    return self.charge_data
 
         if self.pdb_location_absolute:
             self.charge_data = structure.charge.calculate_charge(
                 self.pdb_location_absolute,
+                method=method,
             )
+
+            self.last_charge_method = method
+
             return self.charge_data
         else:
             raise ValueError(
-                "Charge data not stored, and PDB location not set; use `fetch_pdb` first"
+                "Charge data for specified method not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
     def get_cysteine_data(self) -> structure.cysteine_data.CysteineData:
@@ -528,7 +540,7 @@ class Protein:
 
         self.pdb_location_relative = save_path
         self.pdb_location_absolute = os.path.abspath(save_path)
-    
+
     def register_local_pdb(self, path_to_pdb_file: str | None = None) -> None:
         """Sets pdb file for protein object using local pdb file.
 
@@ -539,7 +551,6 @@ class Protein:
             path_to_pdb_file = f"{self.data['entry']}.pdb"
         self.pdb_location_relative = path_to_pdb_file
         self.pdb_location_absolute = os.path.abspath(path_to_pdb_file)
-
 
     def _extract_sites(
         self, site_description: str, patterns: list[tuple[str, bool]]
