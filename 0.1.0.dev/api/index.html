@@ -1953,7 +1953,13 @@
 <span class="normal">582</span>
 <span class="normal">583</span>
 <span class="normal">584</span>
-<span class="normal">585</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="sa">r</span><span class="s2">&quot;ACT_SITE (\d+);&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)],</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -2059,11 +2065,11 @@
                     <span class="n">value</span><span class="p">,</span>
                     <span class="bp">cls</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
                 <span class="p">)</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_cysteine_sites&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">site</span>
-                    <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_sites&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">_is_site_aa</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
-                <span class="p">]</span>
+                <span class="c1"># p.data[f&quot;{key}_cysteine_sites&quot;] = [</span>
+                <span class="c1">#     site</span>
+                <span class="c1">#     for site in p.data[f&quot;{key}_sites&quot;]</span>
+                <span class="c1">#     if p._is_site_aa(site, aa=&quot;C&quot;)</span>
+                <span class="c1"># ]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -2417,35 +2423,41 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            selected_aas: A set of amino acids letters to include in the output.</span>
-<span class="sd">            selected_keys: A set of keys to include in the output. Possible keys</span>
-<span class="sd">                can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.</span>
+<span class="sd">                If `None` (default), all amino acids will be included.</span>
+<span class="sd">            selected_keys: A set of keys belonging to this `Protein` object&#39;s</span>
+<span class="sd">                `data` dictionary to include in the output. If `None` (default),</span>
+<span class="sd">                all keys are used.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict[str, list[Any]]: A dictionary mapping keys to lists of values.</span>
 <span class="sd">                Each list is a parallel array of the same length as the protein</span>
 <span class="sd">                sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">selected_keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">selected_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
 
-        <span class="n">site_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">Protein</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS_RECTIFIED</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="n">selected_keys</span>
+        <span class="n">site_keys</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;_sites&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Protein</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS_RECTIFIED</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="o">&amp;</span> <span class="n">selected_keys</span>
+        <span class="p">)</span>
         <span class="n">other_keys</span> <span class="o">=</span> <span class="n">selected_keys</span> <span class="o">-</span> <span class="n">site_keys</span>
 
-        <span class="n">res</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span> <span class="o">|</span> <span class="n">site_keys</span><span class="p">}</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">res</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_sites&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: ignore</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]):</span>
-            <span class="n">site_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">}</span>
-            <span class="n">site_dict</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span>
-            <span class="n">site_dict</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">selected_aas</span> <span class="ow">and</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_aas</span><span class="p">:</span>
                 <span class="k">continue</span>
-
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
-                <span class="n">site_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_sites&quot;</span><span class="p">]</span>
-
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">site_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_letter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_sites&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                    <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>  <span class="c1"># will be the same for all sites</span>
 
         <span class="k">return</span> <span class="n">res</span>
 
@@ -2618,13 +2630,7 @@ not fetch the PDB from the database.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">516</span>
-<span class="normal">517</span>
-<span class="normal">518</span>
-<span class="normal">519</span>
-<span class="normal">520</span>
-<span class="normal">521</span>
-<span class="normal">522</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">522</span>
 <span class="normal">523</span>
 <span class="normal">524</span>
 <span class="normal">525</span>
@@ -2644,7 +2650,13 @@ not fetch the PDB from the database.</p>
 <span class="normal">539</span>
 <span class="normal">540</span>
 <span class="normal">541</span>
-<span class="normal">542</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches the PDB file for the protein (from the AlphaFold database by default).</span>
 
 <span class="sd">    Args:</span>
@@ -3061,11 +3073,11 @@ have "Sequence" or "sequence" as a key.</p>
                 <span class="n">value</span><span class="p">,</span>
                 <span class="bp">cls</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
             <span class="p">)</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_cysteine_sites&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">site</span>
-                <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_sites&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">_is_site_aa</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
-            <span class="p">]</span>
+            <span class="c1"># p.data[f&quot;{key}_cysteine_sites&quot;] = [</span>
+            <span class="c1">#     site</span>
+            <span class="c1">#     for site in p.data[f&quot;{key}_sites&quot;]</span>
+            <span class="c1">#     if p._is_site_aa(site, aa=&quot;C&quot;)</span>
+            <span class="c1"># ]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -4401,16 +4413,16 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">544</span>
-<span class="normal">545</span>
-<span class="normal">546</span>
-<span class="normal">547</span>
-<span class="normal">548</span>
-<span class="normal">549</span>
-<span class="normal">550</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">550</span>
 <span class="normal">551</span>
 <span class="normal">552</span>
-<span class="normal">553</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets pdb file for protein object using local pdb file.</span>
 
 <span class="sd">    Args:</span>
@@ -4458,7 +4470,8 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A set of amino acids letters to include in the output.</p>
+                <p>A set of amino acids letters to include in the output.
+If <code>None</code> (default), all amino acids will be included.</p>
               </div>
             </td>
             <td>
@@ -4472,8 +4485,9 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A set of keys to include in the output. Possible keys
-can be viewed in <code>Protein.UNIPROT_SITE_PATTERNS_RECTIFIED</code>.</p>
+                <p>A set of keys belonging to this <code>Protein</code> object's
+<code>data</code> dictionary to include in the output. If <code>None</code> (default),
+all keys are used.</p>
               </div>
             </td>
             <td>
@@ -4549,7 +4563,13 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="normal">511</span>
 <span class="normal">512</span>
 <span class="normal">513</span>
-<span class="normal">514</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">selected_keys</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -4558,35 +4578,41 @@ sequence (after filtering out non-selected amino acids).</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        selected_aas: A set of amino acids letters to include in the output.</span>
-<span class="sd">        selected_keys: A set of keys to include in the output. Possible keys</span>
-<span class="sd">            can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.</span>
+<span class="sd">            If `None` (default), all amino acids will be included.</span>
+<span class="sd">        selected_keys: A set of keys belonging to this `Protein` object&#39;s</span>
+<span class="sd">            `data` dictionary to include in the output. If `None` (default),</span>
+<span class="sd">            all keys are used.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        dict[str, list[Any]]: A dictionary mapping keys to lists of values.</span>
 <span class="sd">            Each list is a parallel array of the same length as the protein</span>
 <span class="sd">            sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">selected_keys</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">selected_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
 
-    <span class="n">site_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">Protein</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS_RECTIFIED</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="n">selected_keys</span>
+    <span class="n">site_keys</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">set</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;_sites&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Protein</span><span class="o">.</span><span class="n">UNIPROT_SITE_PATTERNS_RECTIFIED</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="o">&amp;</span> <span class="n">selected_keys</span>
+    <span class="p">)</span>
     <span class="n">other_keys</span> <span class="o">=</span> <span class="n">selected_keys</span> <span class="o">-</span> <span class="n">site_keys</span>
 
-    <span class="n">res</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span> <span class="o">|</span> <span class="n">site_keys</span><span class="p">}</span>
-    <span class="n">res</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">res</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_sites&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: ignore</span>
+    <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]):</span>
-        <span class="n">site_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">}</span>
-        <span class="n">site_dict</span><span class="p">[</span><span class="s2">&quot;letter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span>
-        <span class="n">site_dict</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">selected_aas</span> <span class="ow">and</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_aas</span><span class="p">:</span>
             <span class="k">continue</span>
-
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
-            <span class="n">site_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_sites&quot;</span><span class="p">]</span>
-
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">site_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_letter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">site_keys</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_sites&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_keys</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>  <span class="c1"># will be the same for all sites</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
