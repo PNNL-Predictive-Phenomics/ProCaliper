@@ -482,16 +482,15 @@ class Protein:
         Args:
             selected_aas: A set of amino acids letters to include in the output.
                 If `None` (default), all amino acids will be included.
-            selected_keys: A set of keys to include in the output. Possible keys
-                can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`. If
-                `None` (default), all keys for which this `Protein` object has
-                data will be included.
+            selected_keys: A set of keys belonging to this `Protein` object's
+                `data` dictionary to include in the output. If `None` (default),
+                all keys are used.
 
         Returns:
             dict[str, list[Any]]: A dictionary mapping keys to lists of values.
                 Each list is a parallel array of the same length as the protein
                 sequence (after filtering out non-selected amino acids)."""
-        if not selected_keys:
+        if selected_keys is None:
             selected_keys = set(self.data.keys()) - {"sequence"}
 
         site_keys = (
