@@ -56,16 +56,16 @@ def test_unravel():
 
     row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
     protein = Protein.from_uniprot_row(row_dict)
-
+    print(protein.data.keys())
     unravelled = protein.unravel_sites(
-        selected_aas={"M"}, selected_keys={"entry", "turn"}
+        selected_aas={"M"}, selected_keys={"entry", "turn_sites"}
     )
 
     expected = {
         "entry": ["A0A0B4J2F0", "A0A0B4J2F0"],
-        "turn": [False, False],
-        "letter": ["M", "M"],
-        "position": [1, 43],
+        "is_turn": [False, False],
+        "residue_letter": ["M", "M"],
+        "residue_number": [1, 43],
     }
 
     assert unravelled == expected

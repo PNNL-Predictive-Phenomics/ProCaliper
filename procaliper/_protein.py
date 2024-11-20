@@ -123,11 +123,11 @@ class Protein:
                     value,
                     cls.UNIPROT_SITE_PATTERNS[key],
                 )
-                p.data[f"{key}_cysteine_sites"] = [
-                    site
-                    for site in p.data[f"{key}_sites"]
-                    if p._is_site_aa(site, aa="C")
-                ]
+                # p.data[f"{key}_cysteine_sites"] = [
+                #     site
+                #     for site in p.data[f"{key}_sites"]
+                #     if p._is_site_aa(site, aa="C")
+                # ]
             else:
                 p.data[key] = value
 
@@ -481,35 +481,41 @@ class Protein:
 
         Args:
             selected_aas: A set of amino acids letters to include in the output.
-            selected_keys: A set of keys to include in the output. Possible keys
-                can be viewed in `Protein.UNIPROT_SITE_PATTERNS_RECTIFIED`.
+                If `None` (default), all amino acids will be included.
+            selected_keys: A set of keys belonging to this `Protein` object's
+                `data` dictionary to include in the output. If `None` (default),
+                all keys are used.
 
         Returns:
             dict[str, list[Any]]: A dictionary mapping keys to lists of values.
                 Each list is a parallel array of the same length as the protein
                 sequence (after filtering out non-selected amino acids)."""
-        if not selected_keys:
+        if selected_keys is None:
             selected_keys = set(self.data.keys()) - {"sequence"}
 
-        site_keys = set(Protein.UNIPROT_SITE_PATTERNS_RECTIFIED.keys()) & selected_keys
+        site_keys = (
+            set(x + "_sites" for x in Protein.UNIPROT_SITE_PATTERNS_RECTIFIED.keys())
+            & selected_keys
+        )
         other_keys = selected_keys - site_keys
 
-        res: dict[str, list[Any]] = {k: [] for k in other_keys | site_keys}
-        res["letter"] = []
-        res["position"] = []
+        res: dict[str, list[Any]] = {k: [] for k in other_keys}
+        for k in site_keys:
+            res["is_" + k.removesuffix("_sites")] = []  # type: ignore
+        res["residue_letter"] = []
+        res["residue_number"] = []
 
         for index, site in enumerate(self.data["sequence"]):
-            site_dict: dict[str, Any] = {k: self.data[k] for k in other_keys}
-            site_dict["letter"] = site
-            site_dict["position"] = index + 1
             if selected_aas and site not in selected_aas:
                 continue
-
-            for key in site_keys:
-                site_dict[key] = index in self.data[f"{key}_sites"]
-
-            for k, v in site_dict.items():
-                res[k].append(v)
+            res["residue_letter"].append(site)
+            res["residue_number"].append(index + 1)
+            for k in site_keys:
+                res["is_" + k.removesuffix("_sites")].append(  # type: ignore
+                    (index + 1) in self.data[k]
+                )
+            for k in other_keys:
+                res[k].append(self.data[k])  # will be the same for all sites
 
         return res
 

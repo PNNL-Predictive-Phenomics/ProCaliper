@@ -15,11 +15,17 @@ for _, row in df.iterrows():  # type: ignore
 
     sasa = pd.DataFrame(protein.get_sasa())
     charge = pd.DataFrame(protein.get_charge())
-    size = pd.DataFrame(protein.get_size())
+    titr = pd.DataFrame(protein.get_titration())
 
-    unravelled = pd.DataFrame(protein.unravel_sites(selected_aas={"C"}))
+    sasa.drop(columns=["residue_name", "residue_number"], inplace=True)
+    charge.drop(columns=["residue_name", "residue_number"], inplace=True)
+    titr.drop(columns=["residue_name", "residue_number"], inplace=True)
 
-    row_df = pd.concat([unravelled, sasa, charge, size], axis=1)
+    conf = pd.DataFrame(protein.get_confidence(), columns=["pLDDT"])
+
+    unravelled = pd.DataFrame(protein.unravel_sites())  # all data, all sites
+
+    row_df = pd.concat([unravelled, sasa, charge, conf, titr], axis=1)
 
     if sdf is None:
         sdf = row_df
