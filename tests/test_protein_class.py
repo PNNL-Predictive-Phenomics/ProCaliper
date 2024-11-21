@@ -42,12 +42,28 @@ def test_read_uniprot_row() -> None:
             assert protein.data["sequence"] == COMPARISON_SEQUENCE_1
 
         if protein.data["entry"] == COMPARISON_ENTRY_2:
-            assert protein.data["disulfide_bond_sites"] == COMPARISON_DISULFIDE_2
+            assert protein.site_annotations is not None
+            dbonds = protein.site_annotations.disulfide_bond
+            assert dbonds is not None
+            left = [i + 1 for i, v in enumerate(dbonds) if v]
+            assert left == COMPARISON_DISULFIDE_2
 
         if protein.data["entry"] == COMPARISON_ENTRY_3:
-            assert protein.data["beta_strand_sites"] == COMPARISON_STRAND
-            assert protein.data["helix_sites"] == COMPARISON_HELIX
-            assert protein.data["turn_sites"] == COMPARISON_TURN
+            assert protein.site_annotations is not None
+            strand = protein.site_annotations.beta_strand
+            assert strand is not None
+            left = [i + 1 for i, v in enumerate(strand) if v]
+            assert left == COMPARISON_STRAND
+
+            helix = protein.site_annotations.helix
+            assert helix is not None
+            left = [i + 1 for i, v in enumerate(helix) if v]
+            assert left == COMPARISON_HELIX
+
+            turn = protein.site_annotations.turn
+            assert turn is not None
+            left = [i + 1 for i, v in enumerate(turn) if v]
+            assert left == COMPARISON_TURN
 
 
 def test_unravel():
@@ -58,12 +74,13 @@ def test_unravel():
     protein = Protein.from_uniprot_row(row_dict)
     print(protein.data.keys())
     unravelled = protein.unravel_sites(
-        selected_aas={"M"}, selected_keys={"entry", "turn_sites"}
+        selected_aas={"M"},
+        selected_keys={"entry", "turn", "residue_letter", "residue_number"},
     )
 
     expected = {
         "entry": ["A0A0B4J2F0", "A0A0B4J2F0"],
-        "is_turn": [False, False],
+        "turn": [False, False],
         "residue_letter": ["M", "M"],
         "residue_number": [1, 43],
     }
