@@ -22,15 +22,15 @@ class Protein:
         "Active site": [(r"ACT_SITE (\d+);", False)],
         "Binding site": [
             (r"BINDING (\d+);", False),
-            (r"BINDING (\d+)\.\.(\d+);", False),
+            (r"BINDING (\d+)\.\.(\d+);", True),
         ],
         "DNA binding": [
             (r"DNA_BIND (\d+);", False),
-            (r"DNA_BIND (\d+)\.\.(\d+);", False),
+            (r"DNA_BIND (\d+)\.\.(\d+);", True),
         ],
         "Disulfide bond": [
             (r"DISULFID (\d+);", False),
-            (r"DISULFID (\d+)\.\.(\d+);", False),
+            (r"DISULFID (\d+)\.\.(\d+);", True),
         ],
         "Beta strand": [(r"STRAND (\d+);", True), (r"STRAND (\d+)\.\.(\d+);", True)],
         "Helix": [(r"HELIX (\d+);", True), (r"HELIX (\d+)\.\.(\d+);", True)],
@@ -41,15 +41,15 @@ class Protein:
         "active_site": [(r"ACT_SITE (\d+);", False)],
         "binding_site": [
             (r"BINDING (\d+);", False),
-            (r"BINDING (\d+)\.\.(\d+);", False),
+            (r"BINDING (\d+)\.\.(\d+);", True),
         ],
         "dna_binding": [
             (r"DNA_BIND (\d+);", False),
-            (r"DNA_BIND (\d+)\.\.(\d+);", False),
+            (r"DNA_BIND (\d+)\.\.(\d+);", True),
         ],
         "disulfide_bond": [
             (r"DISULFID (\d+);", False),
-            (r"DISULFID (\d+)\.\.(\d+);", False),
+            (r"DISULFID (\d+)\.\.(\d+);", True),
         ],
         "beta_strand": [(r"STRAND (\d+);", True), (r"STRAND (\d+)\.\.(\d+);", True)],
         "helix": [(r"HELIX (\d+);", True), (r"HELIX (\d+)\.\.(\d+);", True)],
