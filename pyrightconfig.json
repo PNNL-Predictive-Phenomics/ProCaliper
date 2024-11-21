@@ -10,14 +10,15 @@
     ".vscode",
     "docs",
     "**/__pycache__",
-    "LifeWorks_procaliper.egg-info"
+    "LifeWorks_procaliper.egg-info",
+    "**/*.tsv",
+    "**/.venv/**",
+    "**/*.pdb"
   ],
-
   "ignore": [
     "src/oldstuff"
   ],
-
   "reportMissingImports": true,
   "reportMissingTypeStubs": false,
-  "pythonVersion": "3.8"
+  "pythonVersion": "3.9"
 }
