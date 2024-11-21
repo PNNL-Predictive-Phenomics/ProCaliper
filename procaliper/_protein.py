@@ -5,55 +5,37 @@ Contains the main class for holding single protein data.
 from __future__ import annotations
 
 import os
-import re
 from itertools import chain
-from typing import Any, cast
+from typing import Any
 
 import pandas as pd
 import requests
 from UniProtMapper import ProtMapper
 
 import procaliper.protein_structure as structure
+from procaliper.site_metadata import SiteAnnotations
 from procaliper.type_aliases import AminoAcidLetter
 
 
 class Protein:
     UNIPROT_SITE_PATTERNS = {
-        "Active site": [(r"ACT_SITE (\d+);", False)],
-        "Binding site": [
-            (r"BINDING (\d+);", False),
-            (r"BINDING (\d+)\.\.(\d+);", True),
-        ],
-        "DNA binding": [
-            (r"DNA_BIND (\d+);", False),
-            (r"DNA_BIND (\d+)\.\.(\d+);", True),
-        ],
-        "Disulfide bond": [
-            (r"DISULFID (\d+);", False),
-            (r"DISULFID (\d+)\.\.(\d+);", True),
-        ],
-        "Beta strand": [(r"STRAND (\d+);", True), (r"STRAND (\d+)\.\.(\d+);", True)],
-        "Helix": [(r"HELIX (\d+);", True), (r"HELIX (\d+)\.\.(\d+);", True)],
-        "Turn": [(r"TURN (\d+);", True), (r"TURN (\d+)\.\.(\d+);", True)],
+        "Active site": "ACT_SITE",
+        "Binding site": "BINDING",
+        "DNA binding": "DNA_BIND",
+        "Disulfide bond": "DISULFID",
+        "Beta strand": "STRAND",
+        "Helix": "HELIX",
+        "Turn": "TURN",
     }
 
     UNIPROT_SITE_PATTERNS_RECTIFIED = {
-        "active_site": [(r"ACT_SITE (\d+);", False)],
-        "binding_site": [
-            (r"BINDING (\d+);", False),
-            (r"BINDING (\d+)\.\.(\d+);", True),
-        ],
-        "dna_binding": [
-            (r"DNA_BIND (\d+);", False),
-            (r"DNA_BIND (\d+)\.\.(\d+);", True),
-        ],
-        "disulfide_bond": [
-            (r"DISULFID (\d+);", False),
-            (r"DISULFID (\d+)\.\.(\d+);", True),
-        ],
-        "beta_strand": [(r"STRAND (\d+);", True), (r"STRAND (\d+)\.\.(\d+);", True)],
-        "helix": [(r"HELIX (\d+);", True), (r"HELIX (\d+)\.\.(\d+);", True)],
-        "turn": [(r"TURN (\d+);", True), (r"TURN (\d+)\.\.(\d+);", True)],
+        "active": "ACT_SITE",
+        "binding": "BINDING",
+        "dna_binding": "DNA_BIND",
+        "disulfide_bond": "DISULFID",
+        "beta_strand": "STRAND",
+        "helix": "HELIX",
+        "turn": "TURN",
     }
 
     UNIPROT_API_DEFAULT_FIELDS = [
@@ -78,6 +60,8 @@ class Protein:
         self.pdb_location_relative: str | None = None
         self.pdb_location_absolute: str | None = None
 
+        self.site_annotations: SiteAnnotations = SiteAnnotations("")
+
         self.confidence_data: list[float] | None = None
         self.sasa_data: structure.sasa.SASAData | None = None
         self.charge_data: structure.charge.ChargeData | None = None
@@ -85,14 +69,20 @@ class Protein:
         self.titration_data: structure.titration.TitrationData | None = None
         pass
 
+    def _rectify_label(self, label: str) -> str:
+        new_label = label.replace(" ", "_").lower()
+        new_label = new_label.replace("_site_sites", "_sites")
+        return new_label
+
     def _rectify_data_labels(self) -> None:
         """
         Standardize the features names in self.data
 
-        Replaces all spaces with underscores and lowercases the keys
+        Replaces all spaces with underscores and lowercases the keys, and then
+        replaces all instances of "_site_sites" with "_sites"
         """
         for k in list(self.data.keys()):
-            new_key = k.replace(" ", "_").lower()
+            new_key = self._rectify_label(k)
             self.data[new_key] = self.data.pop(k)
 
     @classmethod
@@ -117,21 +107,19 @@ class Protein:
         else:
             raise ValueError(f"Sequence not found in row: {row}")
 
+        p.site_annotations = SiteAnnotations(p.data["sequence"])
         for key, value in row.items():
-            if key in cls.UNIPROT_SITE_PATTERNS:
-                p.data[f"{key}_sites"] = p._extract_sites(
-                    value,
-                    cls.UNIPROT_SITE_PATTERNS[key],
-                )
-                # p.data[f"{key}_cysteine_sites"] = [
-                #     site
-                #     for site in p.data[f"{key}_sites"]
-                #     if p._is_site_aa(site, aa="C")
-                # ]
+            key = p._rectify_label(key)
+            if key in cls.UNIPROT_SITE_PATTERNS_RECTIFIED:
+                uniprot_description_id = cls.UNIPROT_SITE_PATTERNS_RECTIFIED[key]
+                p.site_annotations.extract_annotation(uniprot_description_id, value)
+            elif key in cls.UNIPROT_SITE_PATTERNS:
+                uniprot_description_id = cls.UNIPROT_SITE_PATTERNS[key]
+                p.site_annotations.extract_annotation(uniprot_description_id, value)
             else:
+                if value != value:
+                    value = ""
                 p.data[key] = value
-
-        p._rectify_data_labels()
         return p
 
     @classmethod
@@ -490,31 +478,23 @@ class Protein:
             dict[str, list[Any]]: A dictionary mapping keys to lists of values.
                 Each list is a parallel array of the same length as the protein
                 sequence (after filtering out non-selected amino acids)."""
+        if self.site_annotations is None:
+            raise ValueError("Could not find site-level data in protein object.")
+        tbl = self.site_annotations.table()
         if selected_keys is None:
-            selected_keys = set(self.data.keys()) - {"sequence"}
-
-        site_keys = (
-            set(x + "_sites" for x in Protein.UNIPROT_SITE_PATTERNS_RECTIFIED.keys())
-            & selected_keys
-        )
-        other_keys = selected_keys - site_keys
-
-        res: dict[str, list[Any]] = {k: [] for k in other_keys}
-        for k in site_keys:
-            res["is_" + k.removesuffix("_sites")] = []  # type: ignore
-        res["residue_letter"] = []
-        res["residue_number"] = []
-
+            selected_keys = (set(tbl.keys()) | set(self.data.keys())) - {"sequence"}
+        tbl_keys = selected_keys & set(tbl.keys())
+        data_keys = selected_keys & set(self.data.keys())
+        assert tbl_keys.isdisjoint(data_keys)
+        res: dict[str, list[Any]] = {k: [] for k in selected_keys}
         for index, site in enumerate(self.data["sequence"]):
             if selected_aas and site not in selected_aas:
                 continue
-            res["residue_letter"].append(site)
-            res["residue_number"].append(index + 1)
-            for k in site_keys:
-                res["is_" + k.removesuffix("_sites")].append(  # type: ignore
-                    (index + 1) in self.data[k]
+            for k in tbl_keys:
+                res[k].append(  # type: ignore
+                    tbl[k][index]
                 )
-            for k in other_keys:
+            for k in data_keys:
                 res[k].append(self.data[k])  # will be the same for all sites
 
         return res
@@ -557,30 +537,6 @@ class Protein:
             path_to_pdb_file = f"{self.data['entry']}.pdb"
         self.pdb_location_relative = path_to_pdb_file
         self.pdb_location_absolute = os.path.abspath(path_to_pdb_file)
-
-    def _extract_sites(
-        self, site_description: str, patterns: list[tuple[str, bool]]
-    ) -> list[int]:
-        sites: list[int] = []
-        if (
-            str(site_description) == "nan"
-        ):  # this will be the missing value default in pandas--is there a more elegant way to handle this?
-            return sites
-        for pattern, expand_range in patterns:
-            matches = cast(list[str], re.findall(pattern, site_description))
-
-            for match in matches:
-                if isinstance(match, tuple):
-                    start, end = int(match[0]), int(match[1])
-                    if expand_range:
-                        sites.extend(
-                            range(start, end + 1)
-                        )  # Include all values in the range from start to end
-                    else:
-                        sites.extend([start, end])  # Add start and end points
-                else:
-                    sites.append(int(match))
-        return sites
 
     def _is_site_aa(self, site: int, aa: AminoAcidLetter = "C") -> bool:
         if "sequence" not in self.data:
