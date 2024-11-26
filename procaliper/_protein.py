@@ -71,7 +71,8 @@ class Protein:
 
     def _rectify_label(self, label: str) -> str:
         new_label = label.replace(" ", "_").lower()
-        new_label = new_label.replace("_site_sites", "_sites")
+        new_label = new_label.removesuffix("_site_sites")
+        new_label = new_label.removesuffix("_site")
         return new_label
 
     def _rectify_data_labels(self) -> None:

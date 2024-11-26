@@ -88,6 +88,35 @@ def test_unravel():
     assert unravelled == expected
 
 
+def test_read_row_with_site_data():
+    TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
+    TEST_ROW = 'A0A0K2S4Q6	reviewed	CD3CH_HUMAN	Protein CD300H (CD300 antigen-like family member H)	CD300H	Homo sapiens (Human)	201	MTQRAGAAMLPSALLLLCVPGCLTVSGPSTVMGAVGESLSVQCRYEEKYKTFNKYWCRQPCLPIWHEMVETGGSEGVVRSDQVIITDHPGDLTFTVTLENLTADDAGKYRCGIATILQEDGLSGFLPDPFFQVQVLVSSASSTENSVKTPASPTRPSQCQGSLPSSTCFLLLPLLKVPLLLSILGAILWVNRPWRTPWTES				DISULFID 43..111; /evidence="ECO:0000255|PROSITE-ProRule:PRU00114"			'
+
+    row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
+    protein = Protein.from_uniprot_row(row_dict)
+
+    assert protein.site_annotations is not None
+
+    dbonds = protein.site_annotations.disulfide_bond
+    assert dbonds is not None
+    assert all(dbonds[42:111])  # 43..111, one-indexed
+    assert not any(dbonds[:42]) and not any(dbonds[111:])
+
+
+def test_read_row_with_binding_site_data():
+    TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
+    TEST_ROW = 'A0A087X1C5	reviewed	CP2D7_HUMAN	Putative cytochrome P450 2D7 (EC 1.14.14.1)	CYP2D7	Homo sapiens (Human)	515	MGLEALVPLAMIVAIFLLLVDLMHRHQRWAARYPPGPLPLPGLGNLLHVDFQNTPYCFDQLRRRFGDVFSLQLAWTPVVVLNGLAAVREAMVTRGEDTADRPPAPIYQVLGFGPRSQGVILSRYGPAWREQRRFSVSTLRNLGLGKKSLEQWVTEEAACLCAAFADQAGRPFRPNGLLDKAVSNVIASLTCGRRFEYDDPRFLRLLDLAQEGLKEESGFLREVLNAVPVLPHIPALAGKVLRFQKAFLTQLDELLTEHRMTWDPAQPPRDLTEAFLAKKEKAKGSPESSFNDENLRIVVGNLFLAGMVTTSTTLAWGLLLMILHLDVQRGRRVSPGCPIVGTHVCPVRVQQEIDDVIGQVRRPEMGDQAHMPCTTAVIHEVQHFGDIVPLGVTHMTSRDIEVQGFRIPKGTTLITNLSSVLKDEAVWKKPFRFHPEHFLDAQGHFVKPEAFLPFSAGRRACLGEPLARMELFLFFTSLLQHFSFSVAAGQPRPSHSRVVSFLVTPSPYELCAVPR		BINDING 461; /ligand="heme"; /ligand_id="ChEBI:CHEBI:30413"; /ligand_part="Fe"; /ligand_part_id="ChEBI:CHEBI:18248"; /note="axial binding residue"; /evidence="ECO:0000250|UniProtKB:P10635"					'
+
+    row_dict = {k: v for k, v in zip(TEST_HEADER.split("\t"), TEST_ROW.split("\t"))}
+    protein = Protein.from_uniprot_row(row_dict)
+
+    assert protein.site_annotations is not None
+
+    bsite = protein.site_annotations.binding
+    assert bsite is not None
+    assert bsite[460]
+
+
 def test_fetch_pdb():
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
