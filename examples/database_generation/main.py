@@ -36,3 +36,5 @@ assert sdf is not None
 
 print(sdf)
 print(sdf.columns)
+
+print("Number of binding sites in sample:", sdf["binding"].sum())
