@@ -14,18 +14,18 @@ NEUTRAL_PH = 7.0
 class TitrationData(TypedDict):
     """Data class for titration data.
 
+    Array index corresponds to residue number in the PDB. Note that Python
+    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+    corresponds to residue 1.
+
     Attributes:
         pKa (list[float]): The pK values for the titration data.
-        protonation_state (list[tuple[str, float | str]]): The expected protonation states for the titration data.
-        residue_number (list[int]): The residue numbers for the titration data.
-        residue_name (list[str]): The residue name (three-letter amino acid
-            abbreviation) for the sites.
+        protonation_state (list[tuple[str, float | str]]): The expected
+        protonation states for the titration data.
     """
 
     pKa: list[float]
     protonation_state: list[tuple[str, float | str]]
-    residue_number: list[int]
-    residue_name: list[str]
 
 
 def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
@@ -72,8 +72,6 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
         # pKa=[group.pka_value for group in gs],
         pKa=[pks[i] if i in pks else 0 for i, _ in sv],
         protonation_state=[_state_from_pk(pks[i] if i in pks else 0) for i, _ in sv],
-        residue_name=[v for _, v in sv],
-        residue_number=[i for i, _ in sv],
     )
 
 
@@ -178,8 +176,6 @@ try:
         return TitrationData(
             pKa=pKs,
             protonation_state=states,
-            residue_number=residue_numbers,
-            residue_name=residue_names,
         )
 
 except ImportError:

@@ -13,7 +13,7 @@ import requests
 from UniProtMapper import ProtMapper
 
 import procaliper.protein_structure as structure
-from procaliper.site_metadata import SiteAnnotations
+from procaliper.site_metadata import CustomSiteData, SiteAnnotations
 from procaliper.type_aliases import AminoAcidLetter
 
 
@@ -61,6 +61,7 @@ class Protein:
         self.pdb_location_absolute: str | None = None
 
         self.site_annotations: SiteAnnotations = SiteAnnotations("")
+        self.custom_site_data: CustomSiteData = CustomSiteData([], {})
 
         self.confidence_data: list[float] | None = None
         self.sasa_data: structure.sasa.SASAData | None = None
@@ -107,7 +108,7 @@ class Protein:
             p.data["sequence"] = row["sequence"]
         else:
             raise ValueError(f"Sequence not found in row: {row}")
-
+        p.custom_site_data.add_residue_numbers(len(p.data["sequence"]))
         p.site_annotations = SiteAnnotations(p.data["sequence"])
         for key, value in row.items():
             key = p._rectify_label(key)
@@ -461,6 +462,13 @@ class Protein:
                 "Titration data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
+    def add_custom_site_data_column(
+        self, key: str, site_data: list[Any], overwrite: bool = False
+    ) -> None:
+        if not self.custom_site_data.residue_number:
+            self.custom_site_data.add_residue_numbers(len(self.data["sequence"]))
+        self.custom_site_data.add_site_data(key, site_data, overwrite=overwrite)
+
     def unravel_sites(
         self,
         selected_aas: None | set[AminoAcidLetter] = None,
@@ -481,7 +489,7 @@ class Protein:
                 sequence (after filtering out non-selected amino acids)."""
         if self.site_annotations is None:
             raise ValueError("Could not find site-level data in protein object.")
-        tbl = self.site_annotations.table()
+        tbl = self.site_annotations.table() | self.custom_site_data.table()
         if selected_keys is None:
             selected_keys = (set(tbl.keys()) | set(self.data.keys())) - {"sequence"}
         tbl_keys = selected_keys & set(tbl.keys())

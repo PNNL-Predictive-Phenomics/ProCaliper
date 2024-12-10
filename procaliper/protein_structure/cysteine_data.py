@@ -17,18 +17,18 @@ class CysteineData(TypedDict):
 
     Non-CYS sites are assigned `None` values.
 
+    Array index corresponds to residue number in the PDB. Note that Python
+    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+    corresponds to residue 1.
+
     Attributes:
         cys_ratio (list[float | None]): The ratio of CYS sites to total sites.
         min_dist_to_closest_sulfur (list[float | None]): The minimum distance to the closest sulfur for each CYS site.
-        sulfur_closeness_rating_scaled (list[float | None]): The sulfur closeness rating scaled for the CYS sites.
-        residue_id (list[int | None]): The residue ID for the CYS sites.
-        residue_name (list[str | None]): The residue name for the CYS sites."""
+        sulfur_closeness_rating_scaled (list[float | None]): The sulfur closeness rating scaled for the CYS sites."""
 
     cys_ratio: list[float | None]
     min_dist_to_closest_sulfur: list[float | None]
     sulfur_closeness_rating_scaled: list[float | None]
-    residue_id: list[int | None]
-    residue_name: list[str | None]
 
 
 def calculate_cysteine_data(pdb_filename: str) -> CysteineData:
@@ -48,8 +48,6 @@ def calculate_cysteine_data(pdb_filename: str) -> CysteineData:
             "cys_ratio": [],
             "min_dist_to_closest_sulfur": [],
             "sulfur_closeness_rating_scaled": [],
-            "residue_id": [],
-            "residue_name": [],
         }
     )
 
@@ -70,10 +68,7 @@ def calculate_cysteine_data(pdb_filename: str) -> CysteineData:
 
     cys_index = 0
 
-    for _, grp in ppdb.df["ATOM"].groupby("residue_number"):  # type: ignore
-        res["residue_id"].append(grp["residue_number"].max())
-        res["residue_name"].append(grp["residue_name"].max())
-
+    for _, grp in sorted(ppdb.df["ATOM"].groupby("residue_number")):  # type: ignore
         if grp["residue_name"].max() == "CYS":  # type: ignore
             sg_closeness_rating_scaled = 0
             x_p, y_p, z_p = cys_positions[cys_index]
