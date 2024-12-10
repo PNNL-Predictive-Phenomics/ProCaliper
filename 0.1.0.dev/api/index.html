@@ -1916,7 +1916,15 @@
 <span class="normal">545</span>
 <span class="normal">546</span>
 <span class="normal">547</span>
-<span class="normal">548</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="s2">&quot;ACT_SITE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="s2">&quot;BINDING&quot;</span><span class="p">,</span>
@@ -1960,6 +1968,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="p">:</span> <span class="n">SiteAnnotations</span> <span class="o">=</span> <span class="n">SiteAnnotations</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="p">:</span> <span class="n">CustomSiteData</span> <span class="o">=</span> <span class="n">CustomSiteData</span><span class="p">([],</span> <span class="p">{})</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">confidence_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sasa_data</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2006,7 +2015,7 @@
             <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sequence not found in row: </span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
+        <span class="n">p</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_residue_numbers</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]))</span>
         <span class="n">p</span><span class="o">.</span><span class="n">site_annotations</span> <span class="o">=</span> <span class="n">SiteAnnotations</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">_rectify_label</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
@@ -2360,6 +2369,13 @@
                 <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">add_custom_site_data_column</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">site_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">residue_number</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_residue_numbers</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_site_data</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">site_data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2380,7 +2396,7 @@
 <span class="sd">                sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find site-level data in protein object.&quot;</span><span class="p">)</span>
-        <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
+        <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">selected_keys</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
         <span class="n">tbl_keys</span> <span class="o">=</span> <span class="n">selected_keys</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -2544,15 +2560,7 @@ not fetch the PDB from the database.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">503</span>
-<span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span>
-<span class="normal">510</span>
-<span class="normal">511</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">511</span>
 <span class="normal">512</span>
 <span class="normal">513</span>
 <span class="normal">514</span>
@@ -2570,7 +2578,15 @@ not fetch the PDB from the database.</p>
 <span class="normal">526</span>
 <span class="normal">527</span>
 <span class="normal">528</span>
-<span class="normal">529</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches the PDB file for the protein (from the AlphaFold database by default).</span>
 
 <span class="sd">    Args:</span>
@@ -2742,8 +2758,7 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
-<span class="normal">127</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
@@ -2781,7 +2796,8 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 <span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
-<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">from_uniprot_id</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span>
     <span class="n">uniprot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2922,8 +2938,7 @@ have "Sequence" or "sequence" as a key.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 89</span>
-<span class="normal"> 90</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
 <span class="normal"> 91</span>
 <span class="normal"> 92</span>
 <span class="normal"> 93</span>
@@ -2957,7 +2972,8 @@ have "Sequence" or "sequence" as a key.</p>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
-<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">from_uniprot_row</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new Protein object from a row from a Uniprot table</span>
 
@@ -2978,7 +2994,7 @@ have "Sequence" or "sequence" as a key.</p>
         <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sequence not found in row: </span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
+    <span class="n">p</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_residue_numbers</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]))</span>
     <span class="n">p</span><span class="o">.</span><span class="n">site_annotations</span> <span class="o">=</span> <span class="n">SiteAnnotations</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">_rectify_label</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
@@ -3096,8 +3112,7 @@ object containing the charge values for residues and atoms.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">284</span>
-<span class="normal">285</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">285</span>
 <span class="normal">286</span>
 <span class="normal">287</span>
 <span class="normal">288</span>
@@ -3133,7 +3148,8 @@ object containing the charge values for residues and atoms.</p>
 <span class="normal">318</span>
 <span class="normal">319</span>
 <span class="normal">320</span>
-<span class="normal">321</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">321</span>
+<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed charge data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3241,8 +3257,7 @@ file in <code>self.pdb_location_absolute</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
-<span class="normal">232</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">232</span>
 <span class="normal">233</span>
 <span class="normal">234</span>
 <span class="normal">235</span>
@@ -3265,7 +3280,8 @@ file in <code>self.pdb_location_absolute</code>.</p>
 <span class="normal">252</span>
 <span class="normal">253</span>
 <span class="normal">254</span>
-<span class="normal">255</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="normal">255</span>
+<span class="normal">256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed confidence data from pdb file.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3361,8 +3377,7 @@ object containing the size values for cystein sites.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">323</span>
-<span class="normal">324</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">324</span>
 <span class="normal">325</span>
 <span class="normal">326</span>
 <span class="normal">327</span>
@@ -3386,7 +3401,8 @@ object containing the size values for cystein sites.</p>
 <span class="normal">345</span>
 <span class="normal">346</span>
 <span class="normal">347</span>
-<span class="normal">348</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
+<span class="normal">348</span>
+<span class="normal">349</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed size data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3483,8 +3499,7 @@ object containing the SASA values for residues and atoms.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">257</span>
-<span class="normal">258</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">258</span>
 <span class="normal">259</span>
 <span class="normal">260</span>
 <span class="normal">261</span>
@@ -3508,7 +3523,8 @@ object containing the SASA values for residues and atoms.</p>
 <span class="normal">279</span>
 <span class="normal">280</span>
 <span class="normal">281</span>
-<span class="normal">282</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">282</span>
+<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed SASA data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3607,8 +3623,7 @@ the titration values for residues.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">350</span>
-<span class="normal">351</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">351</span>
 <span class="normal">352</span>
 <span class="normal">353</span>
 <span class="normal">354</span>
@@ -3624,7 +3639,8 @@ the titration values for residues.</p>
 <span class="normal">364</span>
 <span class="normal">365</span>
 <span class="normal">366</span>
-<span class="normal">367</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">367</span>
+<span class="normal">368</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs the default titration calculation for the protein.</span>
 
 <span class="sd">    Equivalent to running `self.get_titration_from_propka`.</span>
@@ -3716,8 +3732,7 @@ file in <code>self.pdb_location_absolute</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">433</span>
-<span class="normal">434</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">434</span>
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
@@ -3745,7 +3760,8 @@ file in <code>self.pdb_location_absolute</code>.</p>
 <span class="normal">459</span>
 <span class="normal">460</span>
 <span class="normal">461</span>
-<span class="normal">462</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">462</span>
+<span class="normal">463</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_pkai` if</span>
@@ -3849,8 +3865,7 @@ the titration values for residues.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">369</span>
-<span class="normal">370</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">370</span>
 <span class="normal">371</span>
 <span class="normal">372</span>
 <span class="normal">373</span>
@@ -3877,7 +3892,8 @@ the titration values for residues.</p>
 <span class="normal">394</span>
 <span class="normal">395</span>
 <span class="normal">396</span>
-<span class="normal">397</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">397</span>
+<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_propka` if</span>
@@ -3983,8 +3999,7 @@ the titration values forresidues.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">399</span>
-<span class="normal">400</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
 <span class="normal">401</span>
 <span class="normal">402</span>
 <span class="normal">403</span>
@@ -4015,7 +4030,8 @@ the titration values forresidues.</p>
 <span class="normal">428</span>
 <span class="normal">429</span>
 <span class="normal">430</span>
-<span class="normal">431</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">431</span>
+<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_pypka` if</span>
@@ -4193,8 +4209,7 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">167</span>
-<span class="normal">168</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">168</span>
 <span class="normal">169</span>
 <span class="normal">170</span>
 <span class="normal">171</span>
@@ -4232,7 +4247,8 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 <span class="normal">203</span>
 <span class="normal">204</span>
 <span class="normal">205</span>
-<span class="normal">206</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">206</span>
+<span class="normal">207</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span>
     <span class="n">uniprot_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -4323,16 +4339,16 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">531</span>
-<span class="normal">532</span>
-<span class="normal">533</span>
-<span class="normal">534</span>
-<span class="normal">535</span>
-<span class="normal">536</span>
-<span class="normal">537</span>
-<span class="normal">538</span>
-<span class="normal">539</span>
-<span class="normal">540</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets pdb file for protein object using local pdb file.</span>
 
 <span class="sd">    Args:</span>
@@ -4434,15 +4450,7 @@ sequence (after filtering out non-selected amino acids).</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">464</span>
-<span class="normal">465</span>
-<span class="normal">466</span>
-<span class="normal">467</span>
-<span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
-<span class="normal">471</span>
-<span class="normal">472</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">472</span>
 <span class="normal">473</span>
 <span class="normal">474</span>
 <span class="normal">475</span>
@@ -4471,7 +4479,15 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="normal">498</span>
 <span class="normal">499</span>
 <span class="normal">500</span>
-<span class="normal">501</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">selected_keys</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -4491,7 +4507,7 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="sd">            sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find site-level data in protein object.&quot;</span><span class="p">)</span>
-    <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
+    <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">selected_keys</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
     <span class="n">tbl_keys</span> <span class="o">=</span> <span class="n">selected_keys</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -4712,9 +4728,7 @@ PDB file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/charge.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
@@ -4763,11 +4777,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -4809,18 +4819,12 @@ PDB file.</p>
         <span class="p">{</span>
             <span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;charge_method&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_number&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">res_num</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">charges</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">residue</span><span class="p">[</span><span class="s2">&quot;atom_number&quot;</span><span class="p">])])</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge_method&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res_num</span><span class="p">))</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">residue</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="p">)</span>  <span class="c1"># all residue names should be the same because these atoms are from the same residue</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -4896,77 +4900,72 @@ PDB file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/cysteine_data.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates spatial data for a protein from a PDB file.</span>
 
 <span class="sd">    Args:</span>
@@ -4983,8 +4982,6 @@ PDB file.</p>
             <span class="s2">&quot;cys_ratio&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;min_dist_to_closest_sulfur&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;sulfur_closeness_rating_scaled&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_id&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -5005,10 +5002,7 @@ PDB file.</p>
 
     <span class="n">cys_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
             <span class="n">sg_closeness_rating_scaled</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">x_p</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="n">z_p</span> <span class="o">=</span> <span class="n">cys_positions</span><span class="p">[</span><span class="n">cys_index</span><span class="p">]</span>
@@ -5113,7 +5107,8 @@ file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/sasa.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
@@ -5147,12 +5142,7 @@ file.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -5177,8 +5167,6 @@ file.</p>
         <span class="p">{</span>
             <span class="s2">&quot;all_sasa_value&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_number&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -5188,8 +5176,6 @@ file.</p>
             <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
                 <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
                 <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">id</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">resname</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -5356,6 +5342,9 @@ across the residue is used.</p>
 
 
         <p>A data class for holding charge data from computed from a PDB file.</p>
+<p>Array index corresponds to residue number in the PDB. Note that Python
+arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+corresponds to residue 1.</p>
 
 
 <p><span class="doc-section-title">Attributes:</span></p>
@@ -5437,9 +5426,15 @@ abbreviation) for the sites.</p>
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ChargeData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ChargeData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A data class for holding charge data from computed from a PDB file.</span>
+
+<span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
+<span class="sd">    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0</span>
+<span class="sd">    corresponds to residue 1.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        charges (list[list[float]]): The charge value for atoms in the residue,</span>
@@ -5453,8 +5448,6 @@ abbreviation) for the sites.</p>
 
     <span class="n">charge</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
     <span class="n">charge_method</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">residue_number</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-    <span class="n">residue_name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -5590,9 +5583,7 @@ PDB file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/charge.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
@@ -5641,11 +5632,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -5687,18 +5674,12 @@ PDB file.</p>
         <span class="p">{</span>
             <span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;charge_method&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_number&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">res_num</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">residue</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">charges</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">residue</span><span class="p">[</span><span class="s2">&quot;atom_number&quot;</span><span class="p">])])</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;charge_method&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res_num</span><span class="p">))</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">residue</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="p">)</span>  <span class="c1"># all residue names should be the same because these atoms are from the same residue</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -5905,6 +5886,9 @@ across the residue is used.</p>
 
         <p>Data class for holding size data from computed from a PDB file.</p>
 <p>Non-CYS sites are assigned <code>None</code> values.</p>
+<p>Array index corresponds to residue number in the PDB. Note that Python
+arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+corresponds to residue 1.</p>
 
 
 <p><span class="doc-section-title">Attributes:</span></p>
@@ -5950,28 +5934,6 @@ across the residue is used.</p>
               </div>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.cysteine_data.CysteineData.residue_id">residue_id</span></code></td>
-            <td>
-                  <code>list[int | None]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue ID for the CYS sites.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.cysteine_data.CysteineData.residue_name">residue_name</span></code></td>
-            <td>
-                  <code>list[str | None]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue name for the CYS sites.</p>
-              </div>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -5998,18 +5960,18 @@ across the residue is used.</p>
 
 <span class="sd">    Non-CYS sites are assigned `None` values.</span>
 
+<span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
+<span class="sd">    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0</span>
+<span class="sd">    corresponds to residue 1.</span>
+
 <span class="sd">    Attributes:</span>
 <span class="sd">        cys_ratio (list[float | None]): The ratio of CYS sites to total sites.</span>
 <span class="sd">        min_dist_to_closest_sulfur (list[float | None]): The minimum distance to the closest sulfur for each CYS site.</span>
-<span class="sd">        sulfur_closeness_rating_scaled (list[float | None]): The sulfur closeness rating scaled for the CYS sites.</span>
-<span class="sd">        residue_id (list[int | None]): The residue ID for the CYS sites.</span>
-<span class="sd">        residue_name (list[str | None]): The residue name for the CYS sites.&quot;&quot;&quot;</span>
+<span class="sd">        sulfur_closeness_rating_scaled (list[float | None]): The sulfur closeness rating scaled for the CYS sites.&quot;&quot;&quot;</span>
 
     <span class="n">cys_ratio</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">min_dist_to_closest_sulfur</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">sulfur_closeness_rating_scaled</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">residue_id</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">residue_name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6101,77 +6063,72 @@ across the residue is used.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/cysteine_data.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates spatial data for a protein from a PDB file.</span>
 
 <span class="sd">    Args:</span>
@@ -6188,8 +6145,6 @@ across the residue is used.</p>
             <span class="s2">&quot;cys_ratio&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;min_dist_to_closest_sulfur&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;sulfur_closeness_rating_scaled&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_id&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -6210,10 +6165,7 @@ across the residue is used.</p>
 
     <span class="n">cys_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
             <span class="n">sg_closeness_rating_scaled</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">x_p</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="n">z_p</span> <span class="o">=</span> <span class="n">cys_positions</span><span class="p">[</span><span class="n">cys_index</span><span class="p">]</span>
@@ -6296,6 +6248,9 @@ across the residue is used.</p>
 
 
         <p>Data class for holding SASA data from computed from a PDB file.</p>
+<p>Array index corresponds to residue number in the PDB. Note that Python
+arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+corresponds to residue 1.</p>
 
 
 <p><span class="doc-section-title">Attributes:</span></p>
@@ -6334,29 +6289,6 @@ is always the SG sulfur.</p>
               </div>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.sasa.SASAData.residue_number">residue_number</span></code></td>
-            <td>
-                  <code>list[int]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue number for the site.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.sasa.SASAData.residue_name">residue_name</span></code></td>
-            <td>
-                  <code>list[str]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue name (three-letter amino acid
-abbreviation) for the sites.</p>
-              </div>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -6379,9 +6311,12 @@ abbreviation) for the sites.</p>
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for holding SASA data from computed from a PDB file.</span>
+
+<span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
+<span class="sd">    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0</span>
+<span class="sd">    corresponds to residue 1.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        all_sasa_value (list[float]): The overall SASA value for each site</span>
@@ -6390,15 +6325,10 @@ abbreviation) for the sites.</p>
 <span class="sd">            in each sites. Atoms are ordered from C-terminus to N-terminus</span>
 <span class="sd">            according to standard pdb order. For example, in CYS, the last atom</span>
 <span class="sd">            is always the SG sulfur.</span>
-<span class="sd">        residue_number (list[int]): The residue number for the site.</span>
-<span class="sd">        residue_name (list[str]): The residue name (three-letter amino acid</span>
-<span class="sd">            abbreviation) for the sites.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">all_sasa_value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
     <span class="n">atom_sasa_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
-    <span class="n">residue_number</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-    <span class="n">residue_name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6493,7 +6423,8 @@ file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/sasa.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
@@ -6527,12 +6458,7 @@ file.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -6557,8 +6483,6 @@ file.</p>
         <span class="p">{</span>
             <span class="s2">&quot;all_sasa_value&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_number&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;residue_name&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -6568,8 +6492,6 @@ file.</p>
             <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
                 <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
                 <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">id</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">resname</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -6626,6 +6548,9 @@ file.</p>
 
 
         <p>Data class for titration data.</p>
+<p>Array index corresponds to residue number in the PDB. Note that Python
+arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+corresponds to residue 1.</p>
 
 
 <p><span class="doc-section-title">Attributes:</span></p>
@@ -6656,30 +6581,7 @@ file.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The expected protonation states for the titration data.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.titration.TitrationData.residue_number">residue_number</span></code></td>
-            <td>
-                  <code>list[int]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue numbers for the titration data.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.titration.TitrationData.residue_name">residue_name</span></code></td>
-            <td>
-                  <code>list[str]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The residue name (three-letter amino acid
-abbreviation) for the sites.</p>
+                <p>The expected</p>
               </div>
             </td>
           </tr>
@@ -6705,18 +6607,18 @@ abbreviation) for the sites.</p>
 <span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for titration data.</span>
 
+<span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
+<span class="sd">    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0</span>
+<span class="sd">    corresponds to residue 1.</span>
+
 <span class="sd">    Attributes:</span>
 <span class="sd">        pKa (list[float]): The pK values for the titration data.</span>
-<span class="sd">        protonation_state (list[tuple[str, float | str]]): The expected protonation states for the titration data.</span>
-<span class="sd">        residue_number (list[int]): The residue numbers for the titration data.</span>
-<span class="sd">        residue_name (list[str]): The residue name (three-letter amino acid</span>
-<span class="sd">            abbreviation) for the sites.</span>
+<span class="sd">        protonation_state (list[tuple[str, float | str]]): The expected</span>
+<span class="sd">        protonation states for the titration data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">pKa</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
     <span class="n">protonation_state</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]]</span>
-    <span class="n">residue_number</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-    <span class="n">residue_name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6833,9 +6735,7 @@ abbreviation) for the sites.</p>
 <span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses propka to calculate titration data for the protein.</span>
 
 <span class="sd">    Args:</span>
@@ -6860,8 +6760,6 @@ abbreviation) for the sites.</p>
         <span class="c1"># pKa=[group.pka_value for group in gs],</span>
         <span class="n">pKa</span><span class="o">=</span><span class="p">[</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
         <span class="n">protonation_state</span><span class="o">=</span><span class="p">[</span><span class="n">_state_from_pk</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
-        <span class="n">residue_name</span><span class="o">=</span><span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
-        <span class="n">residue_number</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
