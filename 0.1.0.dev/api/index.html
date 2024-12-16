@@ -865,6 +865,72 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#procaliper.view" class="md-nav__link">
+    <span class="md-ellipsis">
+      view
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.ngl_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngl_scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.protein_to_nglview" class="md-nav__link">
+    <span class="md-ellipsis">
+      protein_to_nglview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      nglview_utils
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="nglview_utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils.ngl_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngl_scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils.protein_to_nglview" class="md-nav__link">
+    <span class="md-ellipsis">
+      protein_to_nglview
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1317,6 +1383,72 @@
   <a href="#procaliper.protein_structure.titration.calculate_titration_propka" class="md-nav__link">
     <span class="md-ellipsis">
       calculate_titration_propka
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#procaliper.view" class="md-nav__link">
+    <span class="md-ellipsis">
+      view
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.ngl_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngl_scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.protein_to_nglview" class="md-nav__link">
+    <span class="md-ellipsis">
+      protein_to_nglview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      nglview_utils
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="nglview_utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils.ngl_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngl_scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procaliper.view.nglview_utils.protein_to_nglview" class="md-nav__link">
+    <span class="md-ellipsis">
+      protein_to_nglview
     </span>
   </a>
   
@@ -4628,7 +4760,7 @@ sequence (after filtering out non-selected amino acids).</p>
 
     <div class="doc doc-contents ">
 
-        <p>Computes the charge of CYS sites in a PDB file.</p>
+        <p>Computes the charge of residue sites in a PDB file.</p>
 <p>By default, the method used is 'gasteiger', but this is configurable in
 <code>hyperparameters.py</code>.</p>
 
@@ -4778,7 +4910,7 @@ PDB file.</p>
 <span class="normal">87</span>
 <span class="normal">88</span>
 <span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
 <span class="sd">    `hyperparameters.py`.</span>
@@ -5483,7 +5615,7 @@ abbreviation) for the sites.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Computes the charge of CYS sites in a PDB file.</p>
+        <p>Computes the charge of residue sites in a PDB file.</p>
 <p>By default, the method used is 'gasteiger', but this is configurable in
 <code>hyperparameters.py</code>.</p>
 
@@ -5633,7 +5765,7 @@ PDB file.</p>
 <span class="normal">87</span>
 <span class="normal">88</span>
 <span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of CYS sites in a PDB file.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
 <span class="sd">    `hyperparameters.py`.</span>
@@ -6761,6 +6893,692 @@ corresponds to residue 1.</p>
         <span class="n">pKa</span><span class="o">=</span><span class="p">[</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
         <span class="n">protonation_state</span><span class="o">=</span><span class="p">[</span><span class="n">_state_from_pk</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
     <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="procaliper.view" class="doc doc-heading">
+            <code>view</code>
+
+
+<a href="#procaliper.view" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="procaliper.view.ngl_scheme" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ngl_scheme</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">float_to_hex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">two_sided</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#procaliper.view.ngl_scheme" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts a list of values to an nglview color scheme.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>data</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The list of values to convert.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>float_to_hex</code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span>[[float], str] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Function that
+converts a float to a hex color in the form <code>"#RRGGBB"</code>. If <code>None</code>,
+a default function is used that interpolates between white and green
+(one-sided) or red and blue (two-sided). Defaults to <code>None</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>two_sided</code></td>
+            <td>
+                  <code>bool</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to use a two-sided color scheme. If
+<code>False</code>, we assume <code>data</code> only contains positive values. Defaults to
+<code>False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>list[tuple[str, str]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>list[tuple[str, str]]: A list of color and residue number tuples that
+are compatible with nglview.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>procaliper/view/nglview_utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ngl_scheme</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">float_to_hex</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">two_sided</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a list of values to an nglview color scheme.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (list[float]): The list of values to convert.</span>
+<span class="sd">        float_to_hex (Callable[[float], str] | None, optional): Function that</span>
+<span class="sd">            converts a float to a hex color in the form `&quot;#RRGGBB&quot;`. If `None`,</span>
+<span class="sd">            a default function is used that interpolates between white and green</span>
+<span class="sd">            (one-sided) or red and blue (two-sided). Defaults to `None`.</span>
+<span class="sd">        two_sided (bool, optional): Whether to use a two-sided color scheme. If</span>
+<span class="sd">            `False`, we assume `data` only contains positive values. Defaults to</span>
+<span class="sd">            `False`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list[tuple[str, str]]: A list of color and residue number tuples that</span>
+<span class="sd">            are compatible with nglview.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">float_to_hex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">two_sided</span><span class="p">:</span>
+            <span class="n">float_to_hex</span> <span class="o">=</span> <span class="n">_default_float_to_hex_rb</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">float_to_hex</span> <span class="o">=</span> <span class="n">_default_float_to_hex</span>
+
+    <span class="n">maxx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">maxx</span><span class="p">))</span> <span class="k">if</span> <span class="n">two_sided</span> <span class="k">else</span> <span class="n">maxx</span>
+
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="n">maxx</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">[(</span><span class="n">float_to_hex</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_scaled</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="procaliper.view.protein_to_nglview" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span></code>
+
+<a href="#procaliper.view.protein_to_nglview" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Generates an nglview widget from a protein that has an associated PDB file.</p>
+<p>Must run <code>protein.fetch_pdb</code> first or specify an abosulute path to the PDB
+in <code>protein.pdb_location_absolute</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>protein</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="procaliper._protein.Protein" href="#procaliper.Protein">Protein</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The protein object to visualize.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>ValueError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the PDB location is not set.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="nglview.NGLWidget">NGLWidget</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>nglview.NGLWidget: an nglview widget</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>procaliper/view/nglview_utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates an nglview widget from a protein that has an associated PDB file.</span>
+
+<span class="sd">    Must run `protein.fetch_pdb` first or specify an abosulute path to the PDB</span>
+<span class="sd">    in `protein.pdb_location_absolute`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        protein (Protein): The protein object to visualize.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the PDB location is not set.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nglview.NGLWidget: an nglview widget</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">protein</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PDB location not set; use `fetch_pdb` first&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_file</span><span class="p">(</span><span class="n">protein</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h3 id="procaliper.view.nglview_utils" class="doc doc-heading">
+            <code>nglview_utils</code>
+
+
+<a href="#procaliper.view.nglview_utils" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="procaliper.view.nglview_utils.ngl_scheme" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ngl_scheme</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">float_to_hex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">two_sided</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#procaliper.view.nglview_utils.ngl_scheme" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts a list of values to an nglview color scheme.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>data</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The list of values to convert.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>float_to_hex</code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span>[[float], str] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Function that
+converts a float to a hex color in the form <code>"#RRGGBB"</code>. If <code>None</code>,
+a default function is used that interpolates between white and green
+(one-sided) or red and blue (two-sided). Defaults to <code>None</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>two_sided</code></td>
+            <td>
+                  <code>bool</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to use a two-sided color scheme. If
+<code>False</code>, we assume <code>data</code> only contains positive values. Defaults to
+<code>False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>list[tuple[str, str]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>list[tuple[str, str]]: A list of color and residue number tuples that
+are compatible with nglview.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>procaliper/view/nglview_utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ngl_scheme</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">float_to_hex</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">two_sided</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a list of values to an nglview color scheme.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (list[float]): The list of values to convert.</span>
+<span class="sd">        float_to_hex (Callable[[float], str] | None, optional): Function that</span>
+<span class="sd">            converts a float to a hex color in the form `&quot;#RRGGBB&quot;`. If `None`,</span>
+<span class="sd">            a default function is used that interpolates between white and green</span>
+<span class="sd">            (one-sided) or red and blue (two-sided). Defaults to `None`.</span>
+<span class="sd">        two_sided (bool, optional): Whether to use a two-sided color scheme. If</span>
+<span class="sd">            `False`, we assume `data` only contains positive values. Defaults to</span>
+<span class="sd">            `False`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list[tuple[str, str]]: A list of color and residue number tuples that</span>
+<span class="sd">            are compatible with nglview.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">float_to_hex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">two_sided</span><span class="p">:</span>
+            <span class="n">float_to_hex</span> <span class="o">=</span> <span class="n">_default_float_to_hex_rb</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">float_to_hex</span> <span class="o">=</span> <span class="n">_default_float_to_hex</span>
+
+    <span class="n">maxx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">maxx</span><span class="p">))</span> <span class="k">if</span> <span class="n">two_sided</span> <span class="k">else</span> <span class="n">maxx</span>
+
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="n">maxx</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">[(</span><span class="n">float_to_hex</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_scaled</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="procaliper.view.nglview_utils.protein_to_nglview" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span></code>
+
+<a href="#procaliper.view.nglview_utils.protein_to_nglview" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Generates an nglview widget from a protein that has an associated PDB file.</p>
+<p>Must run <code>protein.fetch_pdb</code> first or specify an abosulute path to the PDB
+in <code>protein.pdb_location_absolute</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>protein</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="procaliper._protein.Protein" href="#procaliper.Protein">Protein</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The protein object to visualize.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>ValueError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the PDB location is not set.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="nglview.NGLWidget">NGLWidget</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>nglview.NGLWidget: an nglview widget</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>procaliper/view/nglview_utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates an nglview widget from a protein that has an associated PDB file.</span>
+
+<span class="sd">    Must run `protein.fetch_pdb` first or specify an abosulute path to the PDB</span>
+<span class="sd">    in `protein.pdb_location_absolute`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        protein (Protein): The protein object to visualize.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the PDB location is not set.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nglview.NGLWidget: an nglview widget</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">protein</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PDB location not set; use `fetch_pdb` first&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_file</span><span class="p">(</span><span class="n">protein</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
