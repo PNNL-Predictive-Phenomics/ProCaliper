@@ -17,10 +17,6 @@ for _, row in df.iterrows():  # type: ignore
     charge = pd.DataFrame(protein.get_charge())
     titr = pd.DataFrame(protein.get_titration())
 
-    sasa.drop(columns=["residue_name", "residue_number"], inplace=True)
-    charge.drop(columns=["residue_name", "residue_number"], inplace=True)
-    titr.drop(columns=["residue_name", "residue_number"], inplace=True)
-
     conf = pd.DataFrame(protein.get_confidence(), columns=["pLDDT"])
 
     unravelled = pd.DataFrame(protein.unravel_sites())  # all data, all sites
@@ -33,6 +29,11 @@ for _, row in df.iterrows():  # type: ignore
         sdf = pd.concat([sdf, row_df])
 
 assert sdf is not None
+
+first_columns = ["entry", "residue_letter", "residue_number"]
+new_column_order = first_columns + list(sdf.columns.difference(first_columns))
+
+sdf = sdf.reindex(columns=new_column_order)
 
 print(sdf)
 print(sdf.columns)

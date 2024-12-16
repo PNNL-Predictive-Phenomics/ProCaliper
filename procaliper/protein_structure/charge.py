@@ -19,6 +19,10 @@ class ChargeData(TypedDict):
     """
     A data class for holding charge data from computed from a PDB file.
 
+    Array index corresponds to residue number in the PDB. Note that Python
+    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+    corresponds to residue 1.
+
     Attributes:
         charges (list[list[float]]): The charge value for atoms in the residue,
             ordered from C-terminus to N-terminus according to standard pdb order.
@@ -31,8 +35,6 @@ class ChargeData(TypedDict):
 
     charge: list[list[float]]
     charge_method: list[str]
-    residue_number: list[int]
-    residue_name: list[str]
 
 
 def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
@@ -77,17 +79,11 @@ def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
         {
             "charge": [],
             "charge_method": [],
-            "residue_number": [],
-            "residue_name": [],
         }
     )
 
-    for res_num, residue in ppdb.df["ATOM"].groupby("residue_number"):
+    for _, residue in sorted(ppdb.df["ATOM"].groupby("residue_number")):
         res["charge"].append([charges[x - 1] for x in sorted(residue["atom_number"])])
         res["charge_method"].append(method)
-        res["residue_number"].append(int(res_num))
-        res["residue_name"].append(
-            residue["residue_name"].iloc[0]
-        )  # all residue names should be the same because these atoms are from the same residue
 
     return res

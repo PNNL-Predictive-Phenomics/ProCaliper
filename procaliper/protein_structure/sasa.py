@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TypedDict
 
-from Bio.PDB import PDBParser
+from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 
 N_POINTS = 100
@@ -12,6 +12,10 @@ PROBE_RADIUS = 1.40
 class SASAData(TypedDict):
     """Data class for holding SASA data from computed from a PDB file.
 
+    Array index corresponds to residue number in the PDB. Note that Python
+    arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
+    corresponds to residue 1.
+
     Attributes:
         all_sasa_value (list[float]): The overall SASA value for each site
             (computed as sum of atom SASA values).
@@ -19,15 +23,10 @@ class SASAData(TypedDict):
             in each sites. Atoms are ordered from C-terminus to N-terminus
             according to standard pdb order. For example, in CYS, the last atom
             is always the SG sulfur.
-        residue_number (list[int]): The residue number for the site.
-        residue_name (list[str]): The residue name (three-letter amino acid
-            abbreviation) for the sites.
     """
 
     all_sasa_value: list[float]
     atom_sasa_values: list[list[float]]
-    residue_number: list[int]
-    residue_name: list[str]
 
 
 def calculate_sasa(pdb_filename: str) -> SASAData:
@@ -55,8 +54,6 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
         {
             "all_sasa_value": [],
             "atom_sasa_values": [],
-            "residue_number": [],
-            "residue_name": [],
         }
     )
 
@@ -66,7 +63,5 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
             for z in y.child_list:  # type: ignore
                 res["all_sasa_value"].append(z.sasa)  # type: ignore
                 res["atom_sasa_values"].append([x.sasa for x in z.child_list])  # type: ignore
-                res["residue_number"].append(int(z.id[1]))  # type: ignore
-                res["residue_name"].append(z.resname)  # type: ignore
 
     return res
