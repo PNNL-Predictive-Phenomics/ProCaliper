@@ -11,7 +11,7 @@ pybel.ob.obErrorLog.SetOutputLevel(0)  # type: ignore
 
 """
     Takes a pdb file and the method used ('qtpie', 'eem', etc) 
-        and returns a dict of charge values for CYS sites.
+        and returns a dict of charge values for residue sites.
 """
 
 
@@ -38,7 +38,7 @@ class ChargeData(TypedDict):
 
 
 def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
-    """Computes the charge of CYS sites in a PDB file.
+    """Computes the charge of residue sites in a PDB file.
 
     By default, the method used is 'gasteiger', but this is configurable in
     `hyperparameters.py`.
