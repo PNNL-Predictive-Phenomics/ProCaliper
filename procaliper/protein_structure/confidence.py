@@ -17,10 +17,10 @@ def residue_pLDDT(pdb_filename: str) -> list[float]:
         list[float]: The pLDDT confidence for each residue in the PDB file.
     """
     ppdb = PandasPdb()
-    ppdb.read_pdb(pdb_filename)  # type: ignore
+    ppdb.read_pdb(pdb_filename)
 
     vals = []
-    for _, res in ppdb.df["ATOM"].groupby("residue_number"):  # type: ignore
+    for _, res in ppdb.df["ATOM"].groupby("residue_number"):
         vals.append(res["b_factor"].max())
 
     return vals

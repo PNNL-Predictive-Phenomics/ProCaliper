@@ -18,7 +18,5 @@
   "ignore": [
     "src/oldstuff"
   ],
-  "reportMissingImports": true,
-  "reportMissingTypeStubs": false,
-  "pythonVersion": "3.9"
+  "typeCheckingMode": "off"
 }

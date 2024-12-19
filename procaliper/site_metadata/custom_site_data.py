@@ -13,11 +13,11 @@ class CustomSiteData:
 
     @classmethod
     def from_dict(
-        cls, data: dict[str, Any], residue_index="residue_number"
+        cls, data: dict[str, Any], residue_index_feature_name: str = "residue_number"
     ) -> CustomSiteData:
-        if residue_index not in data:
+        if residue_index_feature_name not in data:
             raise ValueError("CustomSiteData must have a residue_number key.")
-        return cls(data[residue_index], data)
+        return cls(data[residue_index_feature_name], data)
 
     def table(self) -> dict[str, list[Any]]:
         return {k: getattr(self, k) for k in self.keys}

@@ -29,7 +29,7 @@ class SiteAnnotations:
         self.active_data: list[dict[str, str]] = [{} for _ in range(len(sequence))]
 
     def table(self) -> dict[str, list[Any]]:
-        tbl = {}
+        tbl: dict[str, list[Any]] = {}
 
         tbl["residue_letter"] = self.residue_letter
         tbl["residue_number"] = self.residue_number
@@ -59,12 +59,12 @@ class SiteAnnotations:
 
         site_matches = [False] * len(self)
 
+        site_data: list[dict[str, str]] | None = None
+
         if extract_data is None:
             extract_data = bool(self.fields_by_description_type[description_type])
         if extract_data:
             site_data = [{} for _ in range(len(self))]
-        else:
-            site_data = None
 
         if description_type not in self.fields_by_description_type:
             raise NotImplementedError(f"Unknown description type: {description_type}")
@@ -121,28 +121,27 @@ class SiteAnnotations:
         description_type: str,
         description: str,
         extract_data: bool | None = None,
-    ):
+    ) -> None:
         matches, data = self._parse_description(
             description_type, description, extract_data
         )
         if description_type == "ACT_SITE":
-            self.active = matches  # type: ignore
+            self.active = matches
             if data:
-                self.active_data = data  # type: ignore
+                self.active_data = data
         elif description_type == "BINDING":
-            self.binding = matches  # type: ignore
+            self.binding = matches
             if data:
-                self.binding_data = data  # type: ignore
+                self.binding_data = data
         elif description_type == "DNA_BIND":
-            self.dna_binding = matches  # type: ignore
+            self.dna_binding = matches
         elif description_type == "DISULFID":
-            self.disulfide_bond = matches  # type: ignore
+            self.disulfide_bond = matches
         elif description_type == "STRAND":
-            self.beta_strand = matches  # type: ignore
+            self.beta_strand = matches
         elif description_type == "HELIX":
-            self.helix = matches  # type: ignore
+            self.helix = matches
         elif description_type == "TURN":
-            self.turn = matches  # type: ignore
+            self.turn = matches
         else:
             raise ValueError(f"Unrecognized description type {description_type}")
-        return

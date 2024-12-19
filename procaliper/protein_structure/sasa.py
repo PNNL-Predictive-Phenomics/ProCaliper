@@ -4,6 +4,7 @@ from typing import TypedDict
 
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
+from Bio.PDB.Structure import Structure
 
 N_POINTS = 100
 PROBE_RADIUS = 1.40
@@ -42,12 +43,12 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
         SASAData: A data class for holding SASA data from computed from a PDB
             file."""
     p = PDBParser(QUIET=True)
-    struct = p.get_structure("", pdb_filename)  # type: ignore
+    struct = p.get_structure("", pdb_filename)
 
     sr = ShrakeRupley(probe_radius=PROBE_RADIUS, n_points=N_POINTS, radii_dict=None)
 
     # Calc sasa values from Residues (from atoms)
-    sr.compute(struct, level="R")  # type: ignore
+    sr.compute(struct, level="R")
 
     # Set up dict
     res = SASAData(
@@ -57,11 +58,15 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
         }
     )
 
+    assert isinstance(struct, Structure)
+    assert struct is not None
+
     # Fill dict with CYS sites
-    for x in struct.child_list:  # type: ignore
-        for y in x.child_list:  # type: ignore
-            for z in y.child_list:  # type: ignore
-                res["all_sasa_value"].append(z.sasa)  # type: ignore
-                res["atom_sasa_values"].append([x.sasa for x in z.child_list])  # type: ignore
+    for x in struct.child_list:
+        for y in x.child_list:
+            for z in y.child_list:
+                assert hasattr(z, "sasa")
+                res["all_sasa_value"].append(z.sasa)
+                res["atom_sasa_values"].append([zx.sasa for zx in z.child_list])  # type: ignore
 
     return res
