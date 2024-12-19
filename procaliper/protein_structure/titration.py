@@ -19,12 +19,15 @@ class TitrationData(TypedDict):
     corresponds to residue 1.
 
     Attributes:
-        pKa (list[float]): The pK values for the titration data.
-        protonation_state (list[tuple[str, float | str]]): The expected
-        protonation states for the titration data.
+        pKa (list[float | None]): The pKa values for the titration data.
+            Non-titratable sites are assigned `None` values. protonation_state
+        (list[tuple[str, float]]): The expected protonation states for the
+            titration data. The first element of the tuple is the state of the
+            site and the second element is the average protonation of the site.
+            Non-titratable sites are assigned `("undefined", nan)`.
     """
 
-    pKa: list[float]
+    pKa: list[float | None]
     protonation_state: list[tuple[str, float | str]]
 
 
@@ -34,7 +37,7 @@ def _state_from_pk(pk: float | None) -> tuple[str, float | str]:
     if pk is not None:
         average_prot = 10 ** (pk - NEUTRAL_PH) / (1 + 10 ** (pk - NEUTRAL_PH))
     else:
-        return (state, "pk Not In Range")
+        return (state, float("nan"))
 
     if isinstance(average_prot, str):
         return state, average_prot
@@ -60,7 +63,7 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
     gs = mol.conformations["AVR"].groups
 
     ppdb = PandasPdb()
-    ppdb.read_pdb(pdb_filename)  # type: ignore
+    ppdb.read_pdb(pdb_filename)
 
     seq = {
         i: res["residue_name"].iloc[0]
@@ -70,13 +73,13 @@ def calculate_titration_propka(pdb_filename: str) -> TitrationData:
     sv = sorted(seq.items())
     return TitrationData(
         # pKa=[group.pka_value for group in gs],
-        pKa=[pks[i] if i in pks else 0 for i, _ in sv],
+        pKa=[pks[i] if i in pks else None for i, _ in sv],
         protonation_state=[_state_from_pk(pks[i] if i in pks else 0) for i, _ in sv],
     )
 
 
 try:
-    from pypka import Titration  # type: ignore
+    from pypka import Titration
 
     def calculate_titration_pypka(
         pdb_filename: str,
@@ -113,12 +116,14 @@ try:
         }
 
         titr = Titration(titr_params)
+        # Note: iterating through titr iterates through its sites. Each site has
+        # a pK value that defaults to `None` if we do not calculate pK for that
+        # site. However, we will still loop over all sites in the pdb by iterating
+        # through the titr object, even if we do not calculate pK.
 
         return TitrationData(
-            residue_names=[site.res_name for site in titr],  # type: ignore
-            residue_numbers=[site.res_number for site in titr],  # type: ignore
             pKs=[site.pK for site in titr],  # type: ignore
-            protonation_state=[site.getProtState(NEUTRAL_PH)[0] for site in titr],  # type: ignore
+            protonation_state=[site.getProtState(NEUTRAL_PH)[0] for site in titr],
         )
 
 except ImportError:
@@ -137,18 +142,18 @@ except ImportError:
 
 
 try:
-    from pkai.pKAI import pKAI  # type: ignore
+    from pkai.pKAI import pKAI
 
     def calculate_titration_pkai(
         pdb_filename: str,
         model_name: Literal["pKAI", "pKAI+"] = "pKAI",
         device: Literal["cpu", "gpu"] = "cpu",
-        threads=None,
+        threads: int | None = None,
     ) -> TitrationData:
         """Uses pkai to calculate titration data for the protein.
 
         This uses a deep-learning model to predict the titration values of the
-        protein sites.
+        titratable protein sites.
 
         Args:
             pdb_filename (str): The path to the PDB file.
@@ -163,15 +168,18 @@ try:
             pdb_filename, model_name=model_name, device=device, threads=threads
         )
 
-        residue_names = []
-        residue_numbers = []
-        pKs = []
-        states = []
-        for _, resnumb, resname, pk in predictions:  # we do not use the chain here
-            residue_names.append(resname)
-            residue_numbers.append(resnumb)
-            pKs.append(pk)
-            states.append(_state_from_pk(pk))
+        # Note: pKAI returns only titratable residues, so we will need to loop carefully.
+        # To do this, we will read the pdb file and loop through the residues there, comparing
+        # their names and numbers to the ones returned by pKAI.
+
+        ppdb = PandasPdb()
+        ppdb.read_pdb(pdb_filename)
+
+        seq = sorted({i for i, _ in ppdb.df["ATOM"].groupby("residue_number")})
+        pred_dict = {resnumb: pk for _, resnumb, _, pk in predictions}
+
+        pKs = [pred_dict[i] if i in pred_dict else None for i in seq]
+        states = [_state_from_pk(pk) for pk in pKs]
 
         return TitrationData(
             pKa=pKs,
@@ -184,7 +192,7 @@ except ImportError:
         pdb_filename: str,
         model_name: Literal["pKAI", "pKAI+"] = "pKAI",
         device: Literal["cpu", "gpu"] = "cpu",
-        threads=None,
+        threads: int | None = None,
     ) -> TitrationData:
         raise ImportError(
             "pkai not installed. Install with `pip install pkai` (note that only Python 3.11 or lower is supported.)"
