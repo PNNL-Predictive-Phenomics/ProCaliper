@@ -2052,11 +2052,7 @@
 <span class="normal">549</span>
 <span class="normal">550</span>
 <span class="normal">551</span>
-<span class="normal">552</span>
-<span class="normal">553</span>
-<span class="normal">554</span>
-<span class="normal">555</span>
-<span class="normal">556</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">552</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="s2">&quot;ACT_SITE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="s2">&quot;BINDING&quot;</span><span class="p">,</span>
@@ -2194,15 +2190,15 @@
 
         <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
 
-        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="n">uniprot_id</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">from_db</span><span class="o">=</span><span class="n">from_db</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="n">to_db</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uniprot id not retrieved: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
@@ -2234,7 +2230,7 @@
 
         <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
 
-        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="n">ids</span><span class="o">=</span><span class="n">uniprot_ids</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">from_db</span><span class="o">=</span><span class="n">from_db</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="n">to_db</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
@@ -2242,8 +2238,8 @@
         <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>  <span class="c1"># type: ignore</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Protein</span><span class="p">):</span>
@@ -2321,7 +2317,7 @@
                 <span class="s2">&quot;SASA data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed charge data for the protein, or computes it.</span>
 
 <span class="sd">        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -2526,8 +2522,6 @@
 <span class="sd">            dict[str, list[Any]]: A dictionary mapping keys to lists of values.</span>
 <span class="sd">                Each list is a parallel array of the same length as the protein</span>
 <span class="sd">                sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find site-level data in protein object.&quot;</span><span class="p">)</span>
         <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">selected_keys</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
@@ -2539,9 +2533,7 @@
             <span class="k">if</span> <span class="n">selected_aas</span> <span class="ow">and</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_aas</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tbl_keys</span><span class="p">:</span>
-                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-                    <span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data_keys</span><span class="p">:</span>
                 <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>  <span class="c1"># will be the same for all sites</span>
 
@@ -2692,7 +2684,11 @@ not fetch the PDB from the database.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">511</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
 <span class="normal">512</span>
 <span class="normal">513</span>
 <span class="normal">514</span>
@@ -2714,11 +2710,7 @@ not fetch the PDB from the database.</p>
 <span class="normal">530</span>
 <span class="normal">531</span>
 <span class="normal">532</span>
-<span class="normal">533</span>
-<span class="normal">534</span>
-<span class="normal">535</span>
-<span class="normal">536</span>
-<span class="normal">537</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">533</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches the PDB file for the protein (from the AlphaFold database by default).</span>
 
 <span class="sd">    Args:</span>
@@ -2960,15 +2952,15 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 
     <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
 
-    <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+    <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="n">uniprot_id</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">from_db</span><span class="o">=</span><span class="n">from_db</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="n">to_db</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uniprot id not retrieved: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3281,7 +3273,7 @@ object containing the charge values for residues and atoms.</p>
 <span class="normal">319</span>
 <span class="normal">320</span>
 <span class="normal">321</span>
-<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed charge data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -4410,7 +4402,7 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 
     <span class="n">mapper</span> <span class="o">=</span> <span class="n">ProtMapper</span><span class="p">()</span>
 
-    <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+    <span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="n">ids</span><span class="o">=</span><span class="n">uniprot_ids</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">from_db</span><span class="o">=</span><span class="n">from_db</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="n">to_db</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
@@ -4418,8 +4410,8 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
     <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="s2">&quot;entry&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;Length&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
-    <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>  <span class="c1"># type: ignore</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -4471,16 +4463,16 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
 
             <details class="quote">
               <summary>Source code in <code>procaliper/_protein.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">539</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
 <span class="normal">540</span>
 <span class="normal">541</span>
 <span class="normal">542</span>
 <span class="normal">543</span>
-<span class="normal">544</span>
-<span class="normal">545</span>
-<span class="normal">546</span>
-<span class="normal">547</span>
-<span class="normal">548</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">544</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets pdb file for protein object using local pdb file.</span>
 
 <span class="sd">    Args:</span>
@@ -4615,11 +4607,7 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="normal">502</span>
 <span class="normal">503</span>
 <span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
+<span class="normal">505</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">selected_keys</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -4637,8 +4625,6 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="sd">        dict[str, list[Any]]: A dictionary mapping keys to lists of values.</span>
 <span class="sd">            Each list is a parallel array of the same length as the protein</span>
 <span class="sd">            sequence (after filtering out non-selected amino acids).&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find site-level data in protein object.&quot;</span><span class="p">)</span>
     <span class="n">tbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">site_annotations</span><span class="o">.</span><span class="n">table</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">selected_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">selected_keys</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">-</span> <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">}</span>
@@ -4650,9 +4636,7 @@ sequence (after filtering out non-selected amino acids).</p>
         <span class="k">if</span> <span class="n">selected_aas</span> <span class="ow">and</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_aas</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tbl_keys</span><span class="p">:</span>
-            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-                <span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-            <span class="p">)</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data_keys</span><span class="p">:</span>
             <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>  <span class="c1"># will be the same for all sites</span>
 
@@ -4909,7 +4893,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -4931,20 +4915,20 @@ PDB file.</p>
 <span class="sd">        ChargeData: A data class for holding charge data from computed from a</span>
 <span class="sd">            PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pbmol</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pybel</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
-    <span class="n">mol</span> <span class="o">=</span> <span class="n">pbmol</span><span class="o">.</span><span class="n">OBMol</span>  <span class="c1"># type: ignore</span>
+    <span class="n">pbmol</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pybel</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">))</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">pbmol</span><span class="o">.</span><span class="n">OBMol</span>
 
     <span class="c1"># Applies the model and computes charges.</span>
-    <span class="n">ob_charge_model</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">OBChargeModel</span><span class="o">.</span><span class="n">FindType</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ob_charge_model</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">OBChargeModel</span><span class="o">.</span><span class="n">FindType</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ob_charge_model</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ob_charge_model</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Charge method not found. Please check hyperparameters.py&quot;</span><span class="p">)</span>
-    <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">ComputeCharges</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">ComputeCharges</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
 
-    <span class="n">charges</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">GetPartialCharges</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+    <span class="n">charges</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">GetPartialCharges</span><span class="p">())</span>
 
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="c1"># Set up dict</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">ChargeData</span><span class="p">(</span>
@@ -5107,7 +5091,7 @@ PDB file.</p>
 <span class="sd">        CysteineData: A data class for holding size data from computed from a PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">CysteineData</span><span class="p">(</span>
         <span class="p">{</span>
@@ -5117,25 +5101,25 @@ PDB file.</p>
         <span class="p">}</span>
     <span class="p">)</span>
 
-    <span class="n">total_residue</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]))</span>  <span class="c1"># type: ignore</span>
+    <span class="n">total_residue</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]))</span>
 
     <span class="n">cys_positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">])):</span>  <span class="c1"># type: ignore</span>
-        <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-            <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;atom_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SG&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">])):</span>
+        <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;atom_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SG&quot;</span><span class="p">:</span>
                 <span class="n">cys_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;x_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;y_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;z_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;x_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;y_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;z_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
     <span class="n">total_cys_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cys_positions</span><span class="p">)</span>
 
     <span class="n">cys_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>  <span class="c1"># type: ignore</span>
-        <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>
             <span class="n">sg_closeness_rating_scaled</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">x_p</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="n">z_p</span> <span class="o">=</span> <span class="n">cys_positions</span><span class="p">[</span><span class="n">cys_index</span><span class="p">]</span>
             <span class="n">min_distance</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Initialize with a large number</span>
@@ -5239,8 +5223,7 @@ file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/sasa.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
-<span class="normal">33</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
@@ -5274,7 +5257,12 @@ file.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
-<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -5287,12 +5275,12 @@ file.</p>
 <span class="sd">        SASAData: A data class for holding SASA data from computed from a PDB</span>
 <span class="sd">            file.&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">struct</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">sr</span> <span class="o">=</span> <span class="n">ShrakeRupley</span><span class="p">(</span><span class="n">probe_radius</span><span class="o">=</span><span class="n">PROBE_RADIUS</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="n">N_POINTS</span><span class="p">,</span> <span class="n">radii_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># Calc sasa values from Residues (from atoms)</span>
-    <span class="n">sr</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">sr</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
 
     <span class="c1"># Set up dict</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">SASAData</span><span class="p">(</span>
@@ -5302,12 +5290,16 @@ file.</p>
         <span class="p">}</span>
     <span class="p">)</span>
 
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">Structure</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">struct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
     <span class="c1"># Fill dict with CYS sites</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="s2">&quot;sasa&quot;</span><span class="p">)</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">zx</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">zx</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -5420,10 +5412,10 @@ across the residue is used.</p>
 <span class="sd">        list[float]: The pLDDT confidence for each residue in the PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
         <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;b_factor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">vals</span>
@@ -5764,7 +5756,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -5786,20 +5778,20 @@ PDB file.</p>
 <span class="sd">        ChargeData: A data class for holding charge data from computed from a</span>
 <span class="sd">            PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pbmol</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pybel</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
-    <span class="n">mol</span> <span class="o">=</span> <span class="n">pbmol</span><span class="o">.</span><span class="n">OBMol</span>  <span class="c1"># type: ignore</span>
+    <span class="n">pbmol</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pybel</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s2">&quot;pdb&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">))</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">pbmol</span><span class="o">.</span><span class="n">OBMol</span>
 
     <span class="c1"># Applies the model and computes charges.</span>
-    <span class="n">ob_charge_model</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">OBChargeModel</span><span class="o">.</span><span class="n">FindType</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ob_charge_model</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">OBChargeModel</span><span class="o">.</span><span class="n">FindType</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ob_charge_model</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ob_charge_model</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Charge method not found. Please check hyperparameters.py&quot;</span><span class="p">)</span>
-    <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">ComputeCharges</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">ComputeCharges</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
 
-    <span class="n">charges</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">GetPartialCharges</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+    <span class="n">charges</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">ob_charge_model</span><span class="o">.</span><span class="n">GetPartialCharges</span><span class="p">())</span>
 
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="c1"># Set up dict</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">ChargeData</span><span class="p">(</span>
@@ -5956,10 +5948,10 @@ across the residue is used.</p>
 <span class="sd">        list[float]: The pLDDT confidence for each residue in the PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">):</span>
         <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;b_factor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">vals</span>
@@ -6270,7 +6262,7 @@ corresponds to residue 1.</p>
 <span class="sd">        CysteineData: A data class for holding size data from computed from a PDB file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">CysteineData</span><span class="p">(</span>
         <span class="p">{</span>
@@ -6280,25 +6272,25 @@ corresponds to residue 1.</p>
         <span class="p">}</span>
     <span class="p">)</span>
 
-    <span class="n">total_residue</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]))</span>  <span class="c1"># type: ignore</span>
+    <span class="n">total_residue</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_number&quot;</span><span class="p">]))</span>
 
     <span class="n">cys_positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">])):</span>  <span class="c1"># type: ignore</span>
-        <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-            <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;atom_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SG&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">])):</span>
+        <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;residue_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;atom_name&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SG&quot;</span><span class="p">:</span>
                 <span class="n">cys_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;x_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;y_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
-                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;z_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;x_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;y_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
+                        <span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">][</span><span class="s2">&quot;z_coord&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">],</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
     <span class="n">total_cys_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cys_positions</span><span class="p">)</span>
 
     <span class="n">cys_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>  <span class="c1"># type: ignore</span>
-        <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ppdb</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ATOM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;residue_number&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CYS&quot;</span><span class="p">:</span>
             <span class="n">sg_closeness_rating_scaled</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">x_p</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="n">z_p</span> <span class="o">=</span> <span class="n">cys_positions</span><span class="p">[</span><span class="n">cys_index</span><span class="p">]</span>
             <span class="n">min_distance</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Initialize with a large number</span>
@@ -6426,8 +6418,7 @@ is always the SG sulfur.</p>
 
               <details class="quote">
                 <summary>Source code in <code>procaliper/protein_structure/sasa.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
-<span class="normal">13</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
@@ -6443,7 +6434,8 @@ is always the SG sulfur.</p>
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for holding SASA data from computed from a PDB file.</span>
 
 <span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
@@ -6555,8 +6547,7 @@ file.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/sasa.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
-<span class="normal">33</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
@@ -6590,7 +6581,12 @@ file.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
-<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -6603,12 +6599,12 @@ file.</p>
 <span class="sd">        SASAData: A data class for holding SASA data from computed from a PDB</span>
 <span class="sd">            file.&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">struct</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">sr</span> <span class="o">=</span> <span class="n">ShrakeRupley</span><span class="p">(</span><span class="n">probe_radius</span><span class="o">=</span><span class="n">PROBE_RADIUS</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="n">N_POINTS</span><span class="p">,</span> <span class="n">radii_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># Calc sasa values from Residues (from atoms)</span>
-    <span class="n">sr</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">sr</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
 
     <span class="c1"># Set up dict</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">SASAData</span><span class="p">(</span>
@@ -6618,12 +6614,16 @@ file.</p>
         <span class="p">}</span>
     <span class="p">)</span>
 
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">Structure</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">struct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
     <span class="c1"># Fill dict with CYS sites</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">child_list</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="s2">&quot;sasa&quot;</span><span class="p">)</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;all_sasa_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sasa</span><span class="p">)</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;atom_sasa_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">zx</span><span class="o">.</span><span class="n">sasa</span> <span class="k">for</span> <span class="n">zx</span> <span class="ow">in</span> <span class="n">z</span><span class="o">.</span><span class="n">child_list</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div></td></tr></table></div>
@@ -6698,22 +6698,26 @@ corresponds to residue 1.</p>
           <tr class="doc-section-item">
             <td><code><span title="procaliper.protein_structure.titration.TitrationData.pKa">pKa</span></code></td>
             <td>
-                  <code>list[float]</code>
+                  <code>list[float | None]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The pK values for the titration data.</p>
+                <p>The pKa values for the titration data.
+Non-titratable sites are assigned <code>None</code> values. protonation_state</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="procaliper.protein_structure.titration.TitrationData.protonation_state">protonation_state</span></code></td>
+            <td><code><span title="procaliper.protein_structure.titration.TitrationData.(list[tuple[str,">(list[tuple[str,</span></code></td>
             <td>
-                  <code>list[tuple[str, float | str]]</code>
+                  <code>float]]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The expected</p>
+                <p>The expected protonation states for the
+titration data. The first element of the tuple is the state of the
+site and the second element is the average protonation of the site.
+Non-titratable sites are assigned <code>("undefined", nan)</code>.</p>
               </div>
             </td>
           </tr>
@@ -6736,7 +6740,10 @@ corresponds to residue 1.</p>
 <span class="normal">25</span>
 <span class="normal">26</span>
 <span class="normal">27</span>
-<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for titration data.</span>
 
 <span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
@@ -6744,12 +6751,15 @@ corresponds to residue 1.</p>
 <span class="sd">    corresponds to residue 1.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        pKa (list[float]): The pK values for the titration data.</span>
-<span class="sd">        protonation_state (list[tuple[str, float | str]]): The expected</span>
-<span class="sd">        protonation states for the titration data.</span>
+<span class="sd">        pKa (list[float | None]): The pKa values for the titration data.</span>
+<span class="sd">            Non-titratable sites are assigned `None` values. protonation_state</span>
+<span class="sd">        (list[tuple[str, float]]): The expected protonation states for the</span>
+<span class="sd">            titration data. The first element of the tuple is the state of the</span>
+<span class="sd">            site and the second element is the average protonation of the site.</span>
+<span class="sd">            Non-titratable sites are assigned `(&quot;undefined&quot;, nan)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">pKa</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">pKa</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">protonation_state</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]]</span>
 </code></pre></div></td></tr></table></div>
               </details>
@@ -6842,10 +6852,7 @@ corresponds to residue 1.</p>
 
             <details class="quote">
               <summary>Source code in <code>procaliper/protein_structure/titration.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
 <span class="normal">56</span>
@@ -6867,7 +6874,10 @@ corresponds to residue 1.</p>
 <span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
-<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses propka to calculate titration data for the protein.</span>
 
 <span class="sd">    Args:</span>
@@ -6880,7 +6890,7 @@ corresponds to residue 1.</p>
     <span class="n">gs</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">conformations</span><span class="p">[</span><span class="s2">&quot;AVR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groups</span>
 
     <span class="n">ppdb</span> <span class="o">=</span> <span class="n">PandasPdb</span><span class="p">()</span>
-    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ppdb</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
 
     <span class="n">seq</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">i</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;residue_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -6890,7 +6900,7 @@ corresponds to residue 1.</p>
     <span class="n">sv</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">TitrationData</span><span class="p">(</span>
         <span class="c1"># pKa=[group.pka_value for group in gs],</span>
-        <span class="n">pKa</span><span class="o">=</span><span class="p">[</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
+        <span class="n">pKa</span><span class="o">=</span><span class="p">[</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
         <span class="n">protonation_state</span><span class="o">=</span><span class="p">[</span><span class="n">_state_from_pk</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pks</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sv</span><span class="p">],</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -7105,7 +7115,7 @@ are compatible with nglview.</p>
     <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">maxx</span><span class="p">))</span> <span class="k">if</span> <span class="n">two_sided</span> <span class="k">else</span> <span class="n">maxx</span>
 
     <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="n">maxx</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
 
@@ -7441,7 +7451,7 @@ are compatible with nglview.</p>
     <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">maxx</span><span class="p">))</span> <span class="k">if</span> <span class="n">two_sided</span> <span class="k">else</span> <span class="n">maxx</span>
 
     <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">data_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="n">maxx</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
 
