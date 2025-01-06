@@ -641,24 +641,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#procaliper.app" class="md-nav__link">
-    <span class="md-ellipsis">
-      app
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#procaliper.cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      cli
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#procaliper.protein_structure" class="md-nav__link">
     <span class="md-ellipsis">
       protein_structure
@@ -1170,24 +1152,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#procaliper.app" class="md-nav__link">
-    <span class="md-ellipsis">
-      app
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#procaliper.cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      cli
-    </span>
-  </a>
   
 </li>
       
@@ -2052,7 +2016,7 @@
 <span class="normal">549</span>
 <span class="normal">550</span>
 <span class="normal">551</span>
-<span class="normal">552</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Protein</span><span class="p">:</span>
+<span class="normal">552</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Protein</span><span class="p">:</span>
     <span class="n">UNIPROT_SITE_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Active site&quot;</span><span class="p">:</span> <span class="s2">&quot;ACT_SITE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Binding site&quot;</span><span class="p">:</span> <span class="s2">&quot;BINDING&quot;</span><span class="p">,</span>
@@ -2090,7 +2054,7 @@
         <span class="s2">&quot;ft_turn&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_relative</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2105,13 +2069,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">titration_data</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">_rectify_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rectify_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">new_label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">new_label</span> <span class="o">=</span> <span class="n">new_label</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_site_sites&quot;</span><span class="p">)</span>
         <span class="n">new_label</span> <span class="o">=</span> <span class="n">new_label</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;_site&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_label</span>
 
-    <span class="k">def</span> <span class="nf">_rectify_data_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rectify_data_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Standardize the features names in self.data</span>
 
@@ -2123,7 +2087,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">new_key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_uniprot_row</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_uniprot_row</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new Protein object from a row from a Uniprot table</span>
 
 <span class="sd">        Args:</span>
@@ -2160,7 +2124,7 @@
         <span class="k">return</span> <span class="n">p</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_uniprot_id</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_uniprot_id</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">uniprot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2201,7 +2165,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">uniprot_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2241,7 +2205,7 @@
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;Length&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_uniprot_row</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Protein</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -2251,7 +2215,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cysteine_data</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">cysteine_data</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">residue_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">residue_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
         <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">chain</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_charge</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
@@ -2264,7 +2228,7 @@
 
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed confidence data from pdb file.</span>
 
 <span class="sd">        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -2290,7 +2254,7 @@
                 <span class="s2">&quot;Confidence data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed SASA data for the protein, or computes it.</span>
 
 <span class="sd">        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -2317,7 +2281,7 @@
                 <span class="s2">&quot;SASA data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed charge data for the protein, or computes it.</span>
 
 <span class="sd">        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -2356,7 +2320,7 @@
                 <span class="s2">&quot;Charge data for specified method not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed size data for the protein, or computes it.</span>
 
 <span class="sd">        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -2383,7 +2347,7 @@
                 <span class="s2">&quot;Size data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the default titration calculation for the protein.</span>
 
 <span class="sd">        Equivalent to running `self.get_titration_from_propka`.</span>
@@ -2402,7 +2366,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_titration_from_propka</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">        Uses :func:`protein_structure.titration.calculate_titration_propka` if</span>
@@ -2432,7 +2396,7 @@
                 <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">        Uses :func:`protein_structure.titration.calculate_titration_pypka` if</span>
@@ -2466,7 +2430,7 @@
                 <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">        Uses :func:`protein_structure.titration.calculate_titration_pkai` if</span>
@@ -2497,14 +2461,14 @@
                 <span class="s2">&quot;Titration data not stored, and PDB location not set; use `fetch_pdb` first&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_custom_site_data_column</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_custom_site_data_column</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">site_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">residue_number</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_residue_numbers</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">custom_site_data</span><span class="o">.</span><span class="n">add_site_data</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">site_data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unravel_sites</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">selected_keys</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2539,7 +2503,7 @@
 
         <span class="k">return</span> <span class="n">res</span>
 
-    <span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches the PDB file for the protein (from the AlphaFold database by default).</span>
 
 <span class="sd">        Args:</span>
@@ -2567,7 +2531,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_relative</span> <span class="o">=</span> <span class="n">save_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets pdb file for protein object using local pdb file.</span>
 
 <span class="sd">        Args:</span>
@@ -2578,7 +2542,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_relative</span> <span class="o">=</span> <span class="n">path_to_pdb_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb_location_absolute</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path_to_pdb_file</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_is_site_aa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">aa</span><span class="p">:</span> <span class="n">AminoAcidLetter</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_site_aa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">aa</span><span class="p">:</span> <span class="n">AminoAcidLetter</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;sequence&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Sequence entry not found in data&quot;</span><span class="p">)</span>
 
@@ -2710,7 +2674,7 @@ not fetch the PDB from the database.</p>
 <span class="normal">530</span>
 <span class="normal">531</span>
 <span class="normal">532</span>
-<span class="normal">533</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">533</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fetch_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches the PDB file for the protein (from the AlphaFold database by default).</span>
 
 <span class="sd">    Args:</span>
@@ -2922,7 +2886,7 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">from_uniprot_id</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_uniprot_id</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span>
     <span class="n">uniprot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -3098,7 +3062,7 @@ have "Sequence" or "sequence" as a key.</p>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">from_uniprot_row</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_uniprot_row</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Protein</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new Protein object from a row from a Uniprot table</span>
 
 <span class="sd">    Args:</span>
@@ -3273,7 +3237,7 @@ object containing the charge values for residues and atoms.</p>
 <span class="normal">319</span>
 <span class="normal">320</span>
 <span class="normal">321</span>
-<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="o">.</span><span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed charge data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3405,7 +3369,7 @@ file in <code>self.pdb_location_absolute</code>.</p>
 <span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span>
-<span class="normal">256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="normal">256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed confidence data from pdb file.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3526,7 +3490,7 @@ object containing the size values for cystein sites.</p>
 <span class="normal">346</span>
 <span class="normal">347</span>
 <span class="normal">348</span>
-<span class="normal">349</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
+<span class="normal">349</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_cysteine_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">cysteine_data</span><span class="o">.</span><span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed size data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3648,7 +3612,7 @@ object containing the SASA values for residues and atoms.</p>
 <span class="normal">280</span>
 <span class="normal">281</span>
 <span class="normal">282</span>
-<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_sasa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">sasa</span><span class="o">.</span><span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed SASA data for the protein, or computes it.</span>
 
 <span class="sd">    Must run `self.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -3764,7 +3728,7 @@ the titration values for residues.</p>
 <span class="normal">365</span>
 <span class="normal">366</span>
 <span class="normal">367</span>
-<span class="normal">368</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">368</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_titration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs the default titration calculation for the protein.</span>
 
 <span class="sd">    Equivalent to running `self.get_titration_from_propka`.</span>
@@ -3885,7 +3849,7 @@ file in <code>self.pdb_location_absolute</code>.</p>
 <span class="normal">460</span>
 <span class="normal">461</span>
 <span class="normal">462</span>
-<span class="normal">463</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">463</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_pkai</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_pkai` if</span>
@@ -4017,7 +3981,7 @@ the titration values for residues.</p>
 <span class="normal">395</span>
 <span class="normal">396</span>
 <span class="normal">397</span>
-<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_propka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_propka` if</span>
@@ -4155,7 +4119,7 @@ the titration values forresidues.</p>
 <span class="normal">429</span>
 <span class="normal">430</span>
 <span class="normal">431</span>
-<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_titration_from_pypka</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">structure</span><span class="o">.</span><span class="n">titration</span><span class="o">.</span><span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches precomputed titration data for the protein, or computes it.</span>
 
 <span class="sd">    Uses :func:`protein_structure.titration.calculate_titration_pypka` if</span>
@@ -4373,7 +4337,7 @@ Defaults to "UniProtKB-Swiss-Prot".</p>
 <span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_from_uniprot_ids</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span>
     <span class="n">uniprot_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -4472,7 +4436,7 @@ Defaults to <code>None</code>, in which case it assumes a file with 'entry'.pdb.
 <span class="normal">541</span>
 <span class="normal">542</span>
 <span class="normal">543</span>
-<span class="normal">544</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">544</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_local_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_to_pdb_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets pdb file for protein object using local pdb file.</span>
 
 <span class="sd">    Args:</span>
@@ -4607,7 +4571,7 @@ sequence (after filtering out non-selected amino acids).</p>
 <span class="normal">502</span>
 <span class="normal">503</span>
 <span class="normal">504</span>
-<span class="normal">505</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">unravel_sites</span><span class="p">(</span>
+<span class="normal">505</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unravel_sites</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">selected_aas</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="n">AminoAcidLetter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">selected_keys</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -4656,58 +4620,6 @@ sequence (after filtering out non-selected amino acids).</p>
 </div>
 
 
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="procaliper.app" class="doc doc-heading">
-            <code>app</code>
-
-
-<a href="#procaliper.app" class="headerlink" title="Permanent link">&para;</a></h2>
-
-    <div class="doc doc-contents ">
-
-        <p>Main module.</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="procaliper.cli" class="doc doc-heading">
-            <code>cli</code>
-
-
-<a href="#procaliper.cli" class="headerlink" title="Permanent link">&para;</a></h2>
-
-    <div class="doc doc-contents ">
-
-        <p>Console script for procaliper.</p>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
 
 <div class="doc doc-object doc-module">
 
@@ -4893,7 +4805,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -5081,7 +4993,7 @@ PDB file.</p>
 <span class="normal">96</span>
 <span class="normal">97</span>
 <span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates spatial data for a protein from a PDB file.</span>
 
 <span class="sd">    Args:</span>
@@ -5262,7 +5174,7 @@ file.</p>
 <span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -5398,7 +5310,7 @@ across the residue is used.</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">residue_pLDDT</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">residue_pLDDT</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the pLDDT confidence for each residue in a PDB file.</span>
 
 <span class="sd">    We assume that the pLDDT confidences are in the B-factor entries of the PDB</span>
@@ -5552,7 +5464,7 @@ abbreviation) for the sites.</p>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
-<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ChargeData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChargeData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A data class for holding charge data from computed from a PDB file.</span>
 
@@ -5756,7 +5668,7 @@ PDB file.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
-<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_charge</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gasteiger&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChargeData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the charge of residue sites in a PDB file.</span>
 
 <span class="sd">    By default, the method used is &#39;gasteiger&#39;, but this is configurable in</span>
@@ -5934,7 +5846,7 @@ across the residue is used.</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">residue_pLDDT</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">residue_pLDDT</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the pLDDT confidence for each residue in a PDB file.</span>
 
 <span class="sd">    We assume that the pLDDT confidences are in the B-factor entries of the PDB</span>
@@ -6079,7 +5991,7 @@ corresponds to residue 1.</p>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CysteineData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CysteineData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for holding size data from computed from a PDB file.</span>
 
 <span class="sd">    Non-CYS sites are assigned `None` values.</span>
@@ -6252,7 +6164,7 @@ corresponds to residue 1.</p>
 <span class="normal">96</span>
 <span class="normal">97</span>
 <span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_cysteine_data</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CysteineData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates spatial data for a protein from a PDB file.</span>
 
 <span class="sd">    Args:</span>
@@ -6435,7 +6347,7 @@ is always the SG sulfur.</p>
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SASAData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for holding SASA data from computed from a PDB file.</span>
 
 <span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
@@ -6586,7 +6498,7 @@ file.</p>
 <span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_sasa</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SASAData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SASA values for all CYS sites in a PDB file.</span>
 
 <span class="sd">    Uses the ShrakeRupley algorithm implemented in `Bio.PDB.SASA.ShrakeRupley`</span>
@@ -6743,7 +6655,7 @@ Non-titratable sites are assigned <code>("undefined", nan)</code>.</p>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TitrationData</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for titration data.</span>
 
 <span class="sd">    Array index corresponds to residue number in the PDB. Note that Python</span>
@@ -6877,7 +6789,7 @@ Non-titratable sites are assigned <code>("undefined", nan)</code>.</p>
 <span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_titration_propka</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TitrationData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses propka to calculate titration data for the protein.</span>
 
 <span class="sd">    Args:</span>
@@ -7084,7 +6996,7 @@ are compatible with nglview.</p>
 <span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
-<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ngl_scheme</span><span class="p">(</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">ngl_scheme</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">float_to_hex</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">two_sided</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -7235,7 +7147,7 @@ in <code>protein.pdb_location_absolute</code>.</p>
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
-<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates an nglview widget from a protein that has an associated PDB file.</span>
 
 <span class="sd">    Must run `protein.fetch_pdb` first or specify an abosulute path to the PDB</span>
@@ -7420,7 +7332,7 @@ are compatible with nglview.</p>
 <span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
-<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ngl_scheme</span><span class="p">(</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">ngl_scheme</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">float_to_hex</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">two_sided</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -7571,7 +7483,7 @@ in <code>protein.pdb_location_absolute</code>.</p>
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
-<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">protein_to_nglview</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates an nglview widget from a protein that has an associated PDB file.</span>
 
 <span class="sd">    Must run `protein.fetch_pdb` first or specify an abosulute path to the PDB</span>

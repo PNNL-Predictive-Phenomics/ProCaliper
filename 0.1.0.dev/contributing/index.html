@@ -601,7 +601,7 @@
           <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
-      Tips```
+      Tips
     </span>
   </a>
   
@@ -784,7 +784,7 @@
           <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
-      Tips```
+      Tips
     </span>
   </a>
   
@@ -869,8 +869,9 @@ articles, and such.</p>
 <li>Ensure <a href="https://python-poetry.org/docs/">poetry</a> is installed.</li>
 <li>Install dependencies and start your virtualenv:</li>
 </ol>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>    $ poetry install -E test -E doc -E dev
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>    $ poetry install -E &quot;test doc dev&quot;
 </code></pre></div></td></tr></table></div>
+The above command will install the optional dependencies needed for developement. See <code>pyproject.toml</code> for additional features to install.</p>
 <ol>
 <li>Create a branch for local development:</li>
 </ol>
@@ -906,10 +907,10 @@ articles, and such.</p>
    https://github.com/PhenoMeters/procaliper/actions
    and make sure that the tests pass for all supported Python versions.</li>
 </ol>
-<h3 id="tips">Tips```<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$ pytest tests.test_procaliper
-</code></pre></div></td></tr></table></div>
-<p>```To run a subset of tests.</p>
+<h3 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h3>
+<p>To run a specific test:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>    $ poetry run python -m pytest .\tests\test_site_annotation.py -k &quot;test_site_annotations_with_data&quot;
+</code></pre></div></td></tr></table></div></p>
 <h3 id="deploying">Deploying<a class="headerlink" href="#deploying" title="Permanent link">&para;</a></h3>
 <p>A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed (including an entry in HISTORY.md).

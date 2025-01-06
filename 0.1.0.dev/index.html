@@ -444,6 +444,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      extras
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -641,6 +665,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      extras
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -691,17 +739,65 @@
   <h1>home</h1>
 
 <!-- BEGIN INCLUDE ../README.md -->
+<p><img alt="PyPI" src="https://img.shields.io/pypi/v/procaliper.svg" />
+<a href="https://shields.io/"><img alt="Versions" src="https://img.shields.io/badge/Tested%20On%20Python-3.9,%203.10,%203.11,%203.12-blue.svg" /></a></p>
 <h2 id="procaliper">procaliper<a class="headerlink" href="#procaliper" title="Permanent link">&para;</a></h2>
 <p>A tool for fetching and organizing protein data in order to perform structure calculations.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>Available on <a href="https://pypi.org/project/procaliper/">PyPI</a> <img alt="PyPI" src="https://img.shields.io/pypi/v/procaliper.svg" /></p>
-<p>Currently, installing from this repo (see <strong><em>Contributing</em></strong> section below) is the best way to install <code>procaliper</code>, as it is still a work-in-progress!</p>
+<p>To install from <a href="https://pypi.org/project/procaliper/">PyPI</a>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>procaliper
+</code></pre></div></td></tr></table></div>
+<h3 id="extras">extras<a class="headerlink" href="#extras" title="Permanent link">&para;</a></h3>
+<p>During installation, <code>procaliper</code> will also install <code>openbabel-wheel</code>. If you require specialized features of <code>openbabel</code> that are not available in this precompiled version, please run <code>pip uninstall openbabel-wheel</code> after <code>procaliper</code> is installed and provide your own version of the <code>openbabel</code> python library.</p>
+<p>Optional feature dependencies can be installed as follows:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>procaliper<span class="o">[</span>nglview,pka<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<p>The <code>nglview</code> extra provides the ability to visualize protein structures in a graphical notebook environment.</p>
+<p>The <code>pka</code> extra provides additional methods for computing disassociation constants (typically denoted <span class="arithmatex">\(pK_a\)</span>). Note that installing this extra requires obtaining  a <code>DelPhi</code> license. Furthermore, these additional methods require an older version of <code>numpy</code> (version <code>1.26.4</code>) and <code>python</code> version between <code>3.9</code> and <code>3.11</code> to properly function. If the <code>pka</code> extra is not installed, <code>procaliper</code> will use <a href="https://github.com/jensengroup/propka">propka</a> for <span class="arithmatex">\(pK_a\)</span> calculation.</p>
+<h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
+<p>A basic example is provided here. See the examples folder for further examples.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">procaliper</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+
+<span class="c1"># Read in or download protein structure</span>
+<span class="n">protein</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Protein</span><span class="o">.</span><span class="n">from_uniprot_id</span><span class="p">(</span><span class="s2">&quot;A0A0B4J2F0&quot;</span><span class="p">)</span> <span class="c1"># create a protein object from UniProt metadata using a UniProt ID</span>
+<span class="c1"># alternatively, you can read in a protein from a UniProt Table using `Protein.from_uniprot_row`</span>
+
+<span class="c1"># Download &amp; save protein structure from AlphaFold</span>
+<span class="n">protein</span><span class="o">.</span><span class="n">fetch_pdb</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;A0A0B4J2F0.pdb&quot;</span><span class="p">)</span> 
+<span class="c1"># Alternatively, `protein.register_local_pdb(file)` can be used to specify a previously downloaded pdb file</span>
+
+<span class="c1"># Compute structure features</span>
+<span class="n">sasa</span> <span class="o">=</span> <span class="n">protein</span><span class="o">.</span><span class="n">get_sasa</span><span class="p">()</span> <span class="c1"># compute site-level SASA values</span>
+<span class="n">charge</span> <span class="o">=</span> <span class="n">protein</span><span class="o">.</span><span class="n">get_charge</span><span class="p">()</span> <span class="c1"># compute site-level charges</span>
+<span class="n">titr</span> <span class="o">=</span> <span class="n">protein</span><span class="o">.</span><span class="n">get_titration</span><span class="p">()</span> <span class="c1"># compute site-level titration (pKa) data</span>
+<span class="c1"># The results from the above calculations are autmatically stored in the `protein` object.</span>
+
+<span class="c1"># Get a table of site-level data</span>
+<span class="n">site_data</span> <span class="o">=</span> <span class="n">protein</span><span class="o">.</span><span class="n">unravel_sites</span><span class="p">()</span> <span class="c1"># returns a dictionary of lists; readable, e.g., by `pandas`</span>
+</code></pre></div></td></tr></table></div>
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
 <p>Contributions are welcome!</p>
 <p>See <a href="https://github.com/PhenoMeters/ProCaliper/blob/main/CONTRIBUTING.md">Contributing</a> for detailed instructions.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>This code is released under GPL v3. See our <a href="https://github.com/PhenoMeters/ProCaliper/blob/main/LICENSE">License</a> for detailed information.</p>
-<p>Please note that some <em>optional</em> dependencies may require proprietary licenses.</p>
+<p>By default, <code>procaliper</code> does not have any dependencies that are not freely licensed. However, additional features can be installed that rely on restricted software. That is, please note that some <em>optional</em> dependencies are not FOSS. Specifically, the <code>pka</code> extra requires a <code>DelPhi</code> license. We encourage caution when using software that is not free and open source, especially for contributions to the scientific literature.</p>
 <h2 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">&para;</a></h2>
 <p>This work is supported by the Predictive Phenomics Initiative at Pacific Northwest National Laboratory.</p>
 <!-- END INCLUDE -->
