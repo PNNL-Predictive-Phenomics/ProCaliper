@@ -1,5 +1,5 @@
 {
-  "comments": "This is for pylance extension of vscode. Remove me if you're not intented to use vscode.",
+  "comments": "This disables pyright type checking for the entire project. This project is using mypy.",
   "exclude": [
     ".git",
     ".eggs",
