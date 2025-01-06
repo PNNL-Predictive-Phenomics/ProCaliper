@@ -2,11 +2,11 @@ import pandas as pd
 
 import procaliper as am
 
-df = pd.read_csv("examples/database_generation/sample_uniprot.tsv", sep="\t")  # type: ignore
+df = pd.read_csv("examples/database_generation/sample_uniprot.tsv", sep="\t")
 
 sdf = None
 
-for _, row in df.iterrows():  # type: ignore
+for _, row in df.iterrows():
     protein = am.Protein.from_uniprot_row(row)  # type: ignore
 
     protein.fetch_pdb(

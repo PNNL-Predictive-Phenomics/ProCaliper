@@ -25,7 +25,7 @@ def test_read_uniprot_row() -> None:
     )
     COMPARISON_TURN = [117, 118, 119]
 
-    df = pd.read_csv(  # type: ignore
+    df = pd.read_csv(
         TEST_DATA_PATH,
         sep="\t",
         nrows=20,
@@ -33,7 +33,7 @@ def test_read_uniprot_row() -> None:
 
     assert df is not None
 
-    for _, row in df.iterrows():  # type: ignore
+    for _, row in df.iterrows():
         protein = Protein.from_uniprot_row(row)  # type: ignore
 
         assert protein is not None
@@ -66,7 +66,7 @@ def test_read_uniprot_row() -> None:
             assert left == COMPARISON_TURN
 
 
-def test_unravel():
+def test_unravel() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
 
@@ -88,7 +88,7 @@ def test_unravel():
     assert unravelled == expected
 
 
-def test_unravel_with_custom_sites():
+def test_unravel_with_custom_sites() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
 
@@ -116,7 +116,7 @@ def test_unravel_with_custom_sites():
     assert unravelled == expected
 
 
-def test_read_row_with_site_data():
+def test_read_row_with_site_data() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = 'A0A0K2S4Q6	reviewed	CD3CH_HUMAN	Protein CD300H (CD300 antigen-like family member H)	CD300H	Homo sapiens (Human)	201	MTQRAGAAMLPSALLLLCVPGCLTVSGPSTVMGAVGESLSVQCRYEEKYKTFNKYWCRQPCLPIWHEMVETGGSEGVVRSDQVIITDHPGDLTFTVTLENLTADDAGKYRCGIATILQEDGLSGFLPDPFFQVQVLVSSASSTENSVKTPASPTRPSQCQGSLPSSTCFLLLPLLKVPLLLSILGAILWVNRPWRTPWTES				DISULFID 43..111; /evidence="ECO:0000255|PROSITE-ProRule:PRU00114"			'
 
@@ -131,7 +131,7 @@ def test_read_row_with_site_data():
     assert not any(dbonds[:42]) and not any(dbonds[111:])
 
 
-def test_read_row_with_binding_site_data():
+def test_read_row_with_binding_site_data() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = 'A0A087X1C5	reviewed	CP2D7_HUMAN	Putative cytochrome P450 2D7 (EC 1.14.14.1)	CYP2D7	Homo sapiens (Human)	515	MGLEALVPLAMIVAIFLLLVDLMHRHQRWAARYPPGPLPLPGLGNLLHVDFQNTPYCFDQLRRRFGDVFSLQLAWTPVVVLNGLAAVREAMVTRGEDTADRPPAPIYQVLGFGPRSQGVILSRYGPAWREQRRFSVSTLRNLGLGKKSLEQWVTEEAACLCAAFADQAGRPFRPNGLLDKAVSNVIASLTCGRRFEYDDPRFLRLLDLAQEGLKEESGFLREVLNAVPVLPHIPALAGKVLRFQKAFLTQLDELLTEHRMTWDPAQPPRDLTEAFLAKKEKAKGSPESSFNDENLRIVVGNLFLAGMVTTSTTLAWGLLLMILHLDVQRGRRVSPGCPIVGTHVCPVRVQQEIDDVIGQVRRPEMGDQAHMPCTTAVIHEVQHFGDIVPLGVTHMTSRDIEVQGFRIPKGTTLITNLSSVLKDEAVWKKPFRFHPEHFLDAQGHFVKPEAFLPFSAGRRACLGEPLARMELFLFFTSLLQHFSFSVAAGQPRPSHSRVVSFLVTPSPYELCAVPR		BINDING 461; /ligand="heme"; /ligand_id="ChEBI:CHEBI:30413"; /ligand_part="Fe"; /ligand_part_id="ChEBI:CHEBI:18248"; /note="axial binding residue"; /evidence="ECO:0000250|UniProtKB:P10635"					'
 
@@ -145,7 +145,7 @@ def test_read_row_with_binding_site_data():
     assert bsite[460]
 
 
-def test_fetch_pdb():
+def test_fetch_pdb() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
 
@@ -154,7 +154,7 @@ def test_fetch_pdb():
     protein.fetch_pdb(save_path="tests/test_data/outputs/test_pdb.pdb")
 
 
-def test_structure_run_only():
+def test_structure_run_only() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
 
@@ -181,7 +181,7 @@ def test_structure_run_only():
         pass
 
 
-def test_residue_data_frame_run_only():
+def test_residue_data_frame_run_only() -> None:
     TEST_HEADER = "Entry	Reviewed	Entry Name	Protein names	Gene Names	Organism	Length	Sequence	Active site	Binding site	DNA binding	Disulfide bond	Beta strand	Helix	Turn"
     TEST_ROW = "A0A0B4J2F0	reviewed	PIOS1_HUMAN	Protein PIGBOS1 (PIGB opposite strand protein 1)	PIGBOS1	Homo sapiens (Human)	54	MFRRLTFAQLLFATVLGIAGGVYIFQPVFEQYAKDQKELKEKMQLVQESEEKKS							"
 
@@ -192,8 +192,8 @@ def test_residue_data_frame_run_only():
     protein.residue_data_frame()
 
 
-def test_uniprot_api():
-    df = pd.read_csv(  # type: ignore
+def test_uniprot_api() -> None:
+    df = pd.read_csv(
         TEST_DATA_PATH,
         sep="\t",
         nrows=2,
@@ -204,13 +204,12 @@ def test_uniprot_api():
     ids: list[str] = df["Entry"].to_list()
 
     print(Protein.from_uniprot_id(ids[0]).data)
-    print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)  # type: ignore
+    print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)
 
     assert Protein.from_uniprot_id(ids[0]) == Protein.from_uniprot_row(
-        df.iloc[0].to_dict()  # type: ignore
+        df.iloc[0].to_dict()
     )
 
     assert Protein.list_from_uniprot_ids(ids) == [
-        Protein.from_uniprot_row(row.to_dict())  # type: ignore
-        for _, row in df.iterrows()  # type: ignore
+        Protein.from_uniprot_row(row.to_dict()) for _, row in df.iterrows()
     ]

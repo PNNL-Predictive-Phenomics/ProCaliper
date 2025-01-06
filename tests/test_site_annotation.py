@@ -1,7 +1,7 @@
 from procaliper.site_metadata import SiteAnnotations
 
 
-def test_site_annotations_without_data():
+def test_site_annotations_without_data() -> None:
     test_description = 'DISULFID 28..87; /evidence="ECO:0000255|PROSITE-ProRule:PRU00114"; DISULFID 105; /note="Interchain (with heavy chain)"'
     sequence = "x" * 110  # does not matter for this test
 
@@ -14,7 +14,7 @@ def test_site_annotations_without_data():
     assert sa.disulfide_bond == EXPECTED
 
 
-def test_site_annotations_with_data():
+def test_site_annotations_with_data() -> None:
     test_description = 'ACT_SITE 88; /note="Glycyl thioester intermediate"; /evidence="ECO:0000255|PROSITE-ProRule:PRU00388, ECO:0000269|PubMed:24000165"'
     sequence = "x" * 110  # does not matter for this test
 
