@@ -7,7 +7,7 @@ from openbabel import openbabel as ob
 from openbabel import pybel
 
 # Removes annoying warning messages
-pybel.ob.obErrorLog.SetOutputLevel(0)  # type: ignore
+pybel.ob.obErrorLog.SetOutputLevel(0)
 
 """
     Takes a pdb file and the method used ('qtpie', 'eem', etc) 
@@ -37,7 +37,7 @@ class ChargeData(TypedDict):
     charge_method: list[str]
 
 
-def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
+def calculate_charge(pdb_filename: str, method: str = "gasteiger") -> ChargeData:
     """Computes the charge of residue sites in a PDB file.
 
     By default, the method used is 'gasteiger', but this is configurable in
@@ -59,20 +59,20 @@ def calculate_charge(pdb_filename: str, method="gasteiger") -> ChargeData:
         ChargeData: A data class for holding charge data from computed from a
             PDB file.
     """
-    pbmol = next(pybel.readfile("pdb", pdb_filename))  # type: ignore
-    mol = pbmol.OBMol  # type: ignore
+    pbmol = next(pybel.readfile("pdb", pdb_filename))
+    mol = pbmol.OBMol
 
     # Applies the model and computes charges.
-    ob_charge_model = ob.OBChargeModel.FindType(method)  # type: ignore
+    ob_charge_model = ob.OBChargeModel.FindType(method)
 
-    if not ob_charge_model:  # type: ignore
+    if not ob_charge_model:
         raise ValueError("Charge method not found. Please check hyperparameters.py")
-    ob_charge_model.ComputeCharges(mol)  # type: ignore
+    ob_charge_model.ComputeCharges(mol)
 
-    charges = cast(list[float], ob_charge_model.GetPartialCharges())  # type: ignore
+    charges = cast(list[float], ob_charge_model.GetPartialCharges())
 
     ppdb = PandasPdb()
-    ppdb.read_pdb(pdb_filename)  # type: ignore
+    ppdb.read_pdb(pdb_filename)
 
     # Set up dict
     res = ChargeData(

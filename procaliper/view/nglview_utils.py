@@ -32,11 +32,11 @@ def protein_to_nglview(protein: Protein) -> nglview.NGLWidget:
     return nglview.show_file(protein.pdb_location_absolute)
 
 
-def _default_float_to_hex(x):
+def _default_float_to_hex(x: float) -> str:
     return f"#{int((1-x)*255):02x}{int(1*255):02x}{int((1-x)*255):02x}"
 
 
-def _default_float_to_hex_rb(x):
+def _default_float_to_hex_rb(x: float) -> str:
     if x < 0:
         x = -x
         return f"#{int(1*255):02x}{int((1-x)*255):02x}{int((1-x)*255):02x}"
@@ -75,7 +75,7 @@ def ngl_scheme(
     scale = max(min(data), abs(maxx)) if two_sided else maxx
 
     if scale == 0:
-        data_scaled = [0] * len(data)
+        data_scaled = [0.0] * len(data)
     else:
         data_scaled = [x / maxx for x in data]
 

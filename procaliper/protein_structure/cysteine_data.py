@@ -41,7 +41,7 @@ def calculate_cysteine_data(pdb_filename: str) -> CysteineData:
         CysteineData: A data class for holding size data from computed from a PDB file.
     """
     ppdb = PandasPdb()
-    ppdb.read_pdb(pdb_filename)  # type: ignore
+    ppdb.read_pdb(pdb_filename)
 
     res = CysteineData(
         {
@@ -51,25 +51,25 @@ def calculate_cysteine_data(pdb_filename: str) -> CysteineData:
         }
     )
 
-    total_residue = cast(int, max(ppdb.df["ATOM"]["residue_number"]))  # type: ignore
+    total_residue = cast(int, max(ppdb.df["ATOM"]["residue_number"]))
 
     cys_positions: list[tuple[float, float, float]] = []
-    for x in range(len(ppdb.df["ATOM"])):  # type: ignore
-        if ppdb.df["ATOM"]["residue_name"][x] == "CYS":  # type: ignore
-            if ppdb.df["ATOM"]["atom_name"][x] == "SG":  # type: ignore
+    for x in range(len(ppdb.df["ATOM"])):
+        if ppdb.df["ATOM"]["residue_name"][x] == "CYS":
+            if ppdb.df["ATOM"]["atom_name"][x] == "SG":
                 cys_positions.append(
                     (
-                        ppdb.df["ATOM"]["x_coord"][x],  # type: ignore
-                        ppdb.df["ATOM"]["y_coord"][x],  # type: ignore
-                        ppdb.df["ATOM"]["z_coord"][x],  # type: ignore
+                        ppdb.df["ATOM"]["x_coord"][x],
+                        ppdb.df["ATOM"]["y_coord"][x],
+                        ppdb.df["ATOM"]["z_coord"][x],
                     )
                 )
     total_cys_sites = len(cys_positions)
 
     cys_index = 0
 
-    for _, grp in sorted(ppdb.df["ATOM"].groupby("residue_number")):  # type: ignore
-        if grp["residue_name"].max() == "CYS":  # type: ignore
+    for _, grp in sorted(ppdb.df["ATOM"].groupby("residue_number")):
+        if grp["residue_name"].max() == "CYS":
             sg_closeness_rating_scaled = 0
             x_p, y_p, z_p = cys_positions[cys_index]
             min_distance = 1000  # Initialize with a large number

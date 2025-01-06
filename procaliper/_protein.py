@@ -155,15 +155,15 @@ class Protein:
 
         mapper = ProtMapper()
 
-        result, error = mapper.get(  # type: ignore
+        result, error = mapper.get(
             ids=[uniprot_id], fields=fields, from_db=from_db, to_db=to_db
         )
         if error:
             raise ValueError(f"Uniprot id not retrieved: {error}")
         result.rename(columns={"From": "entry"}, inplace=True)
         if "Length" in result.columns:
-            result["Length"] = pd.to_numeric(result["Length"])  # type: ignore
-        return cls.from_uniprot_row(result.iloc[0].to_dict())  # type: ignore
+            result["Length"] = pd.to_numeric(result["Length"])
+        return cls.from_uniprot_row(result.iloc[0].to_dict())
 
     @classmethod
     def list_from_uniprot_ids(
@@ -195,7 +195,7 @@ class Protein:
 
         mapper = ProtMapper()
 
-        result, error = mapper.get(  # type: ignore
+        result, error = mapper.get(
             ids=uniprot_ids, fields=fields, from_db=from_db, to_db=to_db
         )
         if error:
@@ -203,8 +203,8 @@ class Protein:
         result.rename(columns={"From": "entry"}, inplace=True)
 
         if "Length" in result.columns:
-            result["Length"] = pd.to_numeric(result["Length"])  # type: ignore
-        return [cls.from_uniprot_row(row.to_dict()) for _, row in result.iterrows()]  # type: ignore
+            result["Length"] = pd.to_numeric(result["Length"])
+        return [cls.from_uniprot_row(row.to_dict()) for _, row in result.iterrows()]
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Protein):
@@ -282,7 +282,7 @@ class Protein:
                 "SASA data not stored, and PDB location not set; use `fetch_pdb` first"
             )
 
-    def get_charge(self, method="gasteiger") -> structure.charge.ChargeData:
+    def get_charge(self, method: str = "gasteiger") -> structure.charge.ChargeData:
         """Fetches precomputed charge data for the protein, or computes it.
 
         Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
@@ -487,8 +487,6 @@ class Protein:
             dict[str, list[Any]]: A dictionary mapping keys to lists of values.
                 Each list is a parallel array of the same length as the protein
                 sequence (after filtering out non-selected amino acids)."""
-        if self.site_annotations is None:
-            raise ValueError("Could not find site-level data in protein object.")
         tbl = self.site_annotations.table() | self.custom_site_data.table()
         if selected_keys is None:
             selected_keys = (set(tbl.keys()) | set(self.data.keys())) - {"sequence"}
@@ -500,9 +498,7 @@ class Protein:
             if selected_aas and site not in selected_aas:
                 continue
             for k in tbl_keys:
-                res[k].append(  # type: ignore
-                    tbl[k][index]
-                )
+                res[k].append(tbl[k][index])
             for k in data_keys:
                 res[k].append(self.data[k])  # will be the same for all sites
 
