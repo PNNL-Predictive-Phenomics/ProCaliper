@@ -1,13 +1,13 @@
 import pandas as pd
 
-import procaliper as am
+import procaliper
 
 df = pd.read_csv("examples/database_generation/sample_uniprot.tsv", sep="\t")
 
 sdf = None
 
 for _, row in df.iterrows():
-    protein = am.Protein.from_uniprot_row(row)  # type: ignore
+    protein = procaliper.Protein.from_uniprot_row(row)  # type: ignore
 
     protein.fetch_pdb(
         save_path=f"examples/database_generation/pdb_files/{protein.data['entry']}.pdb"
