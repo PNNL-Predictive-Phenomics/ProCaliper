@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
+"""
+Module for parsing UniProt site annotations.
+"""
+
 
 class SiteAnnotations:
     fields_by_description_type = {

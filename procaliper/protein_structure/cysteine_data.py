@@ -6,9 +6,8 @@ import numpy as np
 from biopandas.pdb import PandasPdb
 
 """
-Calculates the total amount of cystein sites in a protein and the total amount of atoms in a protein
-Appends that data to cystein site data.
-
+Computes spatial data for cysteine sites in a protein. Useful for studying
+disulfide bonds.
 """
 
 

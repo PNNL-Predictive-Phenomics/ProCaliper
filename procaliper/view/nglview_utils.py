@@ -4,6 +4,11 @@ from typing import Callable
 
 from .._protein import Protein
 
+"""
+Module for generating nglview widgets from proteins. Requires `nglview` be
+installed. This is provided by the `procaliper[viz]` extra.
+"""
+
 try:
     import nglview
 except ImportError:

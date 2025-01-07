@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from biopandas.pdb import PandasPdb
 
+"""
+Module for extracting the pLDDT confidence from a PDB file.
+"""
+
 
 def residue_pLDDT(pdb_filename: str) -> list[float]:
     """Extracts the pLDDT confidence for each residue in a PDB file.

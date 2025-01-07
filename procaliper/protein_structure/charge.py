@@ -10,8 +10,7 @@ from openbabel import pybel
 pybel.ob.obErrorLog.SetOutputLevel(0)
 
 """
-    Takes a pdb file and the method used ('qtpie', 'eem', etc) 
-        and returns a dict of charge values for residue sites.
+Module for computing the charge of protein residues in a PDB file.
 """
 
 

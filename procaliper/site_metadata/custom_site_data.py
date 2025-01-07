@@ -2,6 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
+"""
+Module for storing custom residue-level data that can be loaded in from
+user-provided tables.
+"""
+
 
 class CustomSiteData:
     def __init__(self, residue_number: list[int], data: dict[str, list[Any]]) -> None:

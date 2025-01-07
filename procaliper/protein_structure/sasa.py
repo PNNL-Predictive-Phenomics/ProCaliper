@@ -6,6 +6,11 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 from Bio.PDB.Structure import Structure
 
+"""
+Module for conducnting solvent accessible surface area (SASA) calculations on
+proteins.
+"""
+
 N_POINTS = 100
 PROBE_RADIUS = 1.40
 
