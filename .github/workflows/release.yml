@@ -94,7 +94,7 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          skip_existing: true
+          skip-existing: true
 
   # Use GitHub's built-in notifications instead--commenting out
   # notification:
