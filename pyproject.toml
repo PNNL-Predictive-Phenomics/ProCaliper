@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "procaliper"
-version = "0.1.0"
+version = "0.2.0"
 homepage = "https://github.com/LifeWorks/procaliper"
 description = "Skeleton project created by Python Project Wizard (ppw)."
 authors = ["AlphaMeter <song.feng@pnnl.gov>"]
