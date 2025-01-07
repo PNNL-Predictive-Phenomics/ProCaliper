@@ -206,7 +206,7 @@ class SiteAnnotations:
             self.helix = matches
         elif description_type == "TURN":
             self.turn = matches
-
-        raise AssertionError(
-            f"If this is raised, the description type {description_type} is only partially handled. Please file an issue."
-        )
+        else:
+            raise AssertionError(
+                f"If this is raised, the description type {description_type} is only partially handled. Please file an issue."
+            )
