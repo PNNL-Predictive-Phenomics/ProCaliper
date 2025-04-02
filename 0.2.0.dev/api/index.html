@@ -7440,11 +7440,11 @@ number of residues in the structure.</p>
           <tr class="doc-section-item">
             <td><code>regions</code></td>
             <td>
-                  <code><span title="collections.abc.Iterable">Iterable</span>[<span title="collections.abc.Iterable">Iterable</span>[<span title="Bio.PDB.Residue.Residue">Residue</span>]]</code>
+                  <code><span title="collections.abc.Sequence">Sequence</span>[<span title="collections.abc.Iterable">Iterable</span>[<span title="Bio.PDB.Residue.Residue">Residue</span>]]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>iterable of regions; each region is an iterable of residues.</p>
+                <p>sequence of regions; each region is an iterable of residues.</p>
               </div>
             </td>
             <td>
@@ -7493,12 +7493,12 @@ number of regions.</p>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">region_distance_matrix</span><span class="p">(</span>
-    <span class="n">regions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Residue</span><span class="p">]],</span>
+    <span class="n">regions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Residue</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a distance matrix between regions of a protein.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        regions (Iterable[Iterable[Residue]]): iterable of regions; each region is an iterable of residues.</span>
+<span class="sd">        regions (Sequence[Iterable[Residue]]): sequence of regions; each region is an iterable of residues.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        npt.NDArray[np.float64]: distance matrix with shape nxn where n is the</span>
