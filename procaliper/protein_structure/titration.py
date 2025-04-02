@@ -7,6 +7,16 @@ import propka
 import propka.run
 from biopandas.pdb import PandasPdb
 
+"""
+Module for computing titration data (e.g. the acid dissociation constant $pK_a$)
+for a protein at the site-level.
+
+This module uses propka to compute the titration data by default. If `pypka` (and
+its non-free dependencies) are installed, pypka can be used instead. Similarly,
+if `pkAI` is installed, `pkAI` can be used instead. These are provided by the 
+`procaliper[pka]` extra.
+"""
+
 logging.getLogger("propka").setLevel(logging.WARNING)
 NEUTRAL_PH = 7.0
 

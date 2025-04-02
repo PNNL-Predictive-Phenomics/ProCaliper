@@ -59,8 +59,10 @@ Ready to contribute? Here's how to set up `procaliper` for local development.
 4. Install dependencies and start your virtualenv:
 
 ```
-    $ poetry install -E test -E doc -E dev
+    $ poetry install -E "test doc dev"
 ```
+The above command will install the optional dependencies needed for developement. See `pyproject.toml` for additional features to install.
+
 
 5. Create a branch for local development:
 
@@ -99,9 +101,12 @@ Before you submit a pull request, check that it meets these guidelines:
    https://github.com/PhenoMeters/procaliper/actions
    and make sure that the tests pass for all supported Python versions.
 
-## Tips```
-    $ pytest tests.test_procaliper
-```To run a subset of tests.
+## Tips
+To run a specific test:
+```
+    $ poetry run python -m pytest .\tests\test_site_annotation.py -k "test_site_annotations_with_data"
+```
+
 
 
 ## Deploying

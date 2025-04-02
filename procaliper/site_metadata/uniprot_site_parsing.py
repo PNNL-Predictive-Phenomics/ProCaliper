@@ -2,8 +2,41 @@ from __future__ import annotations
 
 from typing import Any
 
+"""
+Module for parsing UniProt site annotations.
+"""
+
 
 class SiteAnnotations:
+    """Class for parsing and storing UniProt site annotations.
+
+    An example of a UniProt site annotation:
+
+    `DISULFID 28..87; /evidence="ECO:0000255|PROSITE-ProRule:PRU00114"; DISULFID 105; /note="Interchain (with heavy chain)"`
+
+    Attributes:
+        residue_letter (list[str]): A list of amino acid letters.
+        residue_number (list[int]): A list of residue numbers.
+        binding (list[bool]): A list of booleans indicating whether a residue
+            is a binding site.
+        active (list[bool]): A list of booleans indicating whether a residue
+            is an active site.
+        dna_binding (list[bool]): A list of booleans indicating whether a residue
+            is a DNA binding site.
+        disulfide_bond (list[bool]): A list of booleans indicating whether a residue
+            is a disulfide bond.
+        helix (list[bool]): A list of booleans indicating whether a residue
+            is in a helix.
+        turn (list[bool]): A list of booleans indicating whether a residue
+            is in a turn.
+        beta_strand (list[bool]): A list of booleans indicating whether a residue
+            is in a beta strand.
+        binding_data (list[dict[str, str]]): A list of dictionaries containing
+            binding site metadata.
+        active_data (list[dict[str, str]]): A list of dictionaries containing
+            active site metadata.
+    """
+
     fields_by_description_type = {
         "BINDING": ["ligand"],
         "ACT_SITE": ["note"],
@@ -15,6 +48,15 @@ class SiteAnnotations:
     }
 
     def __init__(self, sequence: str) -> None:
+        """Instantiates a SiteAnnotations object from a string of amino acid letters.
+
+        It is recommended to call `SiteAnnotations.extract_annotation` after instantiating.
+        Before that, the `SiteAnnotations` object contains only default values.
+
+        Args:
+            sequence (str): A string of amino acid letters. See
+                `type_aliases.AminoAcidLetter` for valid letters.
+        """
         self.residue_letter: list[str] = list(sequence)
         self.residue_number: list[int] = list(range(1, len(sequence) + 1))
         self.binding: list[bool] = [False] * len(sequence)
@@ -29,6 +71,12 @@ class SiteAnnotations:
         self.active_data: list[dict[str, str]] = [{} for _ in range(len(sequence))]
 
     def table(self) -> dict[str, list[Any]]:
+        """Return a dictionary of the data in the SiteAnnotations object.
+
+        Returns:
+            dict[str, list[Any]]: Each key is a site annotation feature name.
+                Each value is a list of the values for that feature.
+        """
         tbl: dict[str, list[Any]] = {}
 
         tbl["residue_letter"] = self.residue_letter
@@ -52,7 +100,7 @@ class SiteAnnotations:
         self,
         description_type: str,
         description: str,
-        extract_data: bool | None = None,
+        extract_metadata: bool | None = None,
     ) -> tuple[list[bool], list[dict[str, str]] | None]:
         # example of descrition:
         # DISULFID 28..87; /evidence="ECO:0000255|PROSITE-ProRule:PRU00114"; DISULFID 105; /note="Interchain (with heavy chain)"
@@ -61,9 +109,9 @@ class SiteAnnotations:
 
         site_data: list[dict[str, str]] | None = None
 
-        if extract_data is None:
-            extract_data = bool(self.fields_by_description_type[description_type])
-        if extract_data:
+        if extract_metadata is None:
+            extract_metadata = bool(self.fields_by_description_type[description_type])
+        if extract_metadata:
             site_data = [{} for _ in range(len(self))]
 
         if description_type not in self.fields_by_description_type:
@@ -120,10 +168,25 @@ class SiteAnnotations:
         self,
         description_type: str,
         description: str,
-        extract_data: bool | None = None,
+        extract_metadata: bool | None = None,
     ) -> None:
+        """Extracts the site annotations from the description.
+
+        Args:
+            description_type (str): The type of site annotation to extract. Must be
+                one of the keys in `self.fields_by_description_type`.
+            description (str): The UniProt site description string.
+            extract_metadata (bool | None, optional): Whether to extract metadata.
+                By default, this is inferred from the `description_type` parameter.
+
+        Raises:
+            NotImplementedError: From `_parse_description`. If an unknown `description_type` is provided.
+            ValueError: From `_parse_description`. If the `description_type` is not found in `description`.
+            AssertionError: If a `description_type` is provided that is known to `_parse_description` but
+                not `extract_annotation`. This indicates an internal bug and should be reported.
+        """
         matches, data = self._parse_description(
-            description_type, description, extract_data
+            description_type, description, extract_metadata
         )
         if description_type == "ACT_SITE":
             self.active = matches
@@ -144,4 +207,6 @@ class SiteAnnotations:
         elif description_type == "TURN":
             self.turn = matches
         else:
-            raise ValueError(f"Unrecognized description type {description_type}")
+            raise AssertionError(
+                f"If this is raised, the description type {description_type} is only partially handled. Please file an issue."
+            )
