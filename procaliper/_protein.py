@@ -250,6 +250,27 @@ class Protein:
         ppdb = PandasPdb()
         return ppdb.read_pdb(self.pdb_location_absolute)
 
+    def get_biopython_structure(self) -> Structure:
+        """Get the biopython structure for the protein.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `pdb_location_absolute` is not set.
+            ValueError: If the PDB file cannot be parsed.
+
+        Returns:
+            Structure: A biopython Structure object for the protein.
+        """
+        if not self.pdb_location_absolute:
+            raise ValueError("PDB location not set; use `fetch_pdb` first")
+        p = PDBParser(QUIET=True)
+        structure = p.get_structure("", self.pdb_location_absolute)
+        if not isinstance(structure, Structure):
+            raise ValueError("Unable to parse PDB file.")
+        return structure
+
     def get_biopython_residues(self) -> list[Residue]:
         """Get the biopython residues for the protein.
 
