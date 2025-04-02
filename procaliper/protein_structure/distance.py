@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from itertools import combinations
+from itertools import combinations, product
 from typing import Any
 
 import numpy as np
@@ -10,6 +10,21 @@ from Bio.PDB.Structure import Structure
 
 """Module for computing distances between residues and regions on a protein.
 """
+
+
+def region_distance(
+    region_1: list[Residue], region_2: list[Residue]
+) -> np.floating[Any]:
+    """Compute the distance between two regions of a protein, in Angstroms.
+
+    Args:
+        region_1 (list[Residue]): first region
+        region_2 (list[Residue]): second region
+
+    Returns:
+        np.floating[Any]: minimum distance between the two regions
+    """
+    return min(residue_distance(r1, r2) for r1, r2 in product(region_1, region_2))
 
 
 def residue_distance(
