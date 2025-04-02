@@ -10,6 +10,10 @@ from typing import Any
 
 import pandas as pd
 import requests
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Structure import Structure
+from biopandas.pdb import PandasPdb
 from UniProtMapper import ProtMapper
 
 import procaliper.protein_structure as structure
@@ -228,6 +232,42 @@ class Protein:
         d["pLDDT"] = self.get_confidence()
 
         return pd.DataFrame(d)
+
+    def get_biopandas_pdb_dataframe(self) -> PandasPdb:
+        """Get the PDB dataframe for the protein.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `pdb_location_absolute` is not set.
+
+        Returns:
+            PandasPdb: A biopandas dataframe that contains the PDB file information.
+        """
+        if not self.pdb_location_absolute:
+            raise ValueError("PDB location not set; use `fetch_pdb` first")
+        ppdb = PandasPdb()
+        return ppdb.read_pdb(self.pdb_location_absolute)
+
+    def get_biopython_residues(self) -> list[Residue]:
+        """Get the biopython residues for the protein.
+
+        Must run `self.fetch_pdb` first or specify an abosulute path to the PDB
+        file in `self.pdb_location_absolute`.
+
+        Raises:
+            ValueError: If `pdb_location_absolute` is not set.
+
+        Returns:
+            list[Residue]: A list of biopython residues for the protein.
+        """
+        if not self.pdb_location_absolute:
+            raise ValueError("PDB location not set; use `fetch_pdb` first")
+        p = PDBParser(QUIET=True)
+        structure = p.get_structure("", self.pdb_location_absolute)
+        reslist = [res for model in structure for chain in model for res in chain]
+        return reslist
 
     def get_confidence(self) -> list[float]:
         """Fetches precomputed confidence data from pdb file.
