@@ -55,7 +55,8 @@ def distance_matrix(
             Distances greater than this will be set to np.inf.
 
     Returns:
-        npt.NDArray[np.float64]: distance matrix
+        npt.NDArray[np.float64]: distance matrix with shape nxn where n is the
+            number of residues in the structure.
     """
     residues = [res for model in structure for chain in model for res in chain]
     residues = list(enumerate(residues))
@@ -84,7 +85,8 @@ def proximity_matrix(
             less than this will be set to 0.
 
     Returns:
-        npt.NDArray[np.float64]: proximity matrix
+        npt.NDArray[np.float64]: proximity matrix with shape nxn where n is the
+            number of residues in the structure.
     """
     residues = [res for model in structure for chain in model for res in chain]
     residues = list(enumerate(residues))
@@ -113,7 +115,8 @@ def contact_map(
             in Angstroms. Defaults to 10.
 
     Returns:
-        npt.NDArray[np.float64]: contact map
+        npt.NDArray[np.float64]: contact map with shape nxn where n is the
+            number of residues in the structure.
     """
     residues = [res for model in structure for chain in model for res in chain]
     residues = list(enumerate(residues))
