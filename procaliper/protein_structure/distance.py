@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from itertools import combinations, product
 from typing import Any
 
@@ -29,12 +29,12 @@ def region_distance(
 
 
 def region_distance_matrix(
-    regions: Iterable[Iterable[Residue]],
+    regions: Sequence[Iterable[Residue]],
 ) -> npt.NDArray[np.float64]:
     """Compute a distance matrix between regions of a protein.
 
     Args:
-        regions (Iterable[Iterable[Residue]]): iterable of regions; each region is an iterable of residues.
+        regions (Sequence[Iterable[Residue]]): sequence of regions; each region is an iterable of residues.
 
     Returns:
         npt.NDArray[np.float64]: distance matrix with shape nxn where n is the
