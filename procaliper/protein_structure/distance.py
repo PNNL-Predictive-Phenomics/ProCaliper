@@ -19,13 +19,28 @@ def region_distance(
     """Compute the distance between two regions of a protein, in Angstroms.
 
     Args:
-        region_1 (Iterable[Residue]): first region
-        region_2 (Iterable[Residue]): second region
+        region_1 (Iterable[Residue]): first region.
+        region_2 (Iterable[Residue]): second region.
 
     Returns:
-        np.floating[Any]: minimum distance between the two regions
+        np.floating[Any]: minimum distance between the two regions.
     """
     return min(residue_distance(r1, r2) for r1, r2 in product(region_1, region_2))
+
+
+def region_distance_matrix(
+    regions: Iterable[Iterable[Residue]],
+) -> npt.NDArray[np.float64]:
+    """Compute a distance matrix between regions of a protein.
+
+    Args:
+        regions (Iterable[Iterable[Residue]]): iterable of regions; each region is an iterable of residues.
+
+    Returns:
+        npt.NDArray[np.float64]: distance matrix with shape nxn where n is the
+            number of regions.
+    """
+    return np.array([[region_distance(r1, r2) for r2 in regions] for r1 in regions])
 
 
 def residue_distance(
@@ -35,11 +50,11 @@ def residue_distance(
     """Compute the distance between two residues, in Angstroms.
 
     Args:
-        r1 (Residue): first residue
-        r2 (Residue): second residue
+        r1 (Residue): first residue.
+        r2 (Residue): second residue.
 
     Returns:
-        np.floating[Any]: distance between the two residues
+        np.floating[Any]: distance between the two residues.
     """
     dv = r1["CA"].coord - r2["CA"].coord
     return np.linalg.norm(dv)
@@ -51,7 +66,7 @@ def distance_matrix(
     """Compute a distance matrix for a protein structure.
 
     Args:
-        structure (Structure): protein structure
+        structure (Structure): protein structure.
         thresh (float, optional): threshold for distance. Defaults to np.inf.
             Distances greater than this will be set to np.inf.
 
@@ -81,7 +96,7 @@ def proximity_matrix(
     """Compute a proximity matrix for a protein structure.
 
     Args:
-        structure (Structure): protein structure
+        structure (Structure): protein structure.
         thresh (float, optional): threshold for proximity. Defaults to 0. Proximity
             less than this will be set to 0.
 
@@ -111,7 +126,7 @@ def contact_map(
     """A contact map for a protein structure.
 
     Args:
-        structure (Structure): protein structure
+        structure (Structure): protein structure.
         max_dist_angsrtom (float, optional): Largest distance to consider a contact,
             in Angstroms. Defaults to 10.
 
