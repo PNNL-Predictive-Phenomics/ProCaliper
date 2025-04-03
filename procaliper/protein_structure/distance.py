@@ -43,6 +43,23 @@ def region_distance_matrix(
     return np.array([[region_distance(r1, r2) for r2 in regions] for r1 in regions])
 
 
+def region_proximity_matrix(
+    regions: Sequence[Iterable[Residue]],
+) -> npt.NDArray[np.float64]:
+    """Compute a proxmity matrix between regions of a protein.
+
+    Args:
+        regions (Sequence[Iterable[Residue]]): sequence of regions; each region is an iterable of residues.
+
+    Returns:
+        npt.NDArray[np.float64]: proxmity matrix with shape nxn where n is the
+            number of regions.
+    """
+    return 1 / (
+        1 + np.array([[region_distance(r1, r2) for r2 in regions] for r1 in regions])
+    )
+
+
 def residue_distance(
     r1: Residue,
     r2: Residue,
