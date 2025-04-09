@@ -570,6 +570,7 @@ class Protein:
 
         Args:
             save_path (str | None, optional): The path to save the PDB file to.
+                If `None`, the protein name will be used as the file name.
                 Defaults to `None`.
             url (str | None, optional): The URL to fetch the PDB file from.
                 Defaults to `None`, in which case the AlphaFold database is used.
