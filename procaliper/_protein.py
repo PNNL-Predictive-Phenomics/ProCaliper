@@ -30,6 +30,8 @@ class Protein:
         "Beta strand": "STRAND",
         "Helix": "HELIX",
         "Turn": "TURN",
+        "PTM": "MOD_RES",
+        "Region": "REGION",
     }
 
     UNIPROT_SITE_PATTERNS_RECTIFIED = {
@@ -40,6 +42,8 @@ class Protein:
         "beta_strand": "STRAND",
         "helix": "HELIX",
         "turn": "TURN",
+        "modified_residue": "MOD_RES",
+        "region": "REGION",
     }
 
     UNIPROT_API_DEFAULT_FIELDS = [
@@ -57,6 +61,8 @@ class Protein:
         "ft_strand",
         "ft_helix",
         "ft_turn",
+        "ft_mod_res",
+        "ft_region",
     ]
 
     def __init__(self) -> None:

@@ -21,6 +21,8 @@ class SiteAnnotations:
             is a binding site.
         active (list[bool]): A list of booleans indicating whether a residue
             is an active site.
+        ptm (list[bool]): A list of booleans indicating whether a residue
+            is reported to be post-translationally modified.
         dna_binding (list[bool]): A list of booleans indicating whether a residue
             is a DNA binding site.
         disulfide_bond (list[bool]): A list of booleans indicating whether a residue
@@ -35,11 +37,18 @@ class SiteAnnotations:
             binding site metadata.
         active_data (list[dict[str, str]]): A list of dictionaries containing
             active site metadata.
+        ptm_data (list[dict[str, str]]): A list of dictionaries containing
+            post-translationally modified site metadata.
+        regions (dict[str,list[int]]): A dictionary mapping region names to lists
+            of (zero-indexed) residue numbers.
+        region_data (dict[str,str]): A dictionary mapping region names to annotation data.
     """
 
-    fields_by_description_type = {
+    fields_by_description_type: dict[str, list[str]] = {
         "BINDING": ["ligand"],
         "ACT_SITE": ["note"],
+        "MOD_RES": ["note"],
+        "REGION": ["note"],
         "DNA_BIND": [],
         "DISULFID": [],
         "HELIX": [],
@@ -61,6 +70,7 @@ class SiteAnnotations:
         self.residue_number: list[int] = list(range(1, len(sequence) + 1))
         self.binding: list[bool] = [False] * len(sequence)
         self.active: list[bool] = [False] * len(sequence)
+        self.ptm: list[bool] = [False] * len(sequence)
         self.dna_binding: list[bool] = [False] * len(sequence)
         self.disulfide_bond: list[bool] = [False] * len(sequence)
         self.helix: list[bool] = [False] * len(sequence)
@@ -69,6 +79,10 @@ class SiteAnnotations:
 
         self.binding_data: list[dict[str, str]] = [{} for _ in range(len(sequence))]
         self.active_data: list[dict[str, str]] = [{} for _ in range(len(sequence))]
+        self.ptm_data: list[dict[str, str]] = [{} for _ in range(len(sequence))]
+
+        self.regions: dict[str, list[int]] = {}
+        self.region_data: dict[str, dict[str, str]] = {}
 
     def table(self) -> dict[str, list[Any]]:
         """Return a dictionary of the data in the SiteAnnotations object.
@@ -83,6 +97,7 @@ class SiteAnnotations:
         tbl["residue_number"] = self.residue_number
         tbl["binding"] = self.binding
         tbl["active"] = self.active
+        tbl["ptm"] = self.ptm
         tbl["dna_binding"] = self.dna_binding
         tbl["disulfide_bond"] = self.disulfide_bond
         tbl["helix"] = self.helix
@@ -90,6 +105,7 @@ class SiteAnnotations:
         tbl["beta_strand"] = self.beta_strand
         tbl["binding_data"] = self.binding_data
         tbl["active_data"] = self.active_data
+        tbl["ptm_data"] = self.ptm_data
 
         return tbl
 
@@ -164,6 +180,31 @@ class SiteAnnotations:
 
         return site_matches, site_data
 
+    def _region_parsing(self, description: str) -> None:
+        region_annotations = description.split("REGION ")[1:]
+        self.regions = {}
+        self.region_data = {}
+        for region_index, x in enumerate(region_annotations):
+            r = f"r_{region_index}"
+            fields = x.split(";")
+            self.regions[r] = list(
+                range(
+                    int(fields[0].split("..")[0]) - 1,
+                    int(fields[0].split("..")[1]),
+                )
+            )
+            self.region_data[r] = {}
+            for field in fields[1:]:
+                field = field.strip()
+                for field_id in self.fields_by_description_type["REGION"]:
+                    if not field.startswith(f"/{field_id}="):
+                        continue
+                    field_data = field.removeprefix(f"/{field_id}=")
+                    if field_id not in self.region_data[r]:
+                        self.region_data[r][field_id] = field_data
+                    else:
+                        self.region_data[r][field_id] += "," + field_data
+
     def extract_annotation(
         self,
         description_type: str,
@@ -185,6 +226,12 @@ class SiteAnnotations:
             AssertionError: If a `description_type` is provided that is known to `_parse_description` but
                 not `extract_annotation`. This indicates an internal bug and should be reported.
         """
+
+        # regions are a special case because they can overlap
+        if description_type == "REGION":
+            self._region_parsing(description)
+            return
+
         matches, data = self._parse_description(
             description_type, description, extract_metadata
         )
@@ -196,6 +243,10 @@ class SiteAnnotations:
             self.binding = matches
             if data:
                 self.binding_data = data
+        elif description_type == "MOD_RES":
+            self.ptm = matches
+            if data:
+                self.ptm_data = data
         elif description_type == "DNA_BIND":
             self.dna_binding = matches
         elif description_type == "DISULFID":
