@@ -2,9 +2,7 @@
 examples/**/*.pdb
 
 # scratch files for debuggin only
-scratch.py
-scratch.ipynb
-scratch.pdb
+scratch.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
