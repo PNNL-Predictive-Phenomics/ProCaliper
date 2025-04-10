@@ -44,9 +44,9 @@ def _default_float_to_hex(x: float) -> str:
 def _default_float_to_hex_rb(x: float) -> str:
     if x < 0:
         x = -x
-        return f"#{int(1*255):02x}{int((1-x)*255):02x}{int((1-x)*255):02x}"
-    else:
         return f"#{int((1-x)*255):02x}{int((1-x)*255):02x}{int(1*255):02x}"
+    else:
+        return f"#{int(1*255):02x}{int((1-x)*255):02x}{int((1-x)*255):02x}"
 
 
 def ngl_scheme(

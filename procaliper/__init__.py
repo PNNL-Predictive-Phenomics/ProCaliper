@@ -4,7 +4,8 @@ __author__ = """AlphaMeter"""
 __email__ = "song.feng@pnnl.gov"
 __version__ = "0.1.0"
 
+import procaliper.network as network
 import procaliper.protein_structure as protein_structure
 from procaliper._protein import Protein as Protein
 
-__all__ = ["Protein", "protein_structure"]
+__all__ = ["Protein", "protein_structure", "network"]

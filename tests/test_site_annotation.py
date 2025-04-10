@@ -1,3 +1,4 @@
+from procaliper import Protein
 from procaliper.site_metadata import SiteAnnotations
 
 
@@ -43,3 +44,55 @@ def test_site_annotations_with_data() -> None:
 
     assert sa2.binding == EXPECTED_MATCH2
     assert sa2.binding_data == EXPECTED_DATA2
+
+
+def test_ptm_annotation() -> None:
+    PTM_SITES_ONE_INDEXED = [
+        5,
+        7,
+        58,
+        84,
+        231,
+        252,
+        263,
+        313,
+        443,
+        453,
+        458,
+        476,
+        489,
+        492,
+        585,
+        598,
+        641,
+    ]
+
+    protein = Protein.from_uniprot_id("P07900")
+
+    exctracted_ptm_sites_one_indexed = [
+        i + 1 for i, x in enumerate(protein.site_annotations.ptm) if x
+    ]
+    assert exctracted_ptm_sites_one_indexed == PTM_SITES_ONE_INDEXED
+
+
+def test_region_annotation() -> None:
+    REGION_SITES_BOUNDS_ONE_INDEXED_INCLUSIVE = [
+        [9, 236],
+        [225, 278],
+        [271, 616],
+        [284, 732],
+        [284, 620],
+        [628, 731],
+        [682, 732],
+        [700, 732],
+        [728, 732],
+        [729, 732],
+    ]
+    REGION_SITES = {
+        f"r_{i}": list(range(a - 1, b))
+        for i, (a, b) in enumerate(REGION_SITES_BOUNDS_ONE_INDEXED_INCLUSIVE)
+    }
+
+    protein = Protein.from_uniprot_id("P07900")
+
+    assert protein.site_annotations.regions == REGION_SITES

@@ -206,10 +206,16 @@ def test_uniprot_api() -> None:
     print(Protein.from_uniprot_id(ids[0]).data)
     print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)
 
-    assert Protein.from_uniprot_id(ids[0]) == Protein.from_uniprot_row(
-        df.iloc[0].to_dict()
-    )
+    fields_in_table = [
+        x
+        for x in Protein.UNIPROT_API_DEFAULT_FIELDS
+        if x not in ["ft_mod_res", "ft_region"]
+    ]
 
-    assert Protein.list_from_uniprot_ids(ids) == [
+    assert Protein.from_uniprot_id(
+        ids[0], fields=fields_in_table
+    ) == Protein.from_uniprot_row(df.iloc[0].to_dict())
+
+    assert Protein.list_from_uniprot_ids(ids, fields=fields_in_table) == [
         Protein.from_uniprot_row(row.to_dict()) for _, row in df.iterrows()
     ]
