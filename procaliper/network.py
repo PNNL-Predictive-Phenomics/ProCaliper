@@ -46,11 +46,13 @@ def distance_network(protein: Protein, max_dist_angstroms: float = 20) -> nx.Gra
     return g
 
 
-def _region_label(site_list_zero_indexed: list[int]) -> str:
+def _region_label(site_list_zero_indexed: list[int], sequence: str) -> str:
     """WARNING: assumes sorted (ascending) list as input!"""
+    s1 = sequence[site_list_zero_indexed[0]]
+    s2 = sequence[site_list_zero_indexed[-1]]
     if len(site_list_zero_indexed) == 1:
-        return f"{site_list_zero_indexed[0] + 1}"
-    return f"{site_list_zero_indexed[0] + 1}..{site_list_zero_indexed[-1] + 1}"
+        return f"{s1}{site_list_zero_indexed[0] + 1}"
+    return f"{s1}{site_list_zero_indexed[0] + 1}..{s2}{site_list_zero_indexed[-1] + 1}"
 
 
 def _region_type(region_name: str) -> str:
@@ -69,7 +71,8 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
 
     Distances are computed between PTM sites, annotated regions, binding sites, and active sites.
 
-    Node labels will be 1-indexed and inclusive (e.g., `"5..7"` refers to residues 5, 6, and 7).
+    Node labels will be 1-indexed and inclusive (e.g., `"K5..C7"` refers to residues 5, 6, and 7).
+    The letter in front of the index refers to the first and last amino acid in the region.
 
     Args:
         protein (Protein): Protein object.
@@ -94,7 +97,12 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
 
     g = nx.Graph()
     for k, v in all_regs.items():
-        g.add_node(k, label=_region_label(v), region_type=_region_type(k), residues=v)
+        g.add_node(
+            k,
+            label=_region_label(v, protein.data["sequence"]),
+            region_type=_region_type(k),
+            residues=v,
+        )
 
     for k1, v1 in all_regs_residues.items():
         for k2, v2 in all_regs_residues.items():
