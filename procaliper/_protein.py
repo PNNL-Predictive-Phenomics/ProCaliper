@@ -32,6 +32,7 @@ class Protein:
         "Turn": "TURN",
         "PTM": "MOD_RES",
         "Region": "REGION",
+        "Domain": "DOMAIN",
     }
 
     UNIPROT_SITE_PATTERNS_RECTIFIED = {
@@ -44,6 +45,8 @@ class Protein:
         "turn": "TURN",
         "modified_residue": "MOD_RES",
         "region": "REGION",
+        "domain": "DOMAIN",
+        "domain_[ft]": "DOMAIN",
     }
 
     UNIPROT_API_DEFAULT_FIELDS = [
@@ -63,6 +66,7 @@ class Protein:
         "ft_turn",
         "ft_mod_res",
         "ft_region",
+        "ft_domain",
     ]
 
     def __init__(self) -> None:

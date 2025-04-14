@@ -42,6 +42,9 @@ class SiteAnnotations:
         regions (dict[str,list[int]]): A dictionary mapping region names to lists
             of (zero-indexed) residue numbers.
         region_data (dict[str,str]): A dictionary mapping region names to annotation data.
+        domains (dict[str,list[int]]): A dictionary mapping domain names to lists
+            of (zero-indexed) residue numbers.
+        domain_data (dict[str,str]): A dictionary mapping domain names to annotation data.
     """
 
     fields_by_description_type: dict[str, list[str]] = {
@@ -49,6 +52,7 @@ class SiteAnnotations:
         "ACT_SITE": ["note"],
         "MOD_RES": ["note"],
         "REGION": ["note"],
+        "DOMAIN": ["note"],
         "DNA_BIND": [],
         "DISULFID": [],
         "HELIX": [],
@@ -83,6 +87,9 @@ class SiteAnnotations:
 
         self.regions: dict[str, list[int]] = {}
         self.region_data: dict[str, dict[str, str]] = {}
+
+        self.domains: dict[str, list[int]] = {}
+        self.domain_data: dict[str, dict[str, str]] = {}
 
     def table(self) -> dict[str, list[Any]]:
         """Return a dictionary of the data in the SiteAnnotations object.
@@ -205,6 +212,31 @@ class SiteAnnotations:
                     else:
                         self.region_data[r][field_id] += "," + field_data
 
+    def _domain_parsing(self, description: str) -> None:
+        domain_annotations = description.split("DOMAIN ")[1:]
+        self.domains = {}
+        self.domain_data = {}
+        for domain_index, x in enumerate(domain_annotations):
+            r = f"d_{domain_index}"
+            fields = x.split(";")
+            self.domains[r] = list(
+                range(
+                    int(fields[0].split("..")[0]) - 1,
+                    int(fields[0].split("..")[1]),
+                )
+            )
+            self.domain_data[r] = {}
+            for field in fields[1:]:
+                field = field.strip()
+                for field_id in self.fields_by_description_type["DOMAIN"]:
+                    if not field.startswith(f"/{field_id}="):
+                        continue
+                    field_data = field.removeprefix(f"/{field_id}=")
+                    if field_id not in self.domain_data[r]:
+                        self.domain_data[r][field_id] = field_data
+                    else:
+                        self.domain_data[r][field_id] += "," + field_data
+
     def extract_annotation(
         self,
         description_type: str,
@@ -226,10 +258,12 @@ class SiteAnnotations:
             AssertionError: If a `description_type` is provided that is known to `_parse_description` but
                 not `extract_annotation`. This indicates an internal bug and should be reported.
         """
-
         # regions are a special case because they can overlap
         if description_type == "REGION":
             self._region_parsing(description)
+            return
+        if description_type == "DOMAIN":
+            self._domain_parsing(description)
             return
 
         matches, data = self._parse_description(
