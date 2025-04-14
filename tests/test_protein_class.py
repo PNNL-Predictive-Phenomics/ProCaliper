@@ -209,7 +209,7 @@ def test_uniprot_api() -> None:
     fields_in_table = [
         x
         for x in Protein.UNIPROT_API_DEFAULT_FIELDS
-        if x not in ["ft_mod_res", "ft_region"]
+        if x not in ["ft_mod_res", "ft_region", "ft_domain"]
     ]
 
     assert Protein.from_uniprot_id(

@@ -87,8 +87,9 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
     }
     active = {f"a_{i}": [i] for i, x in enumerate(protein.site_annotations.active) if x}
     regions = protein.site_annotations.regions
+    domains = protein.site_annotations.domains
 
-    all_regs = {**ptms, **binding, **active, **regions}
+    all_regs = {**ptms, **binding, **active, **regions, **domains}
 
     protein_residues = protein.get_biopython_residues()
     all_regs_residues = {
