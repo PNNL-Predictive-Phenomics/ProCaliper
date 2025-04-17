@@ -6433,7 +6433,7 @@ The letter in front of the index refers to the first and last amino acid in the 
 
     <span class="n">all_regs_residues</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">k</span><span class="p">:</span> <span class="p">[</span>
-            <span class="n">protein_residues</span><span class="p">[</span><span class="n">protein</span><span class="o">.</span><span class="n">sequence_position_to_structure_index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+            <span class="n">protein_residues</span><span class="p">[</span><span class="n">protein</span><span class="o">.</span><span class="n">sequence_position_to_structure_index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span>
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_regs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
