@@ -627,7 +627,7 @@ class Protein:
             self.structure_index is not None
         ), "Structure index is not built. PDB file may not be loaded correctly."
         self.sequence_position_to_structure_index = {
-            i + 1: self.structure_index[i] for i in range(len(self.structure_index))
+            self.structure_index[i]: i for i in range(len(self.structure_index))
         }
 
     def _is_site_aa(self, site: int, aa: AminoAcidLetter = "C") -> bool:
