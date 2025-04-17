@@ -20,7 +20,10 @@ class SASAData(TypedDict):
 
     Array index corresponds to residue number in the PDB. Note that Python
     arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
-    corresponds to residue 1.
+    corresponds to residue 1. This assumes a complete PDB. Otherwise,
+    an object of the `procaliper.Protein` class that constructs this will
+    store a variable called `structure_index` that maps these indices to the
+    sequence position.
 
     Attributes:
         all_sasa_value (list[float]): The overall SASA value for each site
@@ -70,6 +73,8 @@ def calculate_sasa(pdb_filename: str) -> SASAData:
     for x in struct.child_list:
         for y in x.child_list:
             for z in y.child_list:
+                if z.get_id()[0] != " ":  # skips heteroatoms
+                    continue
                 assert hasattr(z, "sasa")
                 res["all_sasa_value"].append(z.sasa)
                 res["atom_sasa_values"].append([zx.sasa for zx in z.child_list])  # type: ignore

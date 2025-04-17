@@ -156,10 +156,19 @@ class SiteAnnotations:
             # first field is always site numbers
             se = fields[0].strip().split("..")
             start, end = len(self), len(self)
+            if len(se) not in (1, 2):
+                raise ValueError(
+                    f"Unable to parse site numbers {se} in {stretch} from {description}"
+                )
+            se_start = se[0].split(":")[-1]
+
             if len(se) == 1:
-                start, end = int(se[0]) - 1, int(se[0]) - 1  # uniprot 1-indexes sites
-            elif len(se) == 2:
-                start, end = int(se[0]) - 1, int(se[1]) - 1
+                start, end = (
+                    int(se_start) - 1,
+                    int(se_start) - 1,
+                )  # uniprot 1-indexes sites
+            else:
+                start, end = int(se_start) - 1, int(se[1]) - 1
 
             if start >= len(self) or end >= len(self) or start > end:
                 raise ValueError(
@@ -169,6 +178,10 @@ class SiteAnnotations:
             field_sites = list(range(start, end + 1))
             for s in field_sites:
                 site_matches[s] = True
+                if se[0] != se_start and extract_metadata:
+                    # site_data is populated if extract_metadata is True
+                    # mypy does not catch this
+                    site_data[s]["isoform"] = se[0].split(":")[0]  # type: ignore
 
             if len(fields) == 1 or site_data is None:
                 continue

@@ -82,6 +82,8 @@ class Protein:
         self.charge_data: structure.charge.ChargeData | None = None
         self.cysteine_data: structure.cysteine_data.CysteineData | None = None
         self.titration_data: structure.titration.TitrationData | None = None
+        self.structure_index: list[int] | None = None
+        self.sequence_position_to_structure_index: dict[int, int] | None = None
         pass
 
     def _rectify_label(self, label: str) -> str:
@@ -603,6 +605,7 @@ class Protein:
 
         self.pdb_location_relative = save_path
         self.pdb_location_absolute = os.path.abspath(save_path)
+        self._build_structure_index()
 
     def register_local_pdb(self, path_to_pdb_file: str | None = None) -> None:
         """Sets pdb file for protein object using local pdb file.
@@ -614,6 +617,18 @@ class Protein:
             path_to_pdb_file = f"{self.data['entry']}.pdb"
         self.pdb_location_relative = path_to_pdb_file
         self.pdb_location_absolute = os.path.abspath(path_to_pdb_file)
+        self._build_structure_index()
+
+    def _build_structure_index(self) -> None:
+        self.structure_index = (
+            self.get_biopandas_pdb_dataframe().df["ATOM"]["residue_number"].unique()
+        )
+        assert (
+            self.structure_index is not None
+        ), "Structure index is not built. PDB file may not be loaded correctly."
+        self.sequence_position_to_structure_index = {
+            i + 1: self.structure_index[i] for i in range(len(self.structure_index))
+        }
 
     def _is_site_aa(self, site: int, aa: AminoAcidLetter = "C") -> bool:
         if "sequence" not in self.data:
