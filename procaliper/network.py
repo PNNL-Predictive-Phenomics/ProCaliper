@@ -102,7 +102,7 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
 
     all_regs_residues = {
         k: [
-            protein_residues[protein.sequence_position_to_structure_index[i + 1]]
+            protein_residues[protein.sequence_position_to_structure_index[i + 1] - 1]
             for i in v
         ]
         for k, v in all_regs.items()
