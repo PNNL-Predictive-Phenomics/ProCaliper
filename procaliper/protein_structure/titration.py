@@ -26,7 +26,10 @@ class TitrationData(TypedDict):
 
     Array index corresponds to residue number in the PDB. Note that Python
     arrays are 0-indexed and PDB files are 1-indexed, so Python index 0
-    corresponds to residue 1.
+    corresponds to residue 1. This assumes a complete PDB. Otherwise,
+    an object of the `procaliper.Protein` class that constructs this will
+    store a variable called `structure_index` that maps these indices to the
+    sequence position.
 
     Attributes:
         pKa (list[float | None]): The pKa values for the titration data.
