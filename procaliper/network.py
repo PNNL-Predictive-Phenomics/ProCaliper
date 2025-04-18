@@ -80,7 +80,7 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
     Returns:
         nx.Graph: Distance network.
     """
-    if protein.structure_index is None:
+    if protein.sequence_position_to_structure_index is None:
         raise ValueError(
             "Protein structure not loaded; use `fetch_pdb`  or `register_local_pdb` first"
         )
@@ -100,10 +100,15 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
         res for res in protein.get_biopython_residues() if res.get_id()[0] == " "
     ]
 
-    all_regs_residues = {
-        k: [protein_residues[protein.structure_index[i] - 1] for i in v]
-        for k, v in all_regs.items()
-    }
+    all_regs_residues = {}
+    for k, v in all_regs.items():
+        structure_matched = []
+        for i in v:
+            if i in protein.sequence_position_to_structure_index:
+                res_ind = protein.sequence_position_to_structure_index[i]
+                structure_matched.append(protein_residues[res_ind])
+        if structure_matched:
+            all_regs_residues[k] = structure_matched
 
     g = nx.Graph()
     for k, v in all_regs.items():
