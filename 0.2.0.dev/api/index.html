@@ -6228,12 +6228,7 @@ squared edge weight. This is computed by <code>distance_network</code> and
 
             <details class="quote">
               <summary>Source code in <code>procaliper/network.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
@@ -6245,7 +6240,12 @@ squared edge weight. This is computed by <code>distance_network</code> and
 <span class="normal">141</span>
 <span class="normal">142</span>
 <span class="normal">143</span>
-<span class="normal">144</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">euclidean_backbone</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">euclidean_backbone</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the Euclidean backbone of a distance network.</span>
 
 <span class="sd">    The Euclidean backbone of a weighted graph g is the smallest subgraph of g that contains</span>
@@ -6394,7 +6394,12 @@ The letter in front of the index refers to the first and last amino acid in the 
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
-<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">regulatory_distance_network</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">regulatory_distance_network</span><span class="p">(</span><span class="n">protein</span><span class="p">:</span> <span class="n">Protein</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a regulatory region distance network from a protein.</span>
 
 <span class="sd">    Distances are computed between PTM sites, annotated regions, binding sites, and active sites.</span>
@@ -6408,7 +6413,7 @@ The letter in front of the index refers to the first and last amino acid in the 
 <span class="sd">    Returns:</span>
 <span class="sd">        nx.Graph: Distance network.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">protein</span><span class="o">.</span><span class="n">structure_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">protein</span><span class="o">.</span><span class="n">sequence_position_to_structure_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Protein structure not loaded; use `fetch_pdb`  or `register_local_pdb` first&quot;</span>
         <span class="p">)</span>
@@ -6428,10 +6433,15 @@ The letter in front of the index refers to the first and last amino acid in the 
         <span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">protein</span><span class="o">.</span><span class="n">get_biopython_residues</span><span class="p">()</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">get_id</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
     <span class="p">]</span>
 
-    <span class="n">all_regs_residues</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">k</span><span class="p">:</span> <span class="p">[</span><span class="n">protein_residues</span><span class="p">[</span><span class="n">protein</span><span class="o">.</span><span class="n">structure_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_regs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-    <span class="p">}</span>
+    <span class="n">all_regs_residues</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_regs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">structure_matched</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">protein</span><span class="o">.</span><span class="n">sequence_position_to_structure_index</span><span class="p">:</span>
+                <span class="n">res_ind</span> <span class="o">=</span> <span class="n">protein</span><span class="o">.</span><span class="n">sequence_position_to_structure_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">structure_matched</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">protein_residues</span><span class="p">[</span><span class="n">res_ind</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">structure_matched</span><span class="p">:</span>
+            <span class="n">all_regs_residues</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">structure_matched</span>
 
     <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_regs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
