@@ -24,10 +24,10 @@ During installation, `procaliper` will also install `openbabel-wheel`. If you re
 Optional feature dependencies can be installed as follows:
 
 ```shell
-pip install procaliper[nglview,pka]
+pip install procaliper[viz,pka]
 ``` 
 
-The `nglview` extra provides the ability to visualize protein structures in a graphical notebook environment.
+The `viz` extra provides the ability to visualize protein structures in a graphical notebook environment.
 
 The `pka` extra provides additional methods for computing disassociation constants (typically denoted $pK_a$). Note that installing this extra requires obtaining  a `DelPhi` license. Furthermore, these additional methods require an older version of `numpy` (version `1.26.4`) and `python` version between `3.9` and `3.11` to properly function. If the `pka` extra is not installed, `procaliper` will use [propka](https://github.com/jensengroup/propka) for $pK_a$ calculation.
 
