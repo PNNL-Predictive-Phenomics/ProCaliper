@@ -1,10 +1,15 @@
+<!-- badges: start -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15270417.svg)](https://doi.org/10.5281/zenodo.15270417)
+[![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 ![PyPI](https://img.shields.io/pypi/v/procaliper.svg)
 [![Versions](https://img.shields.io/badge/Tested%20On%20Python-3.9,%203.10,%203.11,%203.12-blue.svg)](https://shields.io/)
+<!-- badges: end -->
 
-# procaliper
+# ProCaliper
 
+ProCaliper is an open-source Python library for functional and structural analysis, visualization, and annotation of proteomic data.
 
-A tool for fetching and organizing protein data in order to perform structure calculations.
+ProCaliper enables interfacing with annotation resources such as [UniProt](https://www.uniprot.org), [PhosphoSitePlus](https://www.phosphosite.org), [AlphaFold](https://alphafold.ebi.ac.uk), or user-supplied experimental data for computing structural and electromchemical property information, construction and analysis of residue-residue distance networks, and functional site identification at the residue or protein level.
 
 # Installation
 
@@ -58,10 +63,13 @@ See [Contributing](https://github.com/PhenoMeters/ProCaliper/blob/main/CONTRIBUT
 
 # License
 
-This code is released under GPL v3. See our [License](https://github.com/PhenoMeters/ProCaliper/blob/main/LICENSE) for detailed information.
+This code is released under BSD 2-Clause "Simplified" License. See our [License](https://github.com/PhenoMeters/ProCaliper/blob/main/LICENSE) for detailed information.
 
 By default, `procaliper` does not have any dependencies that are not freely licensed. However, additional features can be installed that rely on restricted software. That is, please note that some *optional* dependencies are not FOSS. Specifically, the `pka` extra requires a `DelPhi` license. We encourage caution when using software that is not free and open source, especially for contributions to the scientific literature.
 
-# Credits
+# Acknowledgements
 
-This work is supported by the Predictive Phenomics Initiative at Pacific Northwest National Laboratory.
+The software described here was funded under the Predictive Phenomics Initiative (PPI) at Pacific Northwest National Laboratory (PNNL) under the Laboratory Directed Research and Development Program. PNNL is a multiprogram national laboratory operated by Battelle for the DOE under Contract No. DE-AC05-76RL01830.
+
+## Citation Guidance
+1. Feng, S., Rozum, J. C., Ufford, H. S., Kim, D. N., & Im, A. K. (2025). ProCaliper. Zenodo. https://doi.org/10.5281/zenodo.15270417
