@@ -299,7 +299,13 @@ class Protein:
             raise ValueError("PDB location not set; use `fetch_pdb` first")
         p = PDBParser(QUIET=True)
         structure = p.get_structure("", self.pdb_location_absolute)
-        reslist = [res for model in structure for chain in model for res in chain]
+        reslist = [
+            res
+            for model in structure
+            for chain in model
+            for res in chain
+            if res.get_id()[0] == " "  # excludes heteroatoms and water
+        ]
         return reslist
 
     def get_confidence(self) -> list[float]:

@@ -1,5 +1,5 @@
 from procaliper import Protein
-from procaliper.network import regulatory_distance_network
+from procaliper.network import distance_network, regulatory_distance_network
 
 INCOMPLETE_PDB_PATH = "tests/test_data/1nhz.pdb"
 INCOMPLETE_PDB_UNIPROT_ID = "P04150"
@@ -31,5 +31,5 @@ def test_pdb_with_ligand() -> None:
     oxu = Protein.from_uniprot_id(LIGAND_PDB_UNIPROT_ID)
     oxu.register_local_pdb(path_to_pdb_file=LIGAND_PDB_PATH)
 
-    reg = regulatory_distance_network(oxu)
+    reg = distance_network(oxu)
     assert reg is not None
