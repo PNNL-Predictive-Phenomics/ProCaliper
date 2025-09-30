@@ -96,9 +96,7 @@ def regulatory_distance_network(protein: Protein) -> nx.Graph:
     all_regs = {**ptms, **binding, **active, **regions, **domains}
 
     # residues, excluding heteroatoms and water
-    protein_residues = [
-        res for res in protein.get_biopython_residues() if res.get_id()[0] == " "
-    ]
+    protein_residues = protein.get_biopython_residues()
 
     all_regs_residues = {}
     for k, v in all_regs.items():

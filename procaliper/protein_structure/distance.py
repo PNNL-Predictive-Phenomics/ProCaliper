@@ -91,7 +91,13 @@ def distance_matrix(
         npt.NDArray[np.float64]: distance matrix with shape nxn where n is the
             number of residues in the structure.
     """
-    residues = [res for model in structure for chain in model for res in chain]
+    residues = [
+        res
+        for model in structure
+        for chain in model
+        for res in chain
+        if res.get_id()[0] == " "
+    ]
     residues = list(enumerate(residues))
     adj = np.ones((len(residues), len(residues))) * np.inf
 
