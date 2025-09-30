@@ -212,6 +212,11 @@ def test_uniprot_api() -> None:
         if x not in ["ft_mod_res", "ft_region", "ft_domain"]
     ]
 
+    print("================")
+    print(Protein.from_uniprot_id(ids[0], fields=fields_in_table).data)
+    print("----------------")
+    print(Protein.from_uniprot_row(df.iloc[0].to_dict()).data)
+    print("================")
     assert Protein.from_uniprot_id(
         ids[0], fields=fields_in_table
     ) == Protein.from_uniprot_row(df.iloc[0].to_dict())
