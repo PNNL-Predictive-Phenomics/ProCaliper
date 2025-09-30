@@ -10,6 +10,9 @@ TEST_PDB_OBS_RES = 239
 TEST_PDB_FIRST_RES = 530
 TEST_PDB_LAST_RES = 776
 
+LIGAND_PDB_PATH = "tests/test_data/5OXU.pdb"
+LIGAND_PDB_UNIPROT_ID = "B9W4V6"
+
 
 def test_pdb_indexing() -> None:
     protein = Protein.from_uniprot_id(TEST_PDB_UNIPROT_ID)
@@ -38,3 +41,13 @@ def test_pdb_indexing() -> None:
         == TEST_PDB_OBS_RES
     )
     assert len(protein.get_titration()["pKa"]) == TEST_PDB_OBS_RES
+
+
+def test_ligand() -> None:
+    oxu = Protein.from_uniprot_id(LIGAND_PDB_UNIPROT_ID)
+    oxu.register_local_pdb(path_to_pdb_file=LIGAND_PDB_PATH)
+    oxu.get_sasa()
+    oxu.get_charge()
+    oxu.get_cysteine_data()
+    oxu.get_titration()
+    pass
