@@ -7,6 +7,9 @@ INCOMPLETE_PDB_UNIPROT_ID = "P04150"
 COMPLETE_PDB_PATH = "tests/test_data/hsp90.pdb"
 COMPLETE_PDB_UNIPROT_ID = "P07900"
 
+LIGAND_PDB_PATH = "tests/test_data/5OXU.pdb"
+LIGAND_PDB_UNIPROT_ID = "B9W4V6"
+
 
 def test_regulatory_distance_network() -> None:
     hsp90 = Protein.from_uniprot_id(COMPLETE_PDB_UNIPROT_ID)
@@ -21,4 +24,12 @@ def test_regulatory_distance_network_incomplete() -> None:
     nhz.register_local_pdb(path_to_pdb_file=INCOMPLETE_PDB_PATH)
 
     reg = regulatory_distance_network(nhz)
+    assert reg is not None
+
+
+def test_pdb_with_ligand() -> None:
+    oxu = Protein.from_uniprot_id(LIGAND_PDB_UNIPROT_ID)
+    oxu.register_local_pdb(path_to_pdb_file=LIGAND_PDB_PATH)
+
+    reg = regulatory_distance_network(oxu)
     assert reg is not None
