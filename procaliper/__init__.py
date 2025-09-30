@@ -2,7 +2,7 @@
 
 __author__ = """AlphaMeter"""
 __email__ = "song.feng@pnnl.gov"
-__version__ = "0.1.0"
+__version__ = "0.3.0"
 
 import procaliper.network as network
 import procaliper.protein_structure as protein_structure
